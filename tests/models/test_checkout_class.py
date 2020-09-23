@@ -6,7 +6,10 @@ from freezegun import freeze_time
 from unittest import mock
 
 
-class CheckoutUnitTestCase(TestCase):
+class CheckoutClassTestCase(TestCase):
+    ***REMOVED***
+    Test the class behaviors NOT the object behaviors.
+    ***REMOVED***
     def test_checkout_string_repr(self):
         ***REMOVED***
         Assert that checkout string representation is human-readable

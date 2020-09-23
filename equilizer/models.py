@@ -51,9 +51,13 @@ class Item(models.Model):
         if self.library_id:
             return self.library_id
         else:
-            return (
-                f"{self.item_group.make***REMOVED*** {self.item_group.model***REMOVED*** sn. {self.serial_num***REMOVED***"
-            )
+            return f"{str(self.item_group)***REMOVED*** sn. {self.serial_num***REMOVED***"
+
+    def make_model_sn(self):
+        ***REMOVED***
+        Get the make/model and serial number of the item
+        ***REMOVED***
+        return f"{self.item_group.make***REMOVED*** {self.item_group.model***REMOVED*** sn. {self.serial_num***REMOVED***"
 
 
 class Checkout(models.Model):

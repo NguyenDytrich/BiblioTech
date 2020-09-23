@@ -5,14 +5,55 @@ from django.utils import timezone
 
 
 class ItemGroup(models.Model):
+    moniker = models.CharField(max_length=100, null=True, blank=True)
     make = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
+    description = models.TextField()
+
+    def __str__(self):
+        if self.moniker:
+            return self.moniker
+        else:
+            return f"{self.make***REMOVED*** {self.model***REMOVED***"
 
 
 class Item(models.Model):
+    class Availability(models.TextChoices):
+        AVAILABLE = "AVAILABLE", _("Available")
+        HOLD = "HOLD", _("Hold")
+        UNAVAILABLE = "UNAVAILABLE", _("Unavailable")
+        CHECKED_OUT = "CHECKED_OUT", _("Checked out")
+        LOST = "LOST", _("Lost")
+
+    class Condition(models.TextChoices):
+        BROKEN = "BROKEN", _("Broken")
+        POOR = "POOR", _("Poor")
+        FAIR = "FAIR", _("Fair")
+        GOOD = "GOOD", _("Good")
+        EXCELLENT = "EXCELLENT", _("Excellent")
+
     # Protect prevents an ItemGroup with referenced items from being deleted
     # automatically in a CASCADE.
     item_group = models.ForeignKey(ItemGroup, on_delete=models.PROTECT)
+    library_id = models.CharField(max_length=20)
+    serial_num = models.CharField(max_length=100)
+    availability = models.CharField(
+        max_length=15, choices=Availability.choices, default=Availability.AVAILABLE
+    )
+    date_acquired = models.DateTimeField(default=timezone.now(), blank=True)
+    last_inspected = models.DateTimeField(default=timezone.now(), blank=True)
+    condition = models.CharField(
+        max_length=15, choices=Condition.choices, default=Condition.FAIR
+    )
+    notes = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        if self.library_id:
+            return self.library_id
+        else:
+            return (
+                f"{self.item_group.make***REMOVED*** {self.item_group.model***REMOVED*** sn. {self.serial_num***REMOVED***"
+            )
 
 
 class Checkout(models.Model):

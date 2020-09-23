@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Equilizer</title>
+	</head>
+	<body>
+		<h1>Items for Checkout</h1>
+		<ul>
+			{% for itemgroup in object_list %***REMOVED***
+			<li><a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a></li>
+			{% empty %***REMOVED***
+				<li>No items to display.</li>
+			{% endfor %***REMOVED***
+		</ul>
+	</body>
+</html>

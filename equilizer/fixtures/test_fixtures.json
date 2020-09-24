@@ -9,12 +9,31 @@
 		***REMOVED***
 	***REMOVED***,
 	{
+		"model": "equilizer.ItemGroup",
+		"pk": 2,
+		"fields": {
+			"moniker": "Focusrite 2i2",
+			"make": "Focusrite",
+			"model": "Scarlett 2i2",
+			"description": "An entry-level audio interface"
+		***REMOVED***
+	***REMOVED***,
+	{
 		"model": "equilizer.Item",
 		"pk": 1,
 		"fields": {
 			"item_group": 1,
 			"serial_num":"0000",
 			"library_id":"D7000-1"
+		***REMOVED***
+	***REMOVED***,
+	{
+		"model": "equilizer.Item",
+		"pk": 1,
+		"fields": {
+			"item_group": 2,
+			"serial_num":"0000",
+			"library_id":"F2i2-1"
 		***REMOVED***
 	***REMOVED***
 ***REMOVED***

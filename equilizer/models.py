@@ -1,6 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+import pytz
+
+tz = pytz.timezone("UTC")
 
 
 class ItemGroup(models.Model):
@@ -79,12 +83,17 @@ class Checkout(models.Model):
         max_length=15,
         choices=ApprovalStatus.choices,
         default=ApprovalStatus.PENDING,
+        blank=True,
     )
     checkout_status = models.CharField(
         max_length=15,
         choices=CheckoutStatus.choices,
         default=CheckoutStatus.OUTSTANDING,
     )
+
+    def clean(self):
+        if self.due_date < self.checkout_date:
+            raise ValidationError(_("Due date cannot be before checkout date."))
 
     def __str__(self):
         return str(self.checkout_date)

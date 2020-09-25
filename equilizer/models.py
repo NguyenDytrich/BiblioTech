@@ -94,6 +94,9 @@ class Checkout(models.Model):
     def clean(self):
         if self.due_date < self.checkout_date:
             raise ValidationError(_("Due date cannot be before checkout date."))
+        if self.return_date:
+            if self.return_date < self.checkout_date:
+                raise ValidationError(_("Return date cannot be before checkout date."))
 
     def __str__(self):
         return str(self.checkout_date)

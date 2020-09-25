@@ -1,3 +1,4 @@
+from django.utils import timezone
 from equilizer.models import Checkout, Item
 
 from equilizer.validators import ItemValidator
@@ -49,5 +50,38 @@ def checkout_items(items, due_date, checkout_date=None, approval_status=None):
     # Validate the entry
     checkout.clean()
     # Save the entry and return it
+    checkout.save()
+    return checkout
+
+
+def return_items(checkout, items=None, return_date=None):
+    ***REMOVED***
+    Update a checkout entry, setting the items specified to AVAILABLE
+
+    :param checkout: The checkout entry to update
+    :type checkout: Checkout
+
+    :param items: The items to return, defaults to all items
+    :type item: List, QuerySet, Item, optional
+
+    :param return_date: Date that items are returned, defaults to current datetime
+    :param type: datetime
+    ***REMOVED***
+    # First, assign a return date
+    if return_date:
+        checkout.return_date = return_date
+    else:
+        checkout.return_date = timezone.now()
+
+    # Then, mark items as returned
+    if not items:
+        items = checkout.items.get_all()
+
+    for item in items:
+        item.availability = "AVAILABLE"
+        item.save()
+
+    # Validate and save
+    checkout.clean()
     checkout.save()
     return checkout

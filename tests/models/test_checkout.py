@@ -6,6 +6,7 @@ from equilizer.models import Checkout, Item
 from parameterized import parameterized
 import equilizer.checkout_manager as manager
 
+
 class CheckoutTestCase(TestCase):
     fixtures = ["test_fixtures.json"***REMOVED***
     due_date = timezone.now() + timedelta(4)
@@ -28,21 +29,28 @@ class CheckoutTestCase(TestCase):
         self.assertEqual(item, checkout.items.all()[0***REMOVED***)
 
 
-class CheckoutManagerTestCase(TestCase):
+class CheckoutManager_Checkout_TestCase(TestCase):
     fixtures = ["test_fixtures.json"***REMOVED***
 
     # Set a due date 4 days from now
     due_date = timezone.now() + timedelta(4)
 
     def test_good_checkout(self):
+        ***REMOVED***
+        Test that a perfect checkout entry passes through without a problem
+        ***REMOVED***
         item = Item.objects.get(pk=1)
 
         manager.checkout_items(item, self.due_date)
 
         # Check the that the item availability is set correctly
         self.assertEqual(item.availability, "CHECKED_OUT")
+        self.assertIsNone(Checkout.objects.get(pk=1).return_date)
 
     def test_good_checkout_multiple_items(self):
+        ***REMOVED***
+        Test taht our checkout entry can have multiple items
+        ***REMOVED***
         items = Item.objects.all()
         manager.checkout_items(items, self.due_date)
 
@@ -51,13 +59,14 @@ class CheckoutManagerTestCase(TestCase):
             self.assertEqual(item.availability, "CHECKED_OUT")
 
     def test_good_checkout_with_different_checkout_date(self):
+        ***REMOVED***
+        Check that we can set a checkout date in the ~future~
+        ***REMOVED***
         items = Item.objects.all()
         checkout_date = self.due_date + timedelta(-2)
         manager.checkout_items(items, self.due_date, checkout_date=checkout_date)
 
-        self.assertEqual(
-            Checkout.objects.get(pk=1).checkout_date, checkout_date
-        )
+        self.assertEqual(Checkout.objects.get(pk=1).checkout_date, checkout_date)
 
     @parameterized.expand(["UNAVAILABLE", "HOLD", "CHECKED_OUT", "LOST"***REMOVED***)
     def test_bad_checkout_item_unavailable(self, avail):
@@ -85,3 +94,41 @@ class CheckoutManagerTestCase(TestCase):
 
         with self.assertRaises(ValidationError):
             manager.checkout_items(items, due_date, checkout_date=checkout_date)
+
+
+class CheckoutManager_Returns_TestCase(TestCase):
+
+    # Fixtures are reinstalled after each test
+    fixtures = ["test_fixtures.json"***REMOVED***
+
+    def setUp(self):
+        # Set up the checkout entry in the database
+        self.items = Item.objects.all()
+        # We checked this out 2 days ago
+        self.checkout_date = timezone.now() + timedelta(-2)
+        self.due_date = timezone.now() + timedelta(4)
+        self.checkout = manager.checkout_items(
+            self.items, self.due_date, checkout_date=self.checkout_date
+        )
+
+    def test_good_return(self):
+        manager.return_items(self.checkout, self.items)
+
+        for item in self.items:
+            self.assertEqual(item.availability, "AVAILABLE")
+
+        checkout = Checkout.objects.get(pk=1)
+        self.assertIsNotNone(checkout.return_date)
+        self.assertEqual(checkout.return_date.date(), timezone.now().date())
+
+    def test_bad_return_date(self):
+        ***REMOVED***
+        Test that a return date must be after the checkout date
+        ***REMOVED***
+        items = Item.objects.all()
+        checkout_date = self.due_date
+        # 60 days into the past
+        return_date = timezone.now() + timedelta(-60)
+
+        with self.assertRaises(ValidationError):
+            manager.return_items(self.checkout, items, return_date=return_date)

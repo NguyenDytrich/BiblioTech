@@ -43,7 +43,7 @@ class Item(models.Model):
     availability = models.CharField(
         max_length=15, choices=Availability.choices, default=Availability.AVAILABLE
     )
-    date_acquired = models.DateTimeField(default=timezone.now(), blank=True)
+    date_acquired = models.DateField(default=timezone.now(), blank=True)
     last_inspected = models.DateTimeField(default=timezone.now(), blank=True)
     condition = models.CharField(
         max_length=15, choices=Condition.choices, default=Condition.FAIR

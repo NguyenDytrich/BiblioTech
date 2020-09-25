@@ -124,10 +124,13 @@ class CheckoutManager_Returns_TestCase(TestCase):
         ***REMOVED***
         Test that a return date must be after the checkout date
         ***REMOVED***
-        items = Item.objects.all()
+        item = self.checkout.item
         checkout_date = self.due_date
         # 60 days into the past
         return_date = timezone.now() + timedelta(-60)
 
         with self.assertRaises(ValidationError):
             manager.return_items(self.checkout, return_date=return_date)
+
+        # Item should still be checked out
+        self.assertEqual(item.availability, "CHECKED_OUT")

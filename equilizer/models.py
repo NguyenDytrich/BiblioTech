@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -5,7 +6,6 @@ from django.utils import timezone
 import pytz
 
 tz = pytz.timezone("UTC")
-
 
 class ItemGroup(models.Model):
     moniker = models.CharField(max_length=100, null=True, blank=True)
@@ -38,7 +38,7 @@ class Item(models.Model):
     # Protect prevents an ItemGroup with referenced items from being deleted
     # automatically in a CASCADE.
     item_group = models.ForeignKey(ItemGroup, on_delete=models.PROTECT)
-    library_id = models.CharField(max_length=20)
+    library_id = models.CharField(max_length=20, unique=True)
     serial_num = models.CharField(max_length=100)
     availability = models.CharField(
         max_length=15, choices=Availability.choices, default=Availability.AVAILABLE

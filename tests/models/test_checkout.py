@@ -48,7 +48,7 @@ class CheckoutManager_Checkout_TestCase(TestCase):
 
     def test_good_checkout_multiple_items(self):
         ***REMOVED***
-        Test taht our checkout entry can have multiple items
+        Test that our checkout entry can have multiple items
         ***REMOVED***
         items = Item.objects.all()
         manager.checkout_items(items, self.due_date)

@@ -1,3 +1,4 @@
+from django.db import IntegrityError 
 from django.test import TestCase
 from equilizer.models import Item, ItemGroup
 
@@ -68,3 +69,31 @@ class ItemModelTest(TestCase):
         item.save()
 
         self.assertEqual(str(item), f"{item.library_id***REMOVED***")
+
+    def test_item_unique_lib_id(self):
+        ***REMOVED***
+        Assert that library ids are unique
+        ***REMOVED***
+        group = ItemGroup.objects.create(
+            make="Nikon",
+            model="D7000",
+            moniker="Nikon-D7000",
+            description="Mid-range DSLR camera",
+        )
+        group.save()
+
+        item = Item.objects.create(
+            item_group=group,
+            library_id="Library-Id-1",
+            serial_num="0000",
+        )
+        item.save()
+
+        with self.assertRaises(IntegrityError):
+            item2 = Item.objects.create(
+                item_group=group,
+                library_id="Library-Id-1",
+                serial_num="0001",
+            )
+            item2.save()
+

@@ -75,7 +75,7 @@ class Checkout(models.Model):
         LOST = "LOST", _("Lost")
         OUTSTANDING = "OUTSTANDING", _("Outstanding")
 
-    items = models.ManyToManyField(Item)
+    item = models.ForeignKey(Item, on_delete=models.PROTECT)
     checkout_date = models.DateTimeField(default=timezone.now(), blank=True)
     due_date = models.DateTimeField()
     return_date = models.DateTimeField(blank=True, null=True)

@@ -8,7 +8,7 @@ item_validator = ItemValidator()
 
 def checkout_items(items, due_date, checkout_date=None, approval_status=None):
     ***REMOVED***
-    Create a checkout entry for the set of items, validate that those items are
+    Create a checkout entry for each of the set of items, validate that those items are
     avaialble, and then mark those items as checked out
 
     :param items: The items to checkout
@@ -24,11 +24,7 @@ def checkout_items(items, due_date, checkout_date=None, approval_status=None):
     :param type: str, optional
     ***REMOVED***
 
-    checkout = Checkout.objects.create(due_date=due_date)
-    if checkout_date:
-        checkout.checkout_date = checkout_date
-    if approval_status:
-        checkout.approval_status = approval_status
+    checkout_list = [***REMOVED***
 
     # If the items argument is just a single item
     # e.g. acquired via Item.objets.get(), then put
@@ -40,21 +36,26 @@ def checkout_items(items, due_date, checkout_date=None, approval_status=None):
         # Check if our items are available before preceeding
         item_validator.is_available(item)
 
-        # First add the itme to checkout
-        checkout.items.add(item)
-
         # Set the availability
         item.availability = "CHECKED_OUT"
         item.save()
 
+        checkout = Checkout.objects.create(item=item, due_date=due_date)
+        if checkout_date:
+            checkout.checkout_date = checkout_date
+        if approval_status:
+            checkout.approval_status = approval_status
+
+        checkout.clean()
+        checkout.save()
+        checkout_list.append(checkout)
+
     # Validate the entry
-    checkout.clean()
     # Save the entry and return it
-    checkout.save()
-    return checkout
+    return checkout_list
 
 
-def return_items(checkout, items=None, return_date=None):
+def return_items(checkout, return_date=None):
     ***REMOVED***
     Update a checkout entry, setting the items specified to AVAILABLE
 
@@ -72,16 +73,14 @@ def return_items(checkout, items=None, return_date=None):
         checkout.return_date = return_date
     else:
         checkout.return_date = timezone.now()
+    # Validate the return date before making changes
+    checkout.clean()
 
     # Then, mark items as returned
-    if not items:
-        items = checkout.items.get_all()
-
-    for item in items:
-        item.availability = "AVAILABLE"
-        item.save()
+    item = checkout.item
+    item.availability = "AVAILABLE"
+    item.save()
 
     # Validate and save
-    checkout.clean()
     checkout.save()
     return checkout

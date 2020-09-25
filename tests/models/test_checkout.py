@@ -16,9 +16,8 @@ class CheckoutTestCase(TestCase):
         Test a perfectly good checkout entry.
         ***REMOVED***
         item = Item.objects.get(pk=1)
-        checkout = Checkout.objects.create(due_date=self.due_date)
+        checkout = Checkout.objects.create(due_date=self.due_date, item=item)
 
-        checkout.items.add(item)
         checkout.save()
 
         # Check default values
@@ -26,7 +25,7 @@ class CheckoutTestCase(TestCase):
         self.assertEqual("OUTSTANDING", checkout.checkout_status)
 
         # Check the item is referenced
-        self.assertEqual(item, checkout.items.all()[0***REMOVED***)
+        self.assertEqual(item, checkout.item)
 
 
 class CheckoutManager_Checkout_TestCase(TestCase):
@@ -109,10 +108,10 @@ class CheckoutManager_Returns_TestCase(TestCase):
         self.due_date = timezone.now() + timedelta(4)
         self.checkout = manager.checkout_items(
             self.items, self.due_date, checkout_date=self.checkout_date
-        )
+        )[0***REMOVED***
 
     def test_good_return(self):
-        manager.return_items(self.checkout, self.items)
+        manager.return_items(self.checkout)
 
         for item in self.items:
             self.assertEqual(item.availability, "AVAILABLE")
@@ -131,4 +130,4 @@ class CheckoutManager_Returns_TestCase(TestCase):
         return_date = timezone.now() + timedelta(-60)
 
         with self.assertRaises(ValidationError):
-            manager.return_items(self.checkout, items, return_date=return_date)
+            manager.return_items(self.checkout, return_date=return_date)

@@ -7,6 +7,10 @@ import pytz
 
 tz = pytz.timezone("UTC")
 
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=6, unique=True)
+
 class ItemGroup(models.Model):
     moniker = models.CharField(max_length=100, null=True, blank=True)
     make = models.CharField(max_length=100)

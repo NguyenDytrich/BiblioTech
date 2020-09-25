@@ -12,8 +12,8 @@ class ItemValidator:
             )
 
 
-class StudentValidator:
-    def student_id(value):
+class MemberValidator:
+    def member_id(value):
         id_regex = re.compile(r"^\d{6***REMOVED***$", flags=re.M)
         if re.match(id_regex, value) is None:
-            raise ValidationError("Student ID should be 6 digits.")
+            raise ValidationError("member ID should be 6 digits.")

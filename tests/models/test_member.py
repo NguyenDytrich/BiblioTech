@@ -4,14 +4,14 @@ from django.test import TestCase
 from parameterized import parameterized
 import re
 
-from equilizer.models import Student
-from equilizer.validators import StudentValidator
+from equilizer.models import Member
+from equilizer.validators import MemberValidator
 
 
-class StudentTestCase(TestCase):
+class MemberTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create(
-            username="student", password="password", email="student@test.edu"
+            username="member", password="password", email="member@test.edu"
         )
         self.user.save()
 
@@ -21,17 +21,17 @@ class StudentTestCase(TestCase):
         Test that invalid student IDs don't pass when we clean the model
         ***REMOVED***
         with self.assertRaises(ValidationError):
-            student = Student.objects.create(user=self.user, student_id=id)
-            student.full_clean()
-            student.save()
+            member = Member.objects.create(user=self.user, member_id=id)
+            member.full_clean()
+            member.save()
 
     @parameterized.expand(["111111", "212345", "000000"***REMOVED***)
     def test_good_student_id(self, id):
         ***REMOVED***
         Test that valid student IDs are created
         ***REMOVED***
-        student = Student.objects.create(user=self.user, student_id=id)
-        student.full_clean()
-        student.save()
+        member = Member.objects.create(user=self.user, member_id=id)
+        member.full_clean()
+        member.save()
 
-        self.assertEqual(student.student_id, id)
+        self.assertEqual(member.member_id, id)

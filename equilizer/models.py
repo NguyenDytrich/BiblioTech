@@ -5,17 +5,17 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import pytz
 
-from equilizer.validators import StudentValidator
+from equilizer.validators import MemberValidator
 
 tz = pytz.timezone("UTC")
 
-student_validator = StudentValidator
+member_validator = MemberValidator
 
 
-class Student(models.Model):
+class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    student_id = models.CharField(
-        max_length=6, unique=True, validators=[student_validator.student_id***REMOVED***
+    member_id = models.CharField(
+        max_length=6, unique=True, validators=[member_validator.member_id***REMOVED***
     )
 
 

@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from equilizer.views import ItemGroupListView, ItemGroupDetailView
+from equilizer.views import ItemGroupListView, ItemGroupDetailView, login_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("items", ItemGroupListView.as_view(), name="itemgroup-list"),
     path("items/<int:pk>/", ItemGroupDetailView.as_view(), name="itemgroup-detail"),
+    path("login/", login_view, name="login"),
 ***REMOVED***

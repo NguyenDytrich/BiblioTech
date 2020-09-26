@@ -29,7 +29,6 @@ class ItemGroupDetailView(DetailView):
 
 
 def login_view(request):
-
     if request.method == "POST":
         form = LoginForm(request.POST)
         form.is_valid()
@@ -42,10 +41,12 @@ def login_view(request):
             login(request, user)
             # Nav to success page
             return redirect(request.POST.get("next", "itemgroup-list"))
+    # Redirect to home if the user is logged in already
+    elif request.user.is_authenticated:
+        return redirect("itemgroup-list")
     else:
         form = LoginForm()
-
-    return render(request, "equilizer/login.html", {"form": form***REMOVED***)
+        return render(request, "equilizer/login.html", {"form": form***REMOVED***)
 
 
 @login_required(login_url="/login")

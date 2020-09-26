@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.test import TestCase
+from django.test import TransactionTestCase
 
 
-class LoginViewTests(TestCase):
+class LoginViewTests(TransactionTestCase):
     def setUp(self):
         self.user = User.objects.create(username="member", email="member@test.edu")
         self.user.set_password("password")
@@ -14,3 +14,8 @@ class LoginViewTests(TestCase):
         response = self.client.post(reverse("login"), credentials, follow=True)
         self.assertIn("user", response.context)
         self.assertTrue(response.context["user"***REMOVED***.is_authenticated)
+
+    def test_redirect_when_not_anon(self):
+        self.client.login(username="member", password="password")
+        response = self.client.get(reverse("login"), follow=True)
+        self.assertRedirects(response, reverse("itemgroup-list"))

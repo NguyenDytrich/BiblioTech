@@ -66,4 +66,6 @@ def add_to_cart(request, itemgroup_id):
     cart[str(item.id)***REMOVED*** = cart.get(str(item.id), 0) + 1
     request.session["cart_sum"***REMOVED*** = sum(cart.values())
 
-    return redirect(reverse("itemgroup-detail", args=(item.id,)))
+    detail_view = reverse("itemgroup-detail", args=(item.id,))
+
+    return redirect(request.POST.get('return', detail_view))

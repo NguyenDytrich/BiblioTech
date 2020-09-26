@@ -8,7 +8,14 @@
 		<h1>Items for Checkout</h1>
 		<ul>
 			{% for itemgroup in object_list %***REMOVED***
-			<li><a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a></li>
+			<li>
+				<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
+				<form action="{% url 'cart-add' itemgroup.id %***REMOVED***" method="post">
+					{% csrf_token %***REMOVED***
+					<input type="hidden" name="return" value="{% url 'itemgroup-list' %***REMOVED***" />
+					<input type="submit" value="Quick add">
+				</form>
+			</li>
 			{% empty %***REMOVED***
 				<li>No items to display.</li>
 			{% endfor %***REMOVED***

@@ -51,3 +51,12 @@ class CartTests(TransactionTestCase):
 
         self.assertEqual(self.client.session["cart"***REMOVED***, {"1": 2***REMOVED***)
         self.assertEqual(self.client.session["cart_sum"***REMOVED***, 2)
+
+    def test_add_cart_flow_quick_add_good_user(self):
+        self.client.login(username="member", password="password")
+        url = reverse("cart-add", args=(1,))
+        redirect_url = reverse("itemgroup-list")
+
+        response = self.client.post(url, {"return": redirect_url***REMOVED***, follow=True)
+
+        self.assertRedirects(response, redirect_url)

@@ -15,6 +15,7 @@
 		<h1>{{ object.make ***REMOVED******REMOVED***</h1>
 		<h2>{{ object.model ***REMOVED******REMOVED***</h2>
 		<p>Description {{ object.description ***REMOVED******REMOVED***</p>
+		<p>{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
 		<form action="{% url 'cart-add' object.id %***REMOVED***" method="post">
 			{% csrf_token %***REMOVED***
 			<input type="submit" value="Add to cart">

@@ -5,6 +5,10 @@ from equilizer.models import ItemGroup
 
 
 class ItemGroupDetailTests(TestCase):
+    ***REMOVED***
+    A set of naive view tests
+    ***REMOVED***
+
     fixtures = ["test_fixtures.json"***REMOVED***
 
     itemgroup = ItemGroup.objects.get(pk=1)
@@ -21,3 +25,10 @@ class ItemGroupDetailTests(TestCase):
     def test_detail_shows_desc(self):
         response = self.client.get(self.url)
         self.assertContains(response, self.itemgroup.description)
+
+    def test_detail_shows_inventory(self):
+        response = self.client.get(self.url)
+        self.assertContains(
+            response,
+            f"{self.itemgroup.avail_inventory()***REMOVED*** of {self.itemgroup.total_inventory()***REMOVED*** available",
+        )

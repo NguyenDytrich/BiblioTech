@@ -29,11 +29,21 @@
 	***REMOVED***,
 	{
 		"model": "equilizer.Item",
-		"pk": 1,
+		"pk": 2,
 		"fields": {
 			"item_group": 2,
 			"serial_num":"0000",
 			"library_id":"F2i2-1"
+		***REMOVED***
+	***REMOVED***,
+	{
+		"model": "equilizer.Item",
+		"pk": 3,
+		"fields": {
+			"item_group": 2,
+			"serial_num":"0001",
+			"library_id":"F2i2-2",
+			"availability": "UNAVAILABLE"
 		***REMOVED***
 	***REMOVED***
 ***REMOVED***

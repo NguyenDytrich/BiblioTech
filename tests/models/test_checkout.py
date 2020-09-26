@@ -50,7 +50,7 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         ***REMOVED***
         Test that our checkout entry can have multiple items
         ***REMOVED***
-        items = Item.objects.all()
+        items = Item.objects.filter(availability="AVAILABLE")
         manager.checkout_items(items, self.due_date)
 
         # Iterator executes the query, so we're not looking into the cache.
@@ -61,7 +61,7 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         ***REMOVED***
         Check that we can set a checkout date in the ~future~
         ***REMOVED***
-        items = Item.objects.all()
+        items = Item.objects.filter(availability="AVAILABLE")
         checkout_date = self.due_date + timedelta(-2)
         manager.checkout_items(items, self.due_date, checkout_date=checkout_date)
 
@@ -102,7 +102,8 @@ class CheckoutManager_Returns_TestCase(TestCase):
 
     def setUp(self):
         # Set up the checkout entry in the database
-        self.items = Item.objects.all()
+        self.items = Item.objects.filter(availability="AVAILABLE")
+
         # We checked this out 2 days ago
         self.checkout_date = timezone.now() + timedelta(-2)
         self.due_date = timezone.now() + timedelta(4)
@@ -113,8 +114,7 @@ class CheckoutManager_Returns_TestCase(TestCase):
     def test_good_return(self):
         manager.return_items(self.checkout)
 
-        for item in self.items:
-            self.assertEqual(item.availability, "AVAILABLE")
+        self.assertEqual(self.checkout.item.availability, "AVAILABLE")
 
         checkout = Checkout.objects.get(pk=1)
         self.assertIsNotNone(checkout.return_date)

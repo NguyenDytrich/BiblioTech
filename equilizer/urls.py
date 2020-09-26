@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from equilizer.views import ItemGroupListView, ItemGroupDetailView, login_view
+from equilizer.views import ItemGroupListView, ItemGroupDetailView, login_view, add_to_cart
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("items", ItemGroupListView.as_view(), name="itemgroup-list"),
     path("items/<int:pk>/", ItemGroupDetailView.as_view(), name="itemgroup-detail"),
     path("login/", login_view, name="login"),
+    path("cart/add/<int:itemgroup_id>", add_to_cart, name="cart-add"),
 ***REMOVED***

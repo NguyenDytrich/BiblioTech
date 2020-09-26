@@ -8,6 +8,9 @@
 		<form action="{% url 'login' %***REMOVED***" method="post">
 			{% csrf_token %***REMOVED***
 			{{ form ***REMOVED******REMOVED***
+			{% if request.GET.next %***REMOVED***
+			<input type="hidden" name="next" value="{{ request.GET.next ***REMOVED******REMOVED***"/>
+			{% endif %***REMOVED***
 			<input type="submit" value="Login">
 		</form>
 	</body>

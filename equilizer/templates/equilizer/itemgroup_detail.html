@@ -5,8 +5,19 @@
 		<title>Equilizer</title>
 	</head>
 	<body>
+		{% if user.is_authenticated %***REMOVED***
+			{% if request.session.cart_sum %***REMOVED***
+			<span>{{ request.session.cart_sum ***REMOVED******REMOVED*** items in cart</span>
+			{% else %***REMOVED***
+			<span>No items in cart</span>
+			{% endif %***REMOVED***
+		{% endif %***REMOVED***
 		<h1>{{ object.make ***REMOVED******REMOVED***</h1>
 		<h2>{{ object.model ***REMOVED******REMOVED***</h2>
 		<p>Description {{ object.description ***REMOVED******REMOVED***</p>
+		<form action="{% url 'cart-add' object.id %***REMOVED***" method="post">
+			{% csrf_token %***REMOVED***
+			<input type="submit" value="Add to cart">
+		</form>
 	</body>
 </html>

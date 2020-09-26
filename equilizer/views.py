@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 
 from .models import ItemGroup
 from .forms import LoginForm
+import equilizer.cart_manager as cart_manager
 
 
 class ItemGroupListView(ListView):
@@ -63,7 +64,7 @@ def add_to_cart(request, itemgroup_id):
 
     cart = request.session["cart"***REMOVED***
 
-    cart[str(item.id)***REMOVED*** = cart.get(str(item.id), 0) + 1
+    cart_manager.add_to_cart(cart, item.id)
     request.session["cart_sum"***REMOVED*** = sum(cart.values())
 
     detail_view = reverse("itemgroup-detail", args=(item.id,))

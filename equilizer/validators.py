@@ -17,3 +17,7 @@ class MemberValidator:
         id_regex = re.compile(r"^\d{6***REMOVED***$", flags=re.M)
         if re.match(id_regex, value) is None:
             raise ValidationError("member ID should be 6 digits.")
+
+class CartValidator:
+    def has_inventory(itemgroup):
+        pass

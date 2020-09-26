@@ -31,6 +31,15 @@ class ItemGroup(models.Model):
         else:
             return f"{self.make***REMOVED*** {self.model***REMOVED***"
 
+    def total_inventory(self):
+        return len(self.item_set.all())
+
+    def avail_inventory(self):
+        return len(self.avail_items())
+
+    def avail_items(self):
+        return self.item_set.filter(availability="AVAILABLE")
+
 
 class Item(models.Model):
     class Availability(models.TextChoices):

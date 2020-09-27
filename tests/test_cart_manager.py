@@ -3,33 +3,92 @@ from django.test import TestCase
 from parameterized import parameterized
 
 import equilizer.cart_manager as manager
-from equilizer.models import Item, ItemGroup
-from equilizer.validators import CartValidator
+from equilizer.models import ItemGroup
+from equilizer.validators import CartValidator as validator
 
 
 class CartManagerTests(TestCase):
+    ***REMOVED***
+    Tests for the cart_manager
+    ***REMOVED***
+
     fixtures = ["test_fixtures.json"***REMOVED***
 
+    def setUp(self):
+        self.cart = dict()
+
     def test_good_add_to_cart(self):
-        cart = dict()
+        ***REMOVED***
+        Assert that add_to_cart() mutates the passed dictionary as expected
+        ***REMOVED***
         item = ItemGroup.objects.get(pk=1)
-        item_id = str(item.id)
+        str_id = str(item.id)
 
-        manager.add_to_cart(cart, item_id)
+        manager.add_to_cart(self.cart, item.id)
 
-        self.assertIn(item_id, cart)
-        self.assertEqual(cart[item_id***REMOVED***, 1)
+        self.assertIn(str_id, self.cart)
+        self.assertEqual(self.cart[str_id***REMOVED***, 1)
+
+    def test_good_add_to_cart_multiple(self):
+        item = ItemGroup.objects.get(pk=1)
+        num = item.avail_inventory()
+        str_id = str(item.id)
+
+        for i in range(num):
+            manager.add_to_cart(self.cart, item.id)
+
+        self.assertIn(str_id, self.cart)
+        self.assertEqual(self.cart[str_id***REMOVED***, num)
 
     def test_erroneous_input(self):
+        ***REMOVED***
+        Assert that add_to_cart() expects a Dict as its first argument
+        ***REMOVED***
         with self.assertRaisesMessage(
             TypeError, "Expected `cart` to be Dict but found <class 'str'>"
         ):
             manager.add_to_cart("", 1)
 
+    @parameterized.expand(["UNAVAILABLE", "CHECKED_OUT", "HOLD", "LOST"***REMOVED***)
+    def test_bad_add_to_cart_no_inventory(self, avail):
+        ***REMOVED***
+        Assert that add_to_cart() returns an error if there is no inventory for
+        a requested item, and does not mutate the dictionary
+        ***REMOVED***
+        itemgroup = ItemGroup.objects.get(pk=1)
+        item = itemgroup.item_set.first()
+
+        # Set all items in the set to an unavailbility condition
+        item.availability = avail
+        item.save()
+
+        with self.assertRaises(ValidationError):
+            manager.add_to_cart(self.cart, item.id)
+
+        # Our cart was empty, so it shouldn't create a key-value pair
+        self.assertNotIn(item.id, self.cart)
+
+    def test_bad_add_to_cart_would_exceed_inventory(self):
+        ***REMOVED***
+        If adding to cart would excede the avail_inventory, it should raise
+        an exception.
+        ***REMOVED***
+        item = ItemGroup.objects.get(pk=1)
+
+        # Simulate adding all available items into the cart
+        for i in range(item.avail_inventory()):
+            manager.add_to_cart(self.cart, item.id)
+
+        with self.assertRaises(ValidationError):
+            manager.add_to_cart(self.cart, item.id)
+
 
 class CartValidatorTests(TestCase):
+    ***REMOVED***
+    Tests for the CartValidator
+    ***REMOVED***
+
     fixtures = ["test_fixtures.json"***REMOVED***
-    validator = CartValidator()
 
     def test_has_inventory(self):
         ***REMOVED***
@@ -37,7 +96,7 @@ class CartValidatorTests(TestCase):
         ***REMOVED***
         itemgroup = ItemGroup.objects.get(pk=1)
         try:
-            self.validator.has_inventory(itemgroup)
+            validator.has_inventory(itemgroup)
         except ValidationError:
             self.fail()
 
@@ -56,4 +115,34 @@ class CartValidatorTests(TestCase):
             i.save()
 
         with self.assertRaises(ValidationError):
-            self.validator.has_inventory(itemgroup)
+            validator.has_inventory(itemgroup)
+
+    def test_does_not_exceed_avail_inventory(self):
+        ***REMOVED***
+        Nothing should happen if adding an item to the cart will not exceed the
+        available inventory
+        ***REMOVED***
+        # Set up some test data
+        cart = dict()
+        item = ItemGroup.objects.get(pk=1)
+
+        try:
+            validator.does_not_exceed(cart, item)
+        except ValidationError:
+            self.fail()
+
+    def test_would_exceeed_avail_inventory(self):
+        ***REMOVED***
+        If adding an item to the cart will exceed the available inventory, raise
+        exception.
+        ***REMOVED***
+        # Set up some test data
+        cart = dict()
+        item = ItemGroup.objects.get(pk=1)
+        avail = item.avail_inventory()
+        str_id = str(item.id)
+
+        cart[str_id***REMOVED*** = avail
+
+        with self.assertRaises(ValidationError):
+            validator.does_not_exceed(cart, item)

@@ -69,4 +69,4 @@ def add_to_cart(request, itemgroup_id):
 
     detail_view = reverse("itemgroup-detail", args=(item.id,))
 
-    return redirect(request.POST.get('return', detail_view))
+    return redirect(request.POST.get("return", detail_view))

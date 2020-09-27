@@ -13,13 +13,13 @@ def checkout_items(items, due_date, checkout_date=None, approval_status=None):
     :type item: List, QuerySet, Item
 
     :param due_date: Date that items are due
-    :param type: datetime
+    :type due_date: datetime
 
     :param checkout_date: checkout date, defaults to the current datetime
-    :param type: datetime, optional
+    :type checkout_date: datetime, optional
 
     :param approval_status: the approval status of the requested checkout, defaults to 'PENDING'
-    :param type: str, optional
+    :type approval_status: str, optional
     ***REMOVED***
 
     checkout_list = [***REMOVED***

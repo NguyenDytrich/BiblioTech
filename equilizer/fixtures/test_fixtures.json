@@ -19,6 +19,15 @@
 		***REMOVED***
 	***REMOVED***,
 	{
+		"model": "equilizer.ItemGroup",
+		"pk": 3,
+		"fields": {
+			"make": "Nikon",
+			"model": "AF-S Nikkor 18-105mm/3.5-5.6",
+			"description": "Nikon zoom lens"
+		***REMOVED***
+	***REMOVED***,
+	{
 		"model": "equilizer.Item",
 		"pk": 1,
 		"fields": {
@@ -44,6 +53,33 @@
 			"serial_num":"0001",
 			"library_id":"F2i2-2",
 			"availability": "UNAVAILABLE"
+		***REMOVED***
+	***REMOVED***,
+	{
+		"model": "equilizer.Item",
+		"pk": 4,
+		"fields": {
+			"item_group": 3,
+			"serial_num":"0000",
+			"library_id":"Nikkor-Zoom-1"
+		***REMOVED***
+	***REMOVED***,
+	{
+		"model": "equilizer.Item",
+		"pk": 5,
+		"fields": {
+			"item_group": 3,
+			"serial_num":"0001",
+			"library_id":"Nikkor-Zoom-2"
+		***REMOVED***
+	***REMOVED***,
+	{
+		"model": "equilizer.Item",
+		"pk": 6,
+		"fields": {
+			"item_group": 3,
+			"serial_num":"0002",
+			"library_id":"Nikkor-Zoom-3"
 		***REMOVED***
 	***REMOVED***
 ***REMOVED***

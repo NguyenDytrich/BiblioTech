@@ -4,8 +4,8 @@ import re
 
 
 class ItemValidator:
-    # TODO change to static method
-    def is_available(self, item):
+    @staticmethod
+    def is_available(item):
         if item.availability != "AVAILABLE":
             raise ValidationError(
                 _("%(item) is not AVAIALABLE"),

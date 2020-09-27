@@ -3,8 +3,6 @@ from equilizer.models import Checkout, Item
 
 from equilizer.validators import ItemValidator
 
-item_validator = ItemValidator()
-
 
 def checkout_items(items, due_date, checkout_date=None, approval_status=None):
     ***REMOVED***
@@ -34,7 +32,7 @@ def checkout_items(items, due_date, checkout_date=None, approval_status=None):
 
     for item in items:
         # Check if our items are available before preceeding
-        item_validator.is_available(item)
+        ItemValidator.is_available(item)
 
         # Set the availability
         item.availability = "CHECKED_OUT"

@@ -22,6 +22,7 @@ def add_to_cart(cart, itemgroup_id, count=1):
     item = ItemGroup.objects.get(pk=itemgroup_id)
 
     # Validate that the item has the inventory to fulfill a checkout request
+    # TODO: return specialized errors
     validator.has_inventory(item)
     validator.does_not_exceed(cart, item)
     new_val = cart.get(ig_id, 0) + count

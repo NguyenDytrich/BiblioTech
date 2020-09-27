@@ -5,6 +5,13 @@
 		<title>Equilizer</title>
 	</head>
 	<body>
+		{% if messages %***REMOVED***
+		<ul>
+			{% for message in messages %***REMOVED***
+			<li>{{ message ***REMOVED******REMOVED***</li>
+			{% endfor %***REMOVED***
+		</ul>
+		{% endif %***REMOVED***
 		{% if user.is_authenticated %***REMOVED***
 			{% if request.session.cart_sum %***REMOVED***
 			<span>{{ request.session.cart_sum ***REMOVED******REMOVED*** items in cart</span>

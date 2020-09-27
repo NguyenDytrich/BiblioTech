@@ -1,5 +1,7 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_http_methods
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -64,8 +66,11 @@ def add_to_cart(request, itemgroup_id):
 
     cart = request.session["cart"***REMOVED***
 
-    cart_manager.add_to_cart(cart, item.id)
-    request.session["cart_sum"***REMOVED*** = sum(cart.values())
+    try:
+        cart_manager.add_to_cart(cart, item.id)
+        request.session["cart_sum"***REMOVED*** = sum(cart.values())
+    except ValidationError:
+        messages.error(request, "All available items are already in your cart!")
 
     detail_view = reverse("itemgroup-detail", args=(item.id,))
 

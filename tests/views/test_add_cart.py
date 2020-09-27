@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.test import TransactionTestCase
 from django.urls import reverse
 
@@ -60,3 +61,37 @@ class CartTests(TransactionTestCase):
         response = self.client.post(url, {"return": redirect_url***REMOVED***, follow=True)
 
         self.assertRedirects(response, redirect_url)
+
+    def test_add_cart_flow_max_items(self):
+        ***REMOVED***
+        If an add-to-cart request would exceed the number of available items,
+        the view should redirect with an error message
+        ***REMOVED***
+        item_id = (1,)  # Assign this tuple for readability to pass as args
+        url = reverse("cart-add", args=item_id)
+        redirect_url = reverse("itemgroup-detail", args=item_id)
+        expected_msg = "All available items are already in your cart!"
+
+        # Login a user
+        self.client.login(username="member", password="password")
+
+        # Set our cart to have an item
+        session = self.client.session
+        session["cart"***REMOVED*** = {"1": 1***REMOVED***
+        session.save()
+
+        # Make the request
+        response = self.client.post(url, follow=True)
+
+        # Get the messages, then create a list of their string representations
+        # We need to get the messages in this way since we're using FallbackStorage
+        # and the redirect is contextless
+        msgs = list(messages.get_messages(response.wsgi_request))
+        str_msgs = [str(m) for m in msgs***REMOVED***
+
+        # The POST request should add a message
+        self.assertIn(expected_msg, str_msgs)
+        # Our view should redirect us to the item page
+        self.assertRedirects(response, redirect_url)
+        # The message should be rendered in the DOM
+        self.assertContains(response, expected_msg)

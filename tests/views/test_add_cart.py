@@ -43,13 +43,13 @@ class CartTests(TransactionTestCase):
 
     def test_add_cart_flow_multiple_same_item(self):
         self.client.login(username="member", password="password")
-        url = reverse("cart-add", args=(1,))
-        redirect_url = reverse("itemgroup-detail", args=(1,))
+        url = reverse("cart-add", args=(3,))
+        redirect_url = reverse("itemgroup-detail", args=(3,))
 
         response = self.client.post(url)
         response = self.client.post(url)
 
-        self.assertEqual(self.client.session["cart"***REMOVED***, {"1": 2***REMOVED***)
+        self.assertEqual(self.client.session["cart"***REMOVED***, {"3": 2***REMOVED***)
         self.assertEqual(self.client.session["cart_sum"***REMOVED***, 2)
 
     def test_add_cart_flow_quick_add_good_user(self):

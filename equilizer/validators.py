@@ -4,6 +4,7 @@ import re
 
 
 class ItemValidator:
+    # TODO change to static method
     def is_available(self, item):
         if item.availability != "AVAILABLE":
             raise ValidationError(
@@ -13,11 +14,20 @@ class ItemValidator:
 
 
 class MemberValidator:
+    @staticmethod
     def member_id(value):
         id_regex = re.compile(r"^\d{6***REMOVED***$", flags=re.M)
         if re.match(id_regex, value) is None:
-            raise ValidationError("member ID should be 6 digits.")
+            raise ValidationError(_("Member ID should be 6 digits."))
+
 
 class CartValidator:
+    @staticmethod
     def has_inventory(itemgroup):
-        pass
+        ***REMOVED***
+        Validate that the itemgroup has an available Item to checkout
+        ***REMOVED***
+        if itemgroup.avail_inventory() < 1:
+            raise ValidationError(
+                _("Out of inventory for item %(group)"), params={"group": itemgroup***REMOVED***
+            )

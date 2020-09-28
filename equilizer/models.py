@@ -96,6 +96,10 @@ class Checkout(models.Model):
         LOST = "LOST", _("Lost")
         OUTSTANDING = "OUTSTANDING", _("Outstanding")
 
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    approver = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="approver_id", blank=True, null=True
+    )
     item = models.ForeignKey(Item, on_delete=models.PROTECT)
     checkout_date = models.DateTimeField(default=timezone.now(), blank=True)
     due_date = models.DateTimeField()

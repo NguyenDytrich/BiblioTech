@@ -27,3 +27,14 @@ def add_to_cart(cart, itemgroup_id, count=1):
     validator.does_not_exceed(cart, item)
     new_val = cart.get(ig_id, 0) + count
     cart[ig_id***REMOVED*** = new_val
+
+
+def retrieve_for_display(cart):
+    ***REMOVED***
+    Retrieves displayable information in dictionary format
+    ***REMOVED***
+    dto = [***REMOVED***
+    for key, val in cart.items():
+        itemgroup = ItemGroup.objects.get(pk=key)
+        dto.append({"name": str(itemgroup), "quantity": val***REMOVED***)
+    return dto

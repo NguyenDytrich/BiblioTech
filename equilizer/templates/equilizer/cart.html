@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Equilizer</title>
+	</head>
+	<body>
+		{% if not empty_cart %***REMOVED***
+			<ul>
+			{% for item in cart_items %***REMOVED***
+			<li>{{ item.name ***REMOVED******REMOVED*** (x{{ item.quantity ***REMOVED******REMOVED***)</li>
+			{% endfor %***REMOVED***
+		{% endif %***REMOVED***
+		</ul>
+		<form action="" method="post">
+			{% csrf_token %***REMOVED***
+			<input type="submit" value="Checkout">
+		</form>
+	</body>
+</html>

@@ -49,6 +49,18 @@ class CartManagerTests(TestCase):
         ):
             manager.add_to_cart("", 1)
 
+    def test_retrieval(self):
+        ***REMOVED***
+        Assert that the cart manager can retrieve displayable data
+        ***REMOVED***
+        item = ItemGroup.objects.get(pk=3)
+        str_id = str(item.id)
+        cart = {str_id: 2***REMOVED***
+
+        dto = manager.retrieve_for_display(cart)
+
+        self.assertEqual(dto, [{"name": str(item), "quantity": cart[str_id***REMOVED******REMOVED******REMOVED***)
+
     @parameterized.expand(["UNAVAILABLE", "CHECKED_OUT", "HOLD", "LOST"***REMOVED***)
     def test_bad_add_to_cart_no_inventory(self, avail):
         ***REMOVED***

@@ -82,3 +82,22 @@ def return_items(checkout, return_date=None):
     # Validate and save
     checkout.save()
     return checkout
+
+
+def retrieve_items(cart):
+    ***REMOVED***
+    Retrieve a list of items from the inventory according to the entries in
+    the cart.
+
+    :param cart: A dictionary that represents the PK of the type of Item we want to checkout and
+        its quantity
+    :type cart: Dict
+    ***REMOVED***
+    item_list = [***REMOVED***
+    # For each entry in our cart
+    for item, qty in cart.items():
+        # Append each available item found into item_list
+        for i in Item.objects.filter(item_group_id=int(item), availability="AVAILABLE")[:qty***REMOVED***:
+            item_list.append(i)
+
+    return item_list

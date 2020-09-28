@@ -1,16 +1,20 @@
+from datetime import timedelta
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
+from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.urls import reverse
-from django.shortcuts import redirect, render, get_object_or_404
 
 from .models import ItemGroup
 from .forms import LoginForm
 import equilizer.cart_manager as cart_manager
+import equilizer.checkout_manager as checkout_manager
 
 
 class ItemGroupListView(ListView):
@@ -91,3 +95,24 @@ def add_to_cart(request, itemgroup_id):
     detail_view = reverse("itemgroup-detail", args=(item.id,))
 
     return redirect(request.POST.get("return", detail_view))
+
+
+@require_http_methods(["POST"***REMOVED***)
+@login_required(login_url="/login")
+def create_checkout(request):
+    if not "cart" in request.session:
+        return HttpResponseBadRequest()
+    try:
+        item_list = checkout_manager.retrieve_items(request.session["cart"***REMOVED***)
+        # TODO: Hey right now this defaults to 4 days but you probably wanna do this
+        checkout_manager.checkout_items(item_list, timezone.now() + timedelta(4))
+        return redirect(reverse("success-view"))
+    except ValidationError:
+        return HttpResponseBadRequest()
+
+
+def success(request):
+    ***REMOVED***
+    Catch all success page
+    ***REMOVED***
+    return render(request, "equilizer/success.html")

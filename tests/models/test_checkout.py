@@ -134,3 +134,38 @@ class CheckoutManager_Returns_TestCase(TestCase):
 
         # Item should still be checked out
         self.assertEqual(item.availability, "CHECKED_OUT")
+
+
+class CheckoutManager_Retrieve_TestCase(TestCase):
+
+    fixtures = ["test_fixtures.json"***REMOVED***
+    # ItemGroups with PK 1 and 3 are part of our test fixtures
+    cart = {"1": 1, "3": 2***REMOVED***
+
+    def test_good_retrieval(self):
+        ***REMOVED***
+        retrieve_items() should return a list of itmes that can be passed to checkout_items()
+        ***REMOVED***
+        # Expect retrieve_items() to return the first found items belonging to the ItemGroup
+        expected = [
+            Item.objects.filter(item_group_id=1).first(),
+            Item.objects.get(pk=4),
+            Item.objects.get(pk=5),
+        ***REMOVED***
+
+        result = manager.retrieve_items(self.cart)
+        self.assertEqual(result, expected)
+
+    def test_retrieval_only_returns_available_items(self):
+        item = Item.objects.get(item_group_id=3, pk=4)
+        item.availability = "UNAVAILABLE"
+        item.save()
+
+        expected = [
+            Item.objects.filter(item_group_id=1).first(),
+            Item.objects.get(item_group_id=3, pk=5),
+            Item.objects.get(item_group_id=3, pk=6),
+        ***REMOVED***
+
+        result = manager.retrieve_items(self.cart)
+        self.assertEqual(result, expected)

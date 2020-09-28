@@ -22,6 +22,8 @@ from equilizer.views import (
     login_view,
     add_to_cart,
     cart_view,
+    create_checkout,
+    success
 )
 
 urlpatterns = [
@@ -31,4 +33,6 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("cart/", cart_view, name="cart-view"),
     path("cart/add/<int:itemgroup_id>", add_to_cart, name="cart-add"),
+    path("checkout/", create_checkout, name="create-checkout"),
+    path("success/", success, name="success-view"),
 ***REMOVED***

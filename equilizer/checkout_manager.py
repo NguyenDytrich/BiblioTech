@@ -4,7 +4,7 @@ from equilizer.models import Checkout, Item
 from equilizer.validators import ItemValidator
 
 
-def checkout_items(items, due_date, checkout_date=None, approval_status=None):
+def checkout_items(items, due_date, user, checkout_date=None, approval_status=None):
     ***REMOVED***
     Create a checkout entry for each of the set of items, validate that those items are
     avaialble, and then mark those items as checked out
@@ -38,7 +38,7 @@ def checkout_items(items, due_date, checkout_date=None, approval_status=None):
         item.availability = "CHECKED_OUT"
         item.save()
 
-        checkout = Checkout.objects.create(item=item, due_date=due_date)
+        checkout = Checkout.objects.create(item=item, due_date=due_date, user=user)
         if checkout_date:
             checkout.checkout_date = checkout_date
         if approval_status:

@@ -100,12 +100,12 @@ def add_to_cart(request, itemgroup_id):
 @require_http_methods(["POST"***REMOVED***)
 @login_required(login_url="/login")
 def create_checkout(request):
-    if not "cart" in request.session:
+    if not "cart" in request.session or not request.user.is_authenticated:
         return HttpResponseBadRequest()
     try:
         item_list = checkout_manager.retrieve_items(request.session["cart"***REMOVED***)
-        # TODO: Hey right now this defaults to 4 days but you probably wanna do this
-        checkout_manager.checkout_items(item_list, timezone.now() + timedelta(4))
+        # TODO: Hey right now this defaults to 4 days but you probably don't wanna do this
+        checkout_manager.checkout_items(item_list, timezone.now() + timedelta(4), request.user)
         return redirect(reverse("success-view"))
     except ValidationError:
         return HttpResponseBadRequest()

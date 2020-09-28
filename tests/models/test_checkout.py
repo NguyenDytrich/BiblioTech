@@ -1,5 +1,6 @@
 from datetime import timedelta
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
 from equilizer.models import Checkout, Item
@@ -11,12 +12,20 @@ class CheckoutTestCase(TestCase):
     fixtures = ["test_fixtures.json"***REMOVED***
     due_date = timezone.now() + timedelta(4)
 
+    def setUp(self):
+        # Create a test user in the database
+        self.user = User.objects.create(username="member", email="member@test.edu")
+        self.user.set_password("password")
+        self.user.save()
+
     def test_good_checkout(self):
         ***REMOVED***
         Test a perfectly good checkout entry.
         ***REMOVED***
         item = Item.objects.get(pk=1)
-        checkout = Checkout.objects.create(due_date=self.due_date, item=item)
+        checkout = Checkout.objects.create(
+            due_date=self.due_date, item=item, user=self.user
+        )
 
         checkout.save()
 
@@ -31,8 +40,14 @@ class CheckoutTestCase(TestCase):
 class CheckoutManager_Checkout_TestCase(TestCase):
     fixtures = ["test_fixtures.json"***REMOVED***
 
-    # Set a due date 4 days from now
-    due_date = timezone.now() + timedelta(4)
+    def setUp(self):
+        # Create a test user in the database
+        self.user = User.objects.create(username="member", email="member@test.edu")
+        self.user.set_password("password")
+        self.user.save()
+
+        # Set a due date 4 days from now
+        self.due_date = timezone.now() + timedelta(4)
 
     def test_good_checkout(self):
         ***REMOVED***
@@ -40,7 +55,7 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         ***REMOVED***
         item = Item.objects.get(pk=1)
 
-        manager.checkout_items(item, self.due_date)
+        manager.checkout_items(item, self.due_date, self.user)
 
         # Check the that the item availability is set correctly
         self.assertEqual(item.availability, "CHECKED_OUT")
@@ -51,7 +66,7 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         Test that our checkout entry can have multiple items
         ***REMOVED***
         items = Item.objects.filter(availability="AVAILABLE")
-        manager.checkout_items(items, self.due_date)
+        manager.checkout_items(items, self.due_date, self.user)
 
         # Iterator executes the query, so we're not looking into the cache.
         for item in items.iterator():
@@ -63,7 +78,9 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         ***REMOVED***
         items = Item.objects.filter(availability="AVAILABLE")
         checkout_date = self.due_date + timedelta(-2)
-        manager.checkout_items(items, self.due_date, checkout_date=checkout_date)
+        manager.checkout_items(
+            items, self.due_date, self.user, checkout_date=checkout_date
+        )
 
         self.assertEqual(Checkout.objects.get(pk=1).checkout_date, checkout_date)
 
@@ -80,7 +97,7 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         items = Item.objects.all()
 
         with self.assertRaises(ValidationError):
-            manager.checkout_items(items, self.due_date)
+            manager.checkout_items(items, self.due_date, self.user)
 
     def test_bad_checkout_date(self):
         ***REMOVED***
@@ -92,7 +109,9 @@ class CheckoutManager_Checkout_TestCase(TestCase):
         due_date = timezone.now()
 
         with self.assertRaises(ValidationError):
-            manager.checkout_items(items, due_date, checkout_date=checkout_date)
+            manager.checkout_items(
+                items, due_date, self.user, checkout_date=checkout_date
+            )
 
 
 class CheckoutManager_Returns_TestCase(TestCase):
@@ -101,6 +120,11 @@ class CheckoutManager_Returns_TestCase(TestCase):
     fixtures = ["test_fixtures.json"***REMOVED***
 
     def setUp(self):
+        # Set up a user in hte database
+        self.user = User.objects.create(username="member", email="member@test.edu")
+        self.user.set_password("password")
+        self.user.save()
+
         # Set up the checkout entry in the database
         self.items = Item.objects.filter(availability="AVAILABLE")
 
@@ -108,7 +132,7 @@ class CheckoutManager_Returns_TestCase(TestCase):
         self.checkout_date = timezone.now() + timedelta(-2)
         self.due_date = timezone.now() + timedelta(4)
         self.checkout = manager.checkout_items(
-            self.items, self.due_date, checkout_date=self.checkout_date
+            self.items, self.due_date, self.user, checkout_date=self.checkout_date
         )[0***REMOVED***
 
     def test_good_return(self):
@@ -125,7 +149,6 @@ class CheckoutManager_Returns_TestCase(TestCase):
         Test that a return date must be after the checkout date
         ***REMOVED***
         item = self.checkout.item
-        checkout_date = self.due_date
         # 60 days into the past
         return_date = timezone.now() + timedelta(-60)
 

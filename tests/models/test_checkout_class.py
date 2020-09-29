@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.test import TestCase
 from django.utils import timezone
-from equilizer.models import Checkout
+from equilizer.models import Checkout, Item
 from freezegun import freeze_time
 from unittest import mock
 
@@ -10,14 +10,15 @@ class CheckoutClassTestCase(TestCase):
     ***REMOVED***
     Test the class behaviors NOT the object behaviors.
     ***REMOVED***
+
     def test_checkout_string_repr(self):
         ***REMOVED***
         Assert that checkout string representation is human-readable
         ***REMOVED***
-
+        item = Item(library_id="Test")
         date = datetime.now()
-        checkout = Checkout(checkout_date=date)
-        self.assertEqual(str(checkout), f"{date***REMOVED***")
+        checkout = Checkout(item=item, checkout_date=date)
+        self.assertEqual(str(checkout), "Test")
 
     def test_checkout_enum_choices(self):
         ***REMOVED***

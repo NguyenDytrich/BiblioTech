@@ -12,7 +12,7 @@
 			{% endfor %***REMOVED***
 		{% endif %***REMOVED***
 		</ul>
-		<form action="" method="post">
+		<form action="{% url 'create-checkout' %***REMOVED***" method="post">
 			{% csrf_token %***REMOVED***
 			<input type="submit" value="Checkout">
 		</form>

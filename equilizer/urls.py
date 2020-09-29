@@ -19,6 +19,7 @@ from django.urls import path
 from equilizer.views import (
     ItemGroupListView,
     ItemGroupDetailView,
+    CheckoutListView,
     login_view,
     add_to_cart,
     cart_view,
@@ -35,4 +36,5 @@ urlpatterns = [
     path("cart/add/<int:itemgroup_id>", add_to_cart, name="cart-add"),
     path("checkout/", create_checkout, name="create-checkout"),
     path("success/", success, name="success-view"),
+    path("checkouts/", CheckoutListView.as_view(), name="checkout-list"),
 ***REMOVED***

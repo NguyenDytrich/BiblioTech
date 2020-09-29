@@ -11,7 +11,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from .models import ItemGroup
+from .models import ItemGroup, Checkout
 from .forms import LoginForm
 import equilizer.cart_manager as cart_manager
 import equilizer.checkout_manager as checkout_manager
@@ -33,6 +33,19 @@ class ItemGroupDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class CheckoutListView(ListView):
+    model = Checkout
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def get_queryset(self):
+        queryset = super(CheckoutListView, self).get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
 
 
 def cart_view(request):
@@ -105,7 +118,9 @@ def create_checkout(request):
     try:
         item_list = checkout_manager.retrieve_items(request.session["cart"***REMOVED***)
         # TODO: Hey right now this defaults to 4 days but you probably don't wanna do this
-        checkout_manager.checkout_items(item_list, timezone.now() + timedelta(4), request.user)
+        checkout_manager.checkout_items(
+            item_list, timezone.now() + timedelta(4), request.user
+        )
         return redirect(reverse("success-view"))
     except ValidationError:
         return HttpResponseBadRequest()

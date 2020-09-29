@@ -124,4 +124,4 @@ class Checkout(models.Model):
                 raise ValidationError(_("Return date cannot be before checkout date."))
 
     def __str__(self):
-        return str(self.checkout_date)
+        return f"{str(self.item)***REMOVED***"

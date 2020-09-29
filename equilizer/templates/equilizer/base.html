@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Equilizer</title>
+		{% load static %***REMOVED***
+		<link rel="stylesheet" href="{% static 'bulma.min.css' %***REMOVED***">
+	</head>
+	<body>
+		<nav class="navbar" role="navigation" aria-label="main navigation">
+			<div class="navbar-menu">
+				<div class="navbar-brand">
+					<div class="navbar-item">
+						EqLib
+					</div>
+				</div>
+				<a class="navbar-item" href="{% url 'home' %***REMOVED***">Home</a>
+				<a class="navbar-item" href="{% url 'itemgroup-list' %***REMOVED***">Catalogue</a>
+				<div class="navbar-end">
+				{% if user.is_authenticated %***REMOVED***
+					<a class="navbar-item" href="{% url 'checkout-list' %***REMOVED***">My Checkouts</a>
+					<a class="navbar-item" href="{% url 'cart-view' %***REMOVED***">My Cart</a>
+					<a class="navbar-item" >
+						<form id="logout" name="logout" action="{% url 'logout' %***REMOVED***" method="post">
+							{% csrf_token %***REMOVED***
+							<input type="submit" value="Logout">
+						</form>
+					</a>
+				{% else %***REMOVED***
+					<a class="navbar-item">Sign Up</a>
+					<a class="navbar-item" href="{% url 'login' %***REMOVED***">Login</a>
+				{% endif %***REMOVED***
+				</div>
+			</div>
+		</nav>
+		<div class="container">
+		{% block content %***REMOVED***
+		{% endblock %***REMOVED***
+		</div>
+	</body>
+</html>

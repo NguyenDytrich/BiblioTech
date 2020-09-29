@@ -98,7 +98,7 @@ def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
     # Redirect to value specified by 'return' otherwise, redirect to th list view
-    return redirect(request.POST.get("return", "itemgroup-list"))
+    return redirect(request.POST.get("next", "home"))
 
 
 @login_required(login_url="/login", redirect_field_name=None)

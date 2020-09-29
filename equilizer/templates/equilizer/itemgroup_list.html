@@ -1,30 +1,20 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Equilizer</title>
-	</head>
-	<body>
-		<h1>Items for Checkout</h1>
-		{% if user.is_authenticated  %***REMOVED***
-		<form action="{% url 'logout' %***REMOVED***" method="post">
-			{% csrf_token %***REMOVED***
-			<input type="submit" value="Logout">
-		</form>
-		{% endif %***REMOVED***
-		<ul>
-			{% for itemgroup in object_list %***REMOVED***
-			<li>
-				<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
-				<form action="{% url 'cart-add' itemgroup.id %***REMOVED***" method="post">
-					{% csrf_token %***REMOVED***
-					<input type="hidden" name="return" value="{% url 'itemgroup-list' %***REMOVED***" />
-					<input type="submit" value="Quick add">
-				</form>
-			</li>
-			{% empty %***REMOVED***
-				<li>No items to display.</li>
-			{% endfor %***REMOVED***
-		</ul>
-	</body>
-</html>
+{% extends 'equilizer/base.html' %***REMOVED***	
+
+
+{% block content %***REMOVED***
+	<h1>Items for Checkout</h1>
+	<ul>
+		{% for itemgroup in object_list %***REMOVED***
+		<li>
+			<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
+			<form name="quick_add_{{itemgroup.id***REMOVED******REMOVED***" action="{% url 'cart-add' itemgroup.id %***REMOVED***" method="post">
+				{% csrf_token %***REMOVED***
+				<input type="hidden" name="return" value="{% url 'itemgroup-list' %***REMOVED***" />
+				<input type="submit" value="Quick add">
+			</form>
+		</li>
+		{% empty %***REMOVED***
+			<li>No items to display.</li>
+		{% endfor %***REMOVED***
+	</ul>
+	{% endblock %***REMOVED***

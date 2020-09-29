@@ -1,11 +1,7 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Equilizer</title>
-	</head>
-	<body>
-		<form action="{% url 'login' %***REMOVED***" method="post">
+{% extends 'equilizer/base.html' %***REMOVED***
+
+{% block content %***REMOVED***
+	<form action="{% url 'login' %***REMOVED***" method="post">
 			{% csrf_token %***REMOVED***
 			{{ form ***REMOVED******REMOVED***
 			{% if request.GET.next %***REMOVED***
@@ -13,5 +9,4 @@
 			{% endif %***REMOVED***
 			<input type="submit" value="Login">
 		</form>
-	</body>
-</html>
+{% endblock %***REMOVED***

@@ -1,17 +1,5 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Equilizer</title>
-		{% load static %***REMOVED***
-		<link rel="stylesheet" href="{% static 'bulma.min.css' %***REMOVED***">
-	</head>
-	<body>
-		<h1>Home!</h1>
-		<a href="{% url 'itemgroup-list' %***REMOVED***">Browse catalogue</a>
-		{% if user.is_authenticated %***REMOVED***
-		<a href="{% url 'checkout-list' %***REMOVED***">My checkouts</a>
-		<a href="{% url 'cart-view' %***REMOVED***">My cart</a>
-		{% endif %***REMOVED***
-	</body>
-</html>
+{% extends 'equilizer/base.html' %***REMOVED***
+
+{% block content %***REMOVED***
+Hello!
+{% endblock %***REMOVED***

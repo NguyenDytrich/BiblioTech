@@ -1,20 +1,17 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Equilizer</title>
-	</head>
-	<body>
-		{% if not empty_cart %***REMOVED***
-			<ul>
-			{% for item in cart_items %***REMOVED***
-			<li>{{ item.name ***REMOVED******REMOVED*** (x{{ item.quantity ***REMOVED******REMOVED***)</li>
-			{% endfor %***REMOVED***
-		{% endif %***REMOVED***
-		</ul>
-		<form action="{% url 'create-checkout' %***REMOVED***" method="post">
-			{% csrf_token %***REMOVED***
-			<input type="submit" value="Checkout">
-		</form>
-	</body>
-</html>
+{% extends 'equilizer/base.html' %***REMOVED***
+
+{% block content %***REMOVED***
+	{% if not empty_cart %***REMOVED***
+	<ul>
+		{% for item in cart_items %***REMOVED***
+		<li>{{ item.name ***REMOVED******REMOVED*** (x{{ item.quantity ***REMOVED******REMOVED***)</li>
+		{% endfor %***REMOVED***
+	</ul>
+	<form action="{% url 'create-checkout' %***REMOVED***" method="post">
+		{% csrf_token %***REMOVED***
+		<input type="submit" value="Checkout">
+	</form>
+	{% else %***REMOVED***
+	<h1>No items in cart</h1>
+	{% endif %***REMOVED***
+{% endblock%***REMOVED***

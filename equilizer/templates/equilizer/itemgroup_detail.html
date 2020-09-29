@@ -1,31 +1,31 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Equilizer</title>
-	</head>
-	<body>
-		{% if messages %***REMOVED***
+{% extends 'equilizer/base.html' %***REMOVED***
+
+{% block content %***REMOVED***	
+
+	{% if messages %***REMOVED***
 		<ul>
 			{% for message in messages %***REMOVED***
 			<li>{{ message ***REMOVED******REMOVED***</li>
 			{% endfor %***REMOVED***
 		</ul>
-		{% endif %***REMOVED***
-		{% if user.is_authenticated %***REMOVED***
-			{% if request.session.cart_sum %***REMOVED***
+	{% endif %***REMOVED***
+
+	{% if user.is_authenticated %***REMOVED***
+		{% if request.session.cart_sum %***REMOVED***
 			<span>{{ request.session.cart_sum ***REMOVED******REMOVED*** items in cart</span>
 			{% else %***REMOVED***
 			<span>No items in cart</span>
-			{% endif %***REMOVED***
 		{% endif %***REMOVED***
-		<h1>{{ object.make ***REMOVED******REMOVED***</h1>
-		<h2>{{ object.model ***REMOVED******REMOVED***</h2>
-		<p>Description {{ object.description ***REMOVED******REMOVED***</p>
-		<p>{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
-		<form action="{% url 'cart-add' object.id %***REMOVED***" method="post">
-			{% csrf_token %***REMOVED***
-			<input type="submit" value="Add to cart">
-		</form>
-	</body>
-</html>
+	{% endif %***REMOVED***
+
+	<h1>{{ object.make ***REMOVED******REMOVED***</h1>
+	<h2>{{ object.model ***REMOVED******REMOVED***</h2>
+	<p>Description {{ object.description ***REMOVED******REMOVED***</p>
+	<p>{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
+
+	<form name="add_to_cart" action="{% url 'cart-add' object.id %***REMOVED***" method="post">
+		{% csrf_token %***REMOVED***
+		<input type="submit" value="Add to cart">
+	</form>
+
+{% endblock %***REMOVED***

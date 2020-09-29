@@ -1,7 +1,8 @@
 from datetime import timedelta
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render, get_object_or_404
@@ -35,17 +36,24 @@ class ItemGroupDetailView(DetailView):
         return context
 
 
-class CheckoutListView(ListView):
+class CheckoutListView(LoginRequiredMixin, ListView):
+    login_url = "/login/"
+    redirect_field_name = None
     model = Checkout
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
 
+    # TODO: Test this
     def get_queryset(self):
         queryset = super(CheckoutListView, self).get_queryset()
         queryset = queryset.filter(user=self.request.user)
         return queryset
+
+
+def home_view(request):
+    return render(request, "equilizer/home.html")
 
 
 def cart_view(request):
@@ -85,7 +93,15 @@ def login_view(request):
         return render(request, "equilizer/login.html", {"form": form***REMOVED***)
 
 
-@login_required(login_url="/login")
+@require_http_methods(["POST"***REMOVED***)
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    # Redirect to value specified by 'return' otherwise, redirect to th list view
+    return redirect(request.POST.get("return", "itemgroup-list"))
+
+
+@login_required(login_url="/login", redirect_field_name=None)
 def add_to_cart(request, itemgroup_id):
 
     # Redirect to the item page if it's not a post request
@@ -111,7 +127,7 @@ def add_to_cart(request, itemgroup_id):
 
 
 @require_http_methods(["POST"***REMOVED***)
-@login_required(login_url="/login")
+@login_required(login_url="/login", redirect_field_name=None)
 def create_checkout(request):
     if not "cart" in request.session or not request.user.is_authenticated:
         return HttpResponseBadRequest()

@@ -6,6 +6,12 @@
 	</head>
 	<body>
 		<h1>Items for Checkout</h1>
+		{% if user.is_authenticated  %***REMOVED***
+		<form action="{% url 'logout' %***REMOVED***" method="post">
+			{% csrf_token %***REMOVED***
+			<input type="submit" value="Logout">
+		</form>
+		{% endif %***REMOVED***
 		<ul>
 			{% for itemgroup in object_list %***REMOVED***
 			<li>

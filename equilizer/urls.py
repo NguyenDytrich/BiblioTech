@@ -20,7 +20,9 @@ from equilizer.views import (
     ItemGroupListView,
     ItemGroupDetailView,
     CheckoutListView,
+    home_view,
     login_view,
+    logout_view,
     add_to_cart,
     cart_view,
     create_checkout,
@@ -32,9 +34,11 @@ urlpatterns = [
     path("items", ItemGroupListView.as_view(), name="itemgroup-list"),
     path("items/<int:pk>/", ItemGroupDetailView.as_view(), name="itemgroup-detail"),
     path("login/", login_view, name="login"),
+    path("logout/", logout_view, name="logout"),
     path("cart/", cart_view, name="cart-view"),
     path("cart/add/<int:itemgroup_id>", add_to_cart, name="cart-add"),
     path("checkout/", create_checkout, name="create-checkout"),
     path("success/", success, name="success-view"),
     path("checkouts/", CheckoutListView.as_view(), name="checkout-list"),
+    path("", home_view, name="home")
 ***REMOVED***

@@ -32,7 +32,7 @@ class CartTests(TransactionTestCase):
         )
         redirect_url = reverse("itemgroup-detail", args=(1,))
 
-        self.assertRedirects(response, f"{reverse('login')***REMOVED***?next=%2Fcart%2Fadd%2F1")
+        self.assertRedirects(response, reverse('login'))
 
         credentials = {
             "username": "member",

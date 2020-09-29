@@ -39,3 +39,12 @@ class CheckoutTests(TransactionTestCase):
         # A checkout entry should be created in the database
         checkout = Checkout.objects.first()
         self.assertIsNotNone(checkout)
+
+    def test_anon_user_checkouts(self):
+        ***REMOVED***
+        Anonymous users should be redirected to a login page
+        ***REMOVED***
+        url = reverse("checkout-list")
+
+        response = self.client.get(url, follow=True)
+        self.assertRedirects(response, reverse('login'))

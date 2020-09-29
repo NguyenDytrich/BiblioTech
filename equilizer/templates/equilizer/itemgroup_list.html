@@ -2,16 +2,46 @@
 
 
 {% block content %***REMOVED***
-	<h1>Items for Checkout</h1>
+	<h1 class="title">Items for Checkout</h1>
 	<ul>
 		{% for itemgroup in object_list %***REMOVED***
-		<li>
-			<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
-			<form name="quick_add_{{itemgroup.id***REMOVED******REMOVED***" action="{% url 'cart-add' itemgroup.id %***REMOVED***" method="post">
-				{% csrf_token %***REMOVED***
-				<input type="hidden" name="return" value="{% url 'itemgroup-list' %***REMOVED***" />
-				<input type="submit" value="Quick add">
-			</form>
+		<li class="box">
+			<div class="media">
+				<div class="media-left">
+					<figure class="image is-96x96">
+						<img src="https://bulma.io/images/placeholders/128x128.png" alt="picture of a D7000 camera">
+					</figure>
+				</div>
+				<div class="media-content">
+					<div class="content">
+						<strong>
+							<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
+						</strong>
+						<p>{{ itemgroup.description ***REMOVED******REMOVED***</p>
+					</div>
+					<div class="level is-mobile">
+						<div class="level-left">
+							<span class="level-item is-size-7">
+								({{ itemgroup.avail_inventory ***REMOVED******REMOVED*** of {{ itemgroup.total_inventory ***REMOVED******REMOVED*** available)
+							</span>
+							{% if item.avail_inventory > 0 %***REMOVED***
+							<form 
+								name="quick_add_{{itemgroup.id***REMOVED******REMOVED***"
+								action="{% url 'cart-add' itemgroup.id %***REMOVED***"
+								method="post">
+								{% csrf_token %***REMOVED***
+								<input type="hidden" name="return" value="{% url 'itemgroup-list' %***REMOVED***" />
+								<input class="button is-small" type="submit" value="Quick add">
+							</form>
+							{% else %***REMOVED***
+							<div class="level-item">
+								<div class="button is-small">Waitlist</div>
+							</div>
+							{% endif %***REMOVED***
+						</div>
+					</div>
+				</div>
+			</div>
 		</li>
 		{% empty %***REMOVED***
 			<li>No items to display.</li>

@@ -1,12 +1,29 @@
 {% extends 'equilizer/base.html' %***REMOVED***
 
 {% block content %***REMOVED***
-	<form action="{% url 'login' %***REMOVED***" method="post">
-			{% csrf_token %***REMOVED***
-			{{ form ***REMOVED******REMOVED***
-			{% if request.GET.next %***REMOVED***
-			<input type="hidden" name="next" value="{{ request.GET.next ***REMOVED******REMOVED***"/>
-			{% endif %***REMOVED***
-			<input type="submit" value="Login">
-		</form>
+<div class="box container is-max-desktop is-fluid mt-6">
+	<h1 class="title">Login</h1>
+	<div>
+		<form action="{% url 'login' %***REMOVED***" method="post">
+				{% csrf_token %***REMOVED***
+				<div class="field">
+					<label class="label" for="username">Username</label>
+					<div class="control">
+						<input class="input" id="username" type="text" name="username" maxlength="20" required="">
+					</div>
+				</div>
+				<div class="field">
+					<label class="label" for="password">Password</label>
+					<div class="control">
+						<input class="input" id="password" type="password" name="password" required="">
+					</div>
+				</div>
+
+				{% if request.GET.next %***REMOVED***
+				<input type="hidden" name="next" value="{{ request.GET.next ***REMOVED******REMOVED***"/>
+				{% endif %***REMOVED***
+				<input class="button is-primary" type="submit" value="Login">
+			</form>
+		</div>
+</div>
 {% endblock %***REMOVED***

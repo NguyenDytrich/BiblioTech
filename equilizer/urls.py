@@ -29,8 +29,11 @@ from equilizer.views import (
     success
 )
 
+from equilizer.class_views.admin_views import LibrarianView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("control_panel/", LibrarianView.as_view(), name="librarian-control-panel"),
     path("items", ItemGroupListView.as_view(), name="itemgroup-list"),
     path("items/<int:pk>/", ItemGroupDetailView.as_view(), name="itemgroup-detail"),
     path("login/", login_view, name="login"),

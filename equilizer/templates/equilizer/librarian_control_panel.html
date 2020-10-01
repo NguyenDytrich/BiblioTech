@@ -1,0 +1,48 @@
+{% extends 'equilizer/base.html' %***REMOVED***
+
+{% block content %***REMOVED***
+<div class="tile is-ancestor">
+	<div class="tile">
+		<div class="tile is-parent is-7">
+			<div class="card" style="width: 100%">
+				<div class="card-header has-background-info">
+					<h1 class="card-header-title has-text-light">Pending Checkouts</h1>
+				</div>
+				<div class="card-content">
+					<table class="table is-fullwidth">
+						<thead>
+							<th>Checkout Date</th>
+							<th>User</th>
+							<th>Item</th>
+							<th></th>
+						</thead>
+						<tbody>
+						{% for c in pending_checkouts %***REMOVED***
+							<tr>
+								<td>{{ c.checkout_date ***REMOVED******REMOVED***</td>
+								<td>{{ c.user ***REMOVED******REMOVED***</td>
+								<td>{{ c.item ***REMOVED******REMOVED***</td>
+								<td>
+									<div class="level">
+										<div>
+											<form>
+												<input class="button is-small is-success" type="submit" value="Approve">
+											</form>
+										</div>
+										<div>
+											<form>
+												<input class="button is-small is-danger is-outlined" type="submit" value="Deny">
+											</form>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{% endfor %***REMOVED***
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %***REMOVED***

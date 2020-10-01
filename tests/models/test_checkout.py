@@ -192,3 +192,46 @@ class CheckoutManager_Retrieve_TestCase(TestCase):
 
         result = manager.retrieve_items(self.cart)
         self.assertEqual(result, expected)
+
+
+class CheckoutManager_Approval_Tests(TestCase):
+    fixtures = ["test_fixtures.json"***REMOVED***
+
+    def setUp(self):
+        # Create a test user in the database
+        self.user = User.objects.create(username="member", email="member@test.edu")
+        self.user.set_password("password")
+        self.user.save()
+
+        # Set a due date 4 days from now
+        self.due_date = timezone.now() + timedelta(4)
+
+        # Create a checkout entry
+        self.item_id = 1
+        self.checkout = manager.checkout_items(
+            Item.objects.get(pk=self.item_id), self.due_date, self.user
+        )[0***REMOVED*** # Checkout_items returns a list, so take the 1st item
+
+    def test_approval(self):
+        ***REMOVED***
+        Assert method should set approval status correctly
+        ***REMOVED***
+        checkout = self.checkout
+        manager.approve_checkout(checkout)
+        database_obj = Checkout.objects.get(pk=checkout.id)
+        self.assertEqual(database_obj.approval_status, "APPROVED")
+
+    def test_deny(self):
+        ***REMOVED***
+        Assert method updates related objects correctly
+        ***REMOVED***
+        checkout = self.checkout
+        item = checkout.item
+
+        manager.deny_checkout(checkout)
+
+        db_checkout = Checkout.objects.get(pk=checkout.id)
+        db_item = Item.objects.get(pk=item.id)
+
+        self.assertEqual(db_checkout.approval_status, "DENIED")
+        self.assertEqual(db_item.availability, "AVAILABLE")

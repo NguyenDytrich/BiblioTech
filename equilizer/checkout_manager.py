@@ -97,7 +97,28 @@ def retrieve_items(cart):
     # For each entry in our cart
     for item, qty in cart.items():
         # Append each available item found into item_list
-        for i in Item.objects.filter(item_group_id=int(item), availability="AVAILABLE")[:qty***REMOVED***:
+        for i in Item.objects.filter(item_group_id=int(item), availability="AVAILABLE")[
+            :qty
+        ***REMOVED***:
             item_list.append(i)
 
     return item_list
+
+
+def approve_checkout(checkout):
+    ***REMOVED***
+    Set the approval status of the passed checkout as "APPROVED".
+
+    :param checkout: Checkout entry to approve
+    :type checkout: Checkout
+    ***REMOVED***
+
+
+def deny_checkout(checkout):
+    ***REMOVED***
+    Set the approval status of the passed checkout as "DENIED", and set the availability of
+    the item as "AVAILABLE"
+
+    :param checkout: Checkout entry to deny
+    :type checkout: Checkout
+    ***REMOVED***

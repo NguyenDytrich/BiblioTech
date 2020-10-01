@@ -10,22 +10,18 @@
 		</ul>
 	{% endif %***REMOVED***
 
-	{% if user.is_authenticated %***REMOVED***
-		{% if request.session.cart_sum %***REMOVED***
-			<span>{{ request.session.cart_sum ***REMOVED******REMOVED*** items in cart</span>
-			{% else %***REMOVED***
-			<span>No items in cart</span>
-		{% endif %***REMOVED***
-	{% endif %***REMOVED***
+	<section class="container">
+		<h1 class="title">{{ object.make ***REMOVED******REMOVED*** {{ object.model ***REMOVED******REMOVED***</h1>
+		<div>
+			<h3 class="title is-5 mb-2">Description</h2>
+			<p>{{ object.description ***REMOVED******REMOVED***</p>
+			<p class="is-size-7">{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
+		</div>
 
-	<h1>{{ object.make ***REMOVED******REMOVED***</h1>
-	<h2>{{ object.model ***REMOVED******REMOVED***</h2>
-	<p>Description {{ object.description ***REMOVED******REMOVED***</p>
-	<p>{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
-
-	<form name="add_to_cart" action="{% url 'cart-add' object.id %***REMOVED***" method="post">
-		{% csrf_token %***REMOVED***
-		<input type="submit" value="Add to cart">
-	</form>
+		<form name="add_to_cart" action="{% url 'cart-add' object.id %***REMOVED***" method="post">
+			{% csrf_token %***REMOVED***
+			<input type="submit" value="Add to cart">
+		</form>
+	</section>
 
 {% endblock %***REMOVED***

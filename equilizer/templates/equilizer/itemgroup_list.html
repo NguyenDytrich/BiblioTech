@@ -18,13 +18,13 @@
 							<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
 						</strong>
 						<p>{{ itemgroup.description ***REMOVED******REMOVED***</p>
+						<div class="is-size-7">
+							({{ itemgroup.avail_inventory ***REMOVED******REMOVED*** of {{ itemgroup.total_inventory ***REMOVED******REMOVED*** available)
+						</div>
 					</div>
 					<div class="level is-mobile">
 						<div class="level-left">
-							<span class="level-item is-size-7">
-								({{ itemgroup.avail_inventory ***REMOVED******REMOVED*** of {{ itemgroup.total_inventory ***REMOVED******REMOVED*** available)
-							</span>
-							{% if item.avail_inventory > 0 %***REMOVED***
+														{% if item.avail_inventory > 0 %***REMOVED***
 							<form 
 								name="quick_add_{{itemgroup.id***REMOVED******REMOVED***"
 								action="{% url 'cart-add' itemgroup.id %***REMOVED***"

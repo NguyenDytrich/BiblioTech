@@ -1,12 +1,20 @@
 {% extends 'equilizer/base.html' %***REMOVED***
 {% block content %***REMOVED***
-		<h1>Checkout History</h1>
-		<ul>
+		<h1 class="title">Checkout History</h1>
+		<table class="table is-fullwidth">
+			<thead>
+				<th>Checkout Date</th>
+				<th>Item</th>
+				<th>Checkout Status</th>
+			</thead>
+			<tbody>
 			{% for checkout in object_list %***REMOVED***
-			<li>
-				<p>{{ checkout ***REMOVED******REMOVED***</p>
-				<p>({{ checkout.approval_status ***REMOVED******REMOVED***)</p>
-			</li>
+			<tr>
+				<td>{{ checkout.checkout_date ***REMOVED******REMOVED***</td>
+				<td><a href="{% url 'itemgroup-detail' checkout.item.item_group_id %***REMOVED***">{{ checkout ***REMOVED******REMOVED***</a></td>
+				<td>{{ checkout.approval_status ***REMOVED******REMOVED***</td>
+			</tr>
 			{% endfor %***REMOVED***
-		</ul>
+			</tbody>
+		</table>
 {% endblock %***REMOVED***

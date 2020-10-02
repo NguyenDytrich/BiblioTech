@@ -167,4 +167,4 @@ class LibrarianViewAuthTests(TransactionTestCase):
         self.client.login(username="librarian", password="password")
 
         response = self.client.post(self.deny_endpoint, {"reason": ""***REMOVED***, follow=True)
-        self.assertRedirects(response, reverse("deny-checkout", args=(self.checkout.id,)))
+        self.assertContains(response, "This field is required")

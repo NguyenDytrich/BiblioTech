@@ -4,8 +4,23 @@
 <div>
 	<form action="{% url 'deny-checkout' checkout_id %***REMOVED***" method="post">
 		{% csrf_token %***REMOVED***
-		<textarea id="reason" name="reason" maxlength="500" class="textarea"></textarea>
-		<input class="button is-primary" type="submit" value="submit">
+		<div class="field">
+			<label for="reason" class="label">Please provide a reason for denial</label>
+			<textarea
+				id="reason"
+				name="reason"
+				maxlength="500"
+				class="textarea {% if form.reason.errors %***REMOVED***is-danger{% endif %***REMOVED***">
+			</textarea>
+			{% if form.reason.errors %***REMOVED***
+				{% for e in form.reason.errors %***REMOVED***
+					<p class="help is-danger">{{e***REMOVED******REMOVED***</p>
+				{% endfor %***REMOVED***
+			{% endif %***REMOVED***
+		</div>
+		<div class="field">
+			<input class="button is-primary" type="submit" value="submit">
+		</div>
 	</form>
 </div>
 {% endblock %***REMOVED***

@@ -212,15 +212,19 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
         Mark the checkout as denied, and the item as available
         ***REMOVED***
         form = DenyCheckoutForm(request.POST)
-        form.is_valid()
+        is_valid = form.is_valid()
 
         checkout = Checkout.objects.get(pk=checkout_id)
 
-        # TODO: implement an audit log of denied checkouts
-        reason = form.cleaned_data.get("reason")
+        if not is_valid:
+            return render(
+                request,
+                "equilizer/deny_checkout.html",
+            ***REMOVED***"checkout_id": checkout_id, "form": form***REMOVED***,
+            )
 
-        if not reason:
-            return redirect(reverse("deny-checkout", args=(checkout_id,)))
         else:
+            # TODO: implement an audit log of denied checkouts
+            reason = form.cleaned_data.get("reason")
             checkout_manager.deny_checkout(checkout)
             return redirect(reverse("librarian-control-panel"))

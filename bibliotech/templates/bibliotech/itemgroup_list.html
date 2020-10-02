@@ -1,8 +1,19 @@
 {% extends 'bibliotech/base.html' %}	
 
+	
 
 {% block content %}
 	<h1 class="title">Items for Checkout</h1>
+	{% if messages %}
+	<div class="notification is-info">
+		<button class="delete"></button>
+		<ul>
+			{% for m in messages %}
+			<li>{{m}}</li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
 	<ul>
 		{% for itemgroup in object_list %}
 		<li class="box">
@@ -47,4 +58,17 @@
 			<li>No items to display.</li>
 		{% endfor %}
 	</ul>
-	{% endblock %}
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+				var $notification = $delete.parentNode;
+
+				$delete.addEventListener('click', () => {
+					$notification.parentNode.removeChild($notification);
+				});
+			});
+		});
+	</script>
+
+{% endblock %}

@@ -173,6 +173,7 @@ def create_checkout(request):
         return HttpResponseBadRequest()
 
 
+# TODO: you can access this page from wherever, whenever
 def success(request):
     """
     Catch all success page

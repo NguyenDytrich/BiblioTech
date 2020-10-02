@@ -1,10 +1,14 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Equilizer</title>
-	</head>
-	<body>
-		Success!
-	</body>
-</html>
+{% extends 'bibliotech/base.html' %}
+
+{% block content %}
+<div class="content">
+	<h1>Success!</h1>
+	<p>
+	Your checkout request has been processed successfully. We will hold these
+	items for you at the library, and you can pick them up by the end of the day
+	that you've checked out your items for.
+	</p>
+	<a class="button is-primary" href="{% url 'checkout-list' %}">View my checkouts</a>
+	<a class="button is-info" href="{% url 'home' %}">Back to home</a>
+</div>
+{% endblock %}

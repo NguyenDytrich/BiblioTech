@@ -4,15 +4,19 @@
 		<table class="table is-fullwidth">
 			<thead>
 				<th>Checkout Date</th>
+				<th>Due Date</th>
 				<th>Item</th>
 				<th>Checkout Status</th>
+				<th>Return Date</th>
 			</thead>
 			<tbody>
 			{% for checkout in object_list %***REMOVED***
 			<tr>
-				<td>{{ checkout.checkout_date ***REMOVED******REMOVED***</td>
+				<td>{{ checkout.checkout_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
+				<td>{{ checkout.due_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
 				<td><a href="{% url 'itemgroup-detail' checkout.item.item_group_id %***REMOVED***">{{ checkout ***REMOVED******REMOVED***</a></td>
 				<td>{{ checkout.approval_status ***REMOVED******REMOVED***</td>
+				<td>{{ checkout.return_date ***REMOVED******REMOVED***</td>
 			</tr>
 			{% endfor %***REMOVED***
 			</tbody>

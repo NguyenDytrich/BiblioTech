@@ -112,6 +112,10 @@ def approve_checkout(checkout):
     :param checkout: Checkout entry to approve
     :type checkout: Checkout
     ***REMOVED***
+    checkout.approval_status = "APPROVED"
+    checkout.clean()
+
+    checkout.save()
 
 
 def deny_checkout(checkout):
@@ -122,3 +126,13 @@ def deny_checkout(checkout):
     :param checkout: Checkout entry to deny
     :type checkout: Checkout
     ***REMOVED***
+    item = checkout.item
+
+    checkout.approval_status = "DENIED"
+    item.availability = "AVAILABLE"
+
+    checkout.clean()
+    item.clean()
+
+    checkout.save()
+    item.save()

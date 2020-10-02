@@ -1,0 +1,11 @@
+{% extends 'equilizer/base.html' %***REMOVED***
+
+{% block content %***REMOVED***
+<div>
+	<form action="{% url 'deny-checkout' checkout_id %***REMOVED***" method="post">
+		{% csrf_token %***REMOVED***
+		<textarea id="reason" name="reason" maxlength="500" class="textarea"></textarea>
+		<input class="button is-primary" type="submit" value="submit">
+	</form>
+</div>
+{% endblock %***REMOVED***

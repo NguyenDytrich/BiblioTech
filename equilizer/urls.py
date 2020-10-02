@@ -20,13 +20,15 @@ from equilizer.views import (
     ItemGroupListView,
     ItemGroupDetailView,
     CheckoutListView,
+    DenyCheckoutView,
     home_view,
     login_view,
     logout_view,
     add_to_cart,
     cart_view,
     create_checkout,
-    success
+    approve_checkout,
+    success,
 )
 
 from equilizer.class_views.admin_views import LibrarianView
@@ -43,5 +45,9 @@ urlpatterns = [
     path("checkout/", create_checkout, name="create-checkout"),
     path("success/", success, name="success-view"),
     path("checkouts/", CheckoutListView.as_view(), name="checkout-list"),
-    path("", home_view, name="home")
+    path(
+        "checkouts/<int:checkout_id>/approve", approve_checkout, name="approve-checkout"
+    ),
+    path("checkouts/<int:checkout_id>/deny", DenyCheckoutView.as_view(), name="deny-checkout"),
+    path("", home_view, name="home"),
 ***REMOVED***

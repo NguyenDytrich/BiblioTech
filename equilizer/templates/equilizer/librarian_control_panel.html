@@ -5,41 +5,48 @@
 	<div class="tile">
 		<div class="tile is-parent is-7">
 			<div class="card" style="width: 100%">
-				<div class="card-header has-background-info">
+				<div class="card-header has-background-dark">
 					<h1 class="card-header-title has-text-light">Pending Checkouts</h1>
 				</div>
 				<div class="card-content">
-					<table class="table is-fullwidth">
-						<thead>
-							<th>Checkout Date</th>
-							<th>User</th>
-							<th>Item</th>
-							<th></th>
-						</thead>
-						<tbody>
-						{% for c in pending_checkouts %***REMOVED***
-							<tr>
-								<td>{{ c.checkout_date ***REMOVED******REMOVED***</td>
-								<td>{{ c.user ***REMOVED******REMOVED***</td>
-								<td>{{ c.item ***REMOVED******REMOVED***</td>
-								<td>
-									<div class="level">
-										<div>
-											<form>
-												<input class="button is-small is-success" type="submit" value="Approve">
-											</form>
+					{% if pending_checkouts %***REMOVED***
+						<table class="table is-fullwidth">
+							<thead>
+								<th>Checkout Date</th>
+								<th>Due Date</th>
+								<th>User</th>
+								<th>Item</th>
+								<th></th>
+							</thead>
+							<tbody>
+							{% for c in pending_checkouts %***REMOVED***
+								<tr>
+									<td>{{ c.checkout_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
+									<td>{{ c.due_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
+									<td>{{ c.user ***REMOVED******REMOVED***</td>
+									<td>{{ c.item ***REMOVED******REMOVED***</td>
+									<td>
+										<div class="level">
+											<div>
+												<form action="{% url 'approve-checkout' c.id %***REMOVED***" method="post">
+													{% csrf_token %***REMOVED***
+													<input class="button is-small is-success" type="submit" value="Approve">
+												</form>
+											</div>
+											<div>
+												<a
+													href="{% url 'deny-checkout' c.id %***REMOVED***"
+													class="button is-small is-danger is-outlined">Deny</a>
+											</div>
 										</div>
-										<div>
-											<form>
-												<input class="button is-small is-danger is-outlined" type="submit" value="Deny">
-											</form>
-										</div>
-									</div>
-								</td>
-							</tr>
-						{% endfor %***REMOVED***
-						</tbody>
-					</table>
+									</td>
+								</tr>
+							{% endfor %***REMOVED***
+							</tbody>
+						</table>
+					{% else %***REMOVED***
+						No pending checkouts!
+					{% endif %***REMOVED***
 				</div>
 			</div>
 		</div>

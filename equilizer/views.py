@@ -1,19 +1,20 @@
 from datetime import timedelta
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from .models import ItemGroup, Checkout
-from .forms import LoginForm
+from .forms import LoginForm, DenyCheckoutForm
 import equilizer.cart_manager as cart_manager
 import equilizer.checkout_manager as checkout_manager
 
@@ -85,10 +86,15 @@ def login_view(request):
             login(request, user)
             # Nav to success page
             return redirect(request.POST.get("next", "itemgroup-list"))
+        else:
+            # Return to login page
+            # TODO: Display some errors
+            return render(request, "equilizer/login.html")
     # Redirect to home if the user is logged in already
     elif request.user.is_authenticated:
         return redirect("itemgroup-list")
     else:
+        # I don't think this actually does anything anymore...
         form = LoginForm()
         return render(request, "equilizer/login.html", {"form": form***REMOVED***)
 
@@ -147,3 +153,64 @@ def success(request):
     Catch all success page
     ***REMOVED***
     return render(request, "equilizer/success.html")
+
+
+# This is an unrelated method
+def librarian_check(user):
+    return user.groups.filter(name="librarian").exists()
+
+
+@require_http_methods(["POST"***REMOVED***)
+def approve_checkout(request, checkout_id):
+    ***REMOVED***
+    Mark the checkout as approved
+    ***REMOVED***
+    user = request.user
+    # Manually check to see if the user passes all tests
+    # TODO: maybe cleaner way to do this?
+    if user.is_authenticated and librarian_check(user):
+        checkout = Checkout.objects.get(pk=checkout_id)
+        checkout_manager.approve_checkout(checkout)
+        return redirect(request.POST.get("return", "librarian-control-panel"))
+    # Otherwise raise PermissionDenied, which redirects to a 403 page
+    else:
+        raise PermissionDenied
+
+
+class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
+    raise_exception = True
+
+    def test_func(self):
+        ***REMOVED***
+        Test the user is part of the librarian group
+        ***REMOVED***
+        return librarian_check(self.request.user)
+
+    def get(self, request, checkout_id):
+        ***REMOVED***
+        Display a form to provide a reason for checkout denial
+        ***REMOVED***
+        checkout = Checkout.objects.get(pk=checkout_id)
+        if checkout.approval_status != "PENDING":
+            return HttpResponseBadRequest()
+        else:
+            return render(
+                request,
+                "equilizer/deny_checkout.html",
+            ***REMOVED***"checkout_id": checkout_id, "form": DenyCheckoutForm()***REMOVED***,
+            )
+
+    def post(self, request, checkout_id):
+        ***REMOVED***
+        Mark the checkout as denied, and the item as available
+        ***REMOVED***
+        form = DenyCheckoutForm(request.POST)
+        form.is_valid()
+
+        checkout = Checkout.objects.get(pk=checkout_id)
+
+        # TODO: implement an audit log of denied checkouts
+        reason = form.cleaned_data["reason"***REMOVED***
+
+        checkout_manager.deny_checkout(checkout)
+        return redirect(reverse("librarian-control-panel"))

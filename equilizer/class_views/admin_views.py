@@ -31,6 +31,10 @@ class LibrarianView(View):
         ***REMOVED***
         Returns the queryset of pending checkouts ordered by oldest -> most recent
         ***REMOVED***
-        return Checkout.objects.filter(approval_status="PENDING").order_by(
+        checkouts = Checkout.objects.filter(approval_status="PENDING").order_by(
             "checkout_date"
         )
+        if len(checkouts) > 0:
+            return checkouts
+        else:
+            return None

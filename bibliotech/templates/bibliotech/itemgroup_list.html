@@ -5,14 +5,16 @@
 {% block content %}
 	<h1 class="title">Items for Checkout</h1>
 	{% if messages %}
-	<div class="notification is-info">
-		<button class="delete"></button>
-		<ul>
-			{% for m in messages %}
-			<li>{{m}}</li>
-			{% endfor %}
-		</ul>
-	</div>
+		{% for m in messages %}
+		{% if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="notification is-danger">
+		{% else %}
+			<div class="notification is-primary">
+		{% endif %}
+			<button class="delete"></button>
+			{{ m }}
+		</div>
+		{% endfor %}
 	{% endif %}
 	<ul>
 		{% for itemgroup in object_list %}

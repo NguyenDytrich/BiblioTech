@@ -125,8 +125,9 @@ def add_to_cart(request, itemgroup_id):
     try:
         cart_manager.add_to_cart(cart, item.id)
         request.session["cart_sum"] = sum(cart.values())
+        messages.success(request, f"{item} successfully added to cart.")
     except ValidationError:
-        messages.error(request, "All available items are already in your cart!")
+        messages.error(request, f"All available {item}s are already in your cart!")
 
     detail_view = reverse("itemgroup-detail", args=(item.id,))
 

@@ -217,7 +217,10 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
         checkout = Checkout.objects.get(pk=checkout_id)
 
         # TODO: implement an audit log of denied checkouts
-        reason = form.cleaned_data["reason"***REMOVED***
+        reason = form.cleaned_data.get("reason")
 
-        checkout_manager.deny_checkout(checkout)
-        return redirect(reverse("librarian-control-panel"))
+        if not reason:
+            return redirect(reverse("deny-checkout", args=(checkout_id,)))
+        else:
+            checkout_manager.deny_checkout(checkout)
+            return redirect(reverse("librarian-control-panel"))

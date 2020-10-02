@@ -162,3 +162,9 @@ class LibrarianViewAuthTests(TransactionTestCase):
         # If we get a redirect as our status code, assert that we're redirect to the control panel
         if expected_status == 302:
             self.assertRedirects(reverse("librarian-control-panel"))
+
+    def test_authorized_deny_post_blank_reason(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(self.deny_endpoint, {"reason": ""***REMOVED***, follow=True)
+        self.assertRedirects(response, reverse("deny-checkout", args=(self.checkout.id,)))

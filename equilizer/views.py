@@ -61,7 +61,8 @@ def cart_view(request):
     empty_cart = False
     cart_items = [***REMOVED***
 
-    if "cart" in request.session:
+    cart = request.session.get("cart")
+    if cart and sum(cart.values()) > 0:
         cart_items = cart_manager.retrieve_for_display(request.session["cart"***REMOVED***)
     else:
         empty_cart = True

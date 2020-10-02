@@ -18,10 +18,28 @@
 			<p class="is-size-7">{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
 		</div>
 
-		<form name="add_to_cart" action="{% url 'cart-add' object.id %***REMOVED***" method="post">
-			{% csrf_token %***REMOVED***
-			<input type="submit" value="Add to cart">
-		</form>
+		{% if object.avail_inventory > 0 %***REMOVED***
+			<form name="add_to_cart" action="{% url 'cart-add' object.id %***REMOVED***" method="post">
+				{% csrf_token %***REMOVED***
+				<input class="button is-primary" type="submit" value="Add to cart">
+			</form>
+		{% else %***REMOVED***
+			<div class="level">
+				<div class="level-right">
+					<div class="level-item">
+						<form name="add_to_waitlist">
+							{% csrf_token %***REMOVED***
+							<input class="button is-small" type="submit" value="Waitlist">
+						</form>
+					</div>
+
+					<div class="is-size-7 has-text-danger level-item">
+						This item is currently unavailable.<br/>
+						You can waitlist this item and we will hold it for you until it is next available.
+					</div>
+				</div>
+			</div>
+		{% endif %***REMOVED***
 	</section>
 
 {% endblock %***REMOVED***

@@ -1,7 +1,7 @@
 from django.utils import timezone
-from equilizer.models import Checkout, Item
 
-from equilizer.validators import ItemValidator
+from bibliotech.models import Checkout, Item
+from bibliotech.validators import ItemValidator
 
 
 def checkout_items(items, due_date, user, checkout_date=None, approval_status=None):

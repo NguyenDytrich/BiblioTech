@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import pytz
 
-from equilizer.validators import MemberValidator
+from bibliotech.validators import MemberValidator
 
 tz = pytz.timezone("UTC")
 

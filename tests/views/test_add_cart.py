@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.test import TransactionTestCase
 from django.urls import reverse
 
-from equilizer.models import ItemGroup
-from equilizer.views import add_to_cart
+from bibliotech.models import ItemGroup
+from bibliotech.views import add_to_cart
 
 
 class CartTests(TransactionTestCase):

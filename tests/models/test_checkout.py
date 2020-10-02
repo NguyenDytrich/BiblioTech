@@ -3,9 +3,10 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
-from equilizer.models import Checkout, Item
 from parameterized import parameterized
-import equilizer.checkout_manager as manager
+
+from bibliotech.models import Checkout, Item
+import bibliotech.checkout_manager as manager
 
 
 class CheckoutTestCase(TestCase):

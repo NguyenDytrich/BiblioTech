@@ -15,8 +15,8 @@ from django.views.generic.list import ListView
 
 from .models import ItemGroup, Checkout
 from .forms import LoginForm, DenyCheckoutForm, AgreedToTerms
-import equilizer.cart_manager as cart_manager
-import equilizer.checkout_manager as checkout_manager
+import bibliotech.cart_manager as cart_manager
+import bibliotech.checkout_manager as checkout_manager
 
 
 class ItemGroupListView(ListView):
@@ -54,7 +54,7 @@ class CheckoutListView(LoginRequiredMixin, ListView):
 
 
 def home_view(request):
-    return render(request, "equilizer/home.html")
+    return render(request, "bibliotech/home.html")
 
 
 def cart_view(request):
@@ -69,7 +69,7 @@ def cart_view(request):
 
     return render(
         request,
-        "equilizer/cart.html",
+        "bibliotech/cart.html",
     ***REMOVED***"cart_items": cart_items, "empty_cart": empty_cart***REMOVED***,
     )
 
@@ -90,14 +90,14 @@ def login_view(request):
         else:
             # Return to login page
             # TODO: Display some errors
-            return render(request, "equilizer/login.html")
+            return render(request, "bibliotech/login.html")
     # Redirect to home if the user is logged in already
     elif request.user.is_authenticated:
         return redirect("itemgroup-list")
     else:
         # I don't think this actually does anything anymore...
         form = LoginForm()
-        return render(request, "equilizer/login.html", {"form": form***REMOVED***)
+        return render(request, "bibliotech/login.html", {"form": form***REMOVED***)
 
 
 @require_http_methods(["POST"***REMOVED***)
@@ -149,7 +149,7 @@ def create_checkout(request):
     if not agreed:
         return render(
             request,
-            "equilizer/cart.html",
+            "bibliotech/cart.html",
             # Probably not wise to set to false here, but logically speaking
             # This form isn't accessible unless there is a cart available anyway
         ***REMOVED***"cart_items": cart_items, "empty_cart": False, "form": form***REMOVED***,
@@ -176,7 +176,7 @@ def success(request):
     ***REMOVED***
     Catch all success page
     ***REMOVED***
-    return render(request, "equilizer/success.html")
+    return render(request, "bibliotech/success.html")
 
 
 # This is an unrelated method
@@ -220,7 +220,7 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
         else:
             return render(
                 request,
-                "equilizer/deny_checkout.html",
+                "bibliotech/deny_checkout.html",
             ***REMOVED***"checkout_id": checkout_id, "form": DenyCheckoutForm()***REMOVED***,
             )
 
@@ -236,7 +236,7 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
         if not is_valid:
             return render(
                 request,
-                "equilizer/deny_checkout.html",
+                "bibliotech/deny_checkout.html",
             ***REMOVED***"checkout_id": checkout_id, "form": form***REMOVED***,
             )
 

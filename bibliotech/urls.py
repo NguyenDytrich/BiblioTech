@@ -1,4 +1,4 @@
-***REMOVED***equilizer URL Configuration
+***REMOVED***bibliotech URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from equilizer.views import (
+from bibliotech.views import (
     ItemGroupListView,
     ItemGroupDetailView,
     CheckoutListView,
@@ -31,7 +31,7 @@ from equilizer.views import (
     success,
 )
 
-from equilizer.class_views.admin_views import LibrarianView
+from bibliotech.class_views.admin_views import LibrarianView
 
 urlpatterns = [
     path("admin/", admin.site.urls),

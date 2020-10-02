@@ -4,8 +4,8 @@ from django.test import TestCase
 from parameterized import parameterized
 import re
 
-from equilizer.models import Member
-from equilizer.validators import MemberValidator
+from bibliotech.models import Member
+from bibliotech.validators import MemberValidator
 
 
 class MemberTestCase(TestCase):

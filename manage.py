@@ -6,7 +6,7 @@ import sys
 
 def main():
     ***REMOVED***Run administrative tasks.***REMOVED***
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'equilizer.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bibliotech.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

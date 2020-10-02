@@ -1,5 +1,5 @@
 ***REMOVED***
-WSGI config for equilizer project.
+WSGI config for bibliotech project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'equilizer.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bibliotech.settings')
 
 application = get_wsgi_application()

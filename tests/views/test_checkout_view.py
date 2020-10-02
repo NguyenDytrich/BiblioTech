@@ -2,8 +2,8 @@ from django.contrib.auth.models import User
 from django.test import TransactionTestCase
 from django.urls import reverse
 
-from equilizer.models import ItemGroup, Checkout, Member
-from equilizer.views import create_checkout
+from bibliotech.models import ItemGroup, Checkout, Member
+from bibliotech.views import create_checkout
 
 
 class CheckoutTests(TransactionTestCase):
@@ -31,7 +31,7 @@ class CheckoutTests(TransactionTestCase):
         url = reverse("create-checkout")
         expected_url = reverse("success-view")  # Our expected redirect
 
-        response = self.client.post(url, follow=True)
+        response = self.client.post(url, {"agreed": True***REMOVED***, follow=True)
 
         # Request should redirect to a success page
         self.assertRedirects(response, expected_url)

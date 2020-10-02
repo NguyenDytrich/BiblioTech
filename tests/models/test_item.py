@@ -1,6 +1,6 @@
 from django.db import IntegrityError 
 from django.test import TestCase
-from equilizer.models import Item, ItemGroup
+from bibliotech.models import Item, ItemGroup
 
 
 class ItemModelTest(TestCase):

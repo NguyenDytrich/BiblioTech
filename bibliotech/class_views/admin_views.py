@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views import View
 
-from equilizer.models import Checkout, Item, ItemGroup
+from bibliotech.models import Checkout, Item, ItemGroup
 
-import equilizer.checkout_manager as checkout_manager
+import bibliotech.checkout_manager as checkout_manager
 
 
 def has_librarian_permissions(user):
@@ -17,7 +17,7 @@ def has_librarian_permissions(user):
 
 
 class LibrarianView(View):
-    template_name = "equilizer/librarian_control_panel.html"
+    template_name = "bibliotech/librarian_control_panel.html"
 
     def get(self, request, *args, **kwargs):
         return render(

@@ -1,7 +1,7 @@
 from django.test import TransactionTestCase
 from django.urls import reverse
 
-from equilizer.models import ItemGroup
+from bibliotech.models import ItemGroup
 
 
 class ItemGroupListTests(TransactionTestCase):

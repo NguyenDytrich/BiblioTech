@@ -1,10 +1,10 @@
 from datetime import datetime
 from django.test import TestCase
 from django.utils import timezone
-from equilizer.models import Checkout, Item
 from freezegun import freeze_time
 from unittest import mock
 
+from bibliotech.models import Checkout, Item
 
 class CheckoutClassTestCase(TestCase):
     ***REMOVED***

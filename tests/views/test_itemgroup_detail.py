@@ -1,14 +1,13 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from equilizer.models import ItemGroup
+from bibliotech.models import ItemGroup
 
 
 class ItemGroupDetailTests(TestCase):
     ***REMOVED***
     A set of naive view tests
     ***REMOVED***
-
     fixtures = ["test_fixtures.json"***REMOVED***
 
     itemgroup = ItemGroup.objects.get(pk=1)

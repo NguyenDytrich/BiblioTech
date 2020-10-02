@@ -5,9 +5,9 @@ from django.utils import timezone
 from django.urls import reverse
 from parameterized import parameterized
 
-import equilizer.checkout_manager as checkout_manager
-from equilizer.models import Checkout, Item
-from equilizer.class_views.admin_views import LibrarianView
+import bibliotech.checkout_manager as checkout_manager
+from bibliotech.models import Checkout, Item
+from bibliotech.class_views.admin_views import LibrarianView
 
 
 class LibrarianViewDataRetrieval(TestCase):

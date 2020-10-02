@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.db.models import ProtectedError
-from equilizer.models import ItemGroup, Item
+from bibliotech.models import ItemGroup, Item
 from parameterized import parameterized
 
 

@@ -1,4 +1,4 @@
-{% extends 'equilizer/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %***REMOVED***
 
 {% block content %***REMOVED***
 	{% if not empty_cart %***REMOVED***
@@ -13,9 +13,11 @@
 
 		<tbody>
 		{% for item in cart_items %***REMOVED***
+		<tr>
 			<td>{{ item.name ***REMOVED******REMOVED***</td>
 			<td>x{{ item.quantity ***REMOVED******REMOVED***</td>
 			<td>None</td>
+		</tr>
 		{% endfor %***REMOVED***
 		</tbody>
 

@@ -2,9 +2,9 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from parameterized import parameterized
 
-import equilizer.cart_manager as manager
-from equilizer.models import ItemGroup
-from equilizer.validators import CartValidator as validator
+import bibliotech.cart_manager as manager
+from bibliotech.models import ItemGroup
+from bibliotech.validators import CartValidator as validator
 
 
 class CartManagerTests(TestCase):

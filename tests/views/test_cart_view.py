@@ -1,7 +1,7 @@
 from django.test import TransactionTestCase
 from django.urls import reverse
 
-from equilizer.models import ItemGroup
+from bibliotech.models import ItemGroup
 
 class CartViewTests(TransactionTestCase):
     fixtures = ["test_fixtures.json"***REMOVED***
@@ -19,4 +19,4 @@ class CartViewTests(TransactionTestCase):
         response = self.client.get(reverse("cart-view"))
 
         self.assertContains(response, str(item))
-        self.assertContains(response, f"(x{count***REMOVED***)")
+        self.assertContains(response, f"x{count***REMOVED***")

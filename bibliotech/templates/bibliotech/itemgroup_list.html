@@ -1,10 +1,10 @@
-{% extends 'bibliotech/base.html' %***REMOVED***	
+{% extends 'bibliotech/base.html' %}	
 
 
-{% block content %***REMOVED***
+{% block content %}
 	<h1 class="title">Items for Checkout</h1>
 	<ul>
-		{% for itemgroup in object_list %***REMOVED***
+		{% for itemgroup in object_list %}
 		<li class="box">
 			<div class="media">
 				<div class="media-left">
@@ -15,36 +15,36 @@
 				<div class="media-content">
 					<div class="content">
 						<strong>
-							<a href="{% url 'itemgroup-detail' itemgroup.id %***REMOVED***">{{ itemgroup ***REMOVED******REMOVED***</a>
+							<a href="{% url 'itemgroup-detail' itemgroup.id %}">{{ itemgroup }}</a>
 						</strong>
-						<p>{{ itemgroup.description ***REMOVED******REMOVED***</p>
+						<p>{{ itemgroup.description }}</p>
 						<div class="is-size-7">
-							({{ itemgroup.avail_inventory ***REMOVED******REMOVED*** of {{ itemgroup.total_inventory ***REMOVED******REMOVED*** available)
+							({{ itemgroup.avail_inventory }} of {{ itemgroup.total_inventory }} available)
 						</div>
 					</div>
 					<div class="level is-mobile">
 						<div class="level-left">
-							{% if itemgroup.avail_inventory > 0 %***REMOVED***
+							{% if itemgroup.avail_inventory > 0 %}
 							<form 
-								name="quick_add_{{itemgroup.id***REMOVED******REMOVED***"
-								action="{% url 'cart-add' itemgroup.id %***REMOVED***"
+								name="quick_add_{{itemgroup.id}}"
+								action="{% url 'cart-add' itemgroup.id %}"
 								method="post">
-								{% csrf_token %***REMOVED***
-								<input type="hidden" name="return" value="{% url 'itemgroup-list' %***REMOVED***" />
+								{% csrf_token %}
+								<input type="hidden" name="return" value="{% url 'itemgroup-list' %}" />
 								<input class="button is-small" type="submit" value="Quick add">
 							</form>
-							{% else %***REMOVED***
+							{% else %}
 							<div class="level-item">
 								<div class="button is-small">Waitlist</div>
 							</div>
-							{% endif %***REMOVED***
+							{% endif %}
 						</div>
 					</div>
 				</div>
 			</div>
 		</li>
-		{% empty %***REMOVED***
+		{% empty %}
 			<li>No items to display.</li>
-		{% endfor %***REMOVED***
+		{% endfor %}
 	</ul>
-	{% endblock %***REMOVED***
+	{% endblock %}

@@ -1,6 +1,6 @@
-{% extends 'bibliotech/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %}
 
-{% block content %***REMOVED***
+{% block content %}
 		<h1 class="title">Checkout History</h1>
 		<table class="table is-fullwidth">
 			<thead>
@@ -11,15 +11,15 @@
 				<th>Return Date</th>
 			</thead>
 			<tbody>
-			{% for checkout in object_list %***REMOVED***
+			{% for checkout in object_list %}
 			<tr>
-				<td>{{ checkout.checkout_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
-				<td>{{ checkout.due_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
-				<td><a href="{% url 'itemgroup-detail' checkout.item.item_group_id %***REMOVED***">{{ checkout ***REMOVED******REMOVED***</a></td>
-				<td>{{ checkout.approval_status ***REMOVED******REMOVED***</td>
-				<td>{{ checkout.return_date ***REMOVED******REMOVED***</td>
+				<td>{{ checkout.checkout_date|date:"m\/d\/y" }}</td>
+				<td>{{ checkout.due_date|date:"m\/d\/y" }}</td>
+				<td><a href="{% url 'itemgroup-detail' checkout.item.item_group_id %}">{{ checkout }}</a></td>
+				<td>{{ checkout.approval_status }}</td>
+				<td>{{ checkout.return_date }}</td>
 			</tr>
-			{% endfor %***REMOVED***
+			{% endfor %}
 			</tbody>
 		</table>
-{% endblock %***REMOVED***
+{% endblock %}

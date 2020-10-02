@@ -11,4 +11,4 @@ class LogoutTests(TransactionTestCase):
     def test_good_logout(self):
         self.client.login(username="member", password="password")
         response = self.client.post(reverse("logout"), follow=True)
-        self.assertFalse(response.context["user"***REMOVED***.is_authenticated)
+        self.assertFalse(response.context["user"].is_authenticated)

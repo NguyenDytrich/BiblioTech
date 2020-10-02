@@ -7,7 +7,7 @@ from bibliotech.views import create_checkout
 
 
 class CheckoutTests(TransactionTestCase):
-    fixtures = ["test_fixtures.json"***REMOVED***
+    fixtures = ["test_fixtures.json"]
 
     def setUp(self):
         # Create a test user in the database
@@ -19,19 +19,19 @@ class CheckoutTests(TransactionTestCase):
         self.member.save()
 
     def test_good_create_checkout(self):
-        ***REMOVED***
+        """
         When an authenticated user hits the create_checkout endpoint, a checkout
         entry should be created for each item in the cart
-        ***REMOVED***
-        cart = {"1": 1***REMOVED***  # ItemGroup w/ pk=1 is defined in test fixtures
+        """
+        cart = {"1": 1}  # ItemGroup w/ pk=1 is defined in test fixtures
         self.client.login(username="member", password="password")
         session = self.client.session
-        session["cart"***REMOVED*** = cart
+        session["cart"] = cart
         session.save()
         url = reverse("create-checkout")
         expected_url = reverse("success-view")  # Our expected redirect
 
-        response = self.client.post(url, {"agreed": True***REMOVED***, follow=True)
+        response = self.client.post(url, {"agreed": True}, follow=True)
 
         # Request should redirect to a success page
         self.assertRedirects(response, expected_url)
@@ -41,12 +41,12 @@ class CheckoutTests(TransactionTestCase):
         self.assertIsNotNone(checkout)
 
         session = response.client.session
-        self.assertEqual(session["cart"***REMOVED***, dict())
+        self.assertEqual(session["cart"], dict())
 
     def test_anon_user_checkouts(self):
-        ***REMOVED***
+        """
         Anonymous users should be redirected to a login page
-        ***REMOVED***
+        """
         url = reverse("checkout-list")
 
         response = self.client.get(url, follow=True)

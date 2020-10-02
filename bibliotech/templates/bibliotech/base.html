@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Equilizer</title>
-		{% load static %***REMOVED***
-		<link rel="stylesheet" href="{% static 'bulma.min.css' %***REMOVED***">
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'bulma.min.css' %}">
 	</head>
 	<body>
 		<nav class="navbar" role="navigation" aria-label="main navigation">
@@ -14,28 +14,28 @@
 						EqLib
 					</div>
 				</div>
-				<a class="navbar-item" href="{% url 'home' %***REMOVED***">Home</a>
-				<a class="navbar-item" href="{% url 'itemgroup-list' %***REMOVED***">Catalogue</a>
+				<a class="navbar-item" href="{% url 'home' %}">Home</a>
+				<a class="navbar-item" href="{% url 'itemgroup-list' %}">Catalogue</a>
 				<div class="navbar-end">
-				{% if user.is_authenticated %***REMOVED***
-					<a class="navbar-item" href="{% url 'checkout-list' %***REMOVED***">My Checkouts</a>
-					<a class="navbar-item" href="{% url 'cart-view' %***REMOVED***">My Cart</a>
+				{% if user.is_authenticated %}
+					<a class="navbar-item" href="{% url 'checkout-list' %}">My Checkouts</a>
+					<a class="navbar-item" href="{% url 'cart-view' %}">My Cart</a>
 					<a class="navbar-item" >
-						<form id="logout" name="logout" action="{% url 'logout' %***REMOVED***" method="post">
-							{% csrf_token %***REMOVED***
+						<form id="logout" name="logout" action="{% url 'logout' %}" method="post">
+							{% csrf_token %}
 							<input class="button" type="submit" value="Logout">
 						</form>
 					</a>
-				{% else %***REMOVED***
+				{% else %}
 					<a class="navbar-item">Sign Up</a>
-					<a class="navbar-item" href="{% url 'login' %***REMOVED***">Login</a>
-				{% endif %***REMOVED***
+					<a class="navbar-item" href="{% url 'login' %}">Login</a>
+				{% endif %}
 				</div>
 			</div>
 		</nav>
 		<div class="container">
-		{% block content %***REMOVED***
-		{% endblock %***REMOVED***
+		{% block content %}
+		{% endblock %}
 		</div>
 	</body>
 </html>

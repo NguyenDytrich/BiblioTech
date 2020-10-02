@@ -1,26 +1,26 @@
-{% extends 'bibliotech/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %}
 
-{% block content %***REMOVED***
+{% block content %}
 <div>
-	<form action="{% url 'deny-checkout' checkout_id %***REMOVED***" method="post">
-		{% csrf_token %***REMOVED***
+	<form action="{% url 'deny-checkout' checkout_id %}" method="post">
+		{% csrf_token %}
 		<div class="field">
 			<label for="reason" class="label">Please provide a reason for denial</label>
 			<textarea
 				id="reason"
 				name="reason"
 				maxlength="500"
-				class="textarea {% if form.reason.errors %***REMOVED***is-danger{% endif %***REMOVED***"
+				class="textarea {% if form.reason.errors %}is-danger{% endif %}"
 				></textarea>
-			{% if form.reason.errors %***REMOVED***
-				{% for e in form.reason.errors %***REMOVED***
-					<p class="help is-danger">{{e***REMOVED******REMOVED***</p>
-				{% endfor %***REMOVED***
-			{% endif %***REMOVED***
+			{% if form.reason.errors %}
+				{% for e in form.reason.errors %}
+					<p class="help is-danger">{{e}}</p>
+				{% endfor %}
+			{% endif %}
 		</div>
 		<div class="field">
 			<input class="button is-primary" type="submit" value="submit">
 		</div>
 	</form>
 </div>
-{% endblock %***REMOVED***
+{% endblock %}

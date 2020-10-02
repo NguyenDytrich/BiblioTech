@@ -15,7 +15,7 @@ member_validator = MemberValidator
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     member_id = models.CharField(
-        max_length=6, unique=True, validators=[member_validator.member_id***REMOVED***
+        max_length=6, unique=True, validators=[member_validator.member_id]
     )
 
 
@@ -29,7 +29,7 @@ class ItemGroup(models.Model):
         if self.moniker:
             return self.moniker
         else:
-            return f"{self.make***REMOVED*** {self.model***REMOVED***"
+            return f"{self.make} {self.model}"
 
     def total_inventory(self):
         return len(self.item_set.all())
@@ -75,13 +75,13 @@ class Item(models.Model):
         if self.library_id:
             return self.library_id
         else:
-            return f"{str(self.item_group)***REMOVED*** sn. {self.serial_num***REMOVED***"
+            return f"{str(self.item_group)} sn. {self.serial_num}"
 
     def make_model_sn(self):
-        ***REMOVED***
+        """
         Get the make/model and serial number of the item
-        ***REMOVED***
-        return f"{self.item_group.make***REMOVED*** {self.item_group.model***REMOVED*** sn. {self.serial_num***REMOVED***"
+        """
+        return f"{self.item_group.make} {self.item_group.model} sn. {self.serial_num}"
 
 
 class Checkout(models.Model):
@@ -124,4 +124,4 @@ class Checkout(models.Model):
                 raise ValidationError(_("Return date cannot be before checkout date."))
 
     def __str__(self):
-        return f"{str(self.item)***REMOVED***"
+        return f"{str(self.item)}"

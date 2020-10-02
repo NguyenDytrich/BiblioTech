@@ -1,34 +1,34 @@
-{% extends 'bibliotech/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %}
 
-{% block content %***REMOVED***	
+{% block content %}	
 
-	{% if messages %***REMOVED***
+	{% if messages %}
 		<ul>
-			{% for message in messages %***REMOVED***
-			<li>{{ message ***REMOVED******REMOVED***</li>
-			{% endfor %***REMOVED***
+			{% for message in messages %}
+			<li>{{ message }}</li>
+			{% endfor %}
 		</ul>
-	{% endif %***REMOVED***
+	{% endif %}
 
 	<section class="container">
-		<h1 class="title">{{ object.make ***REMOVED******REMOVED*** {{ object.model ***REMOVED******REMOVED***</h1>
+		<h1 class="title">{{ object.make }} {{ object.model }}</h1>
 		<div>
 			<h3 class="title is-5 mb-2">Description</h2>
-			<p>{{ object.description ***REMOVED******REMOVED***</p>
-			<p class="is-size-7">{{ object.avail_inventory ***REMOVED******REMOVED*** of {{ object.total_inventory ***REMOVED******REMOVED*** available.</p>
+			<p>{{ object.description }}</p>
+			<p class="is-size-7">{{ object.avail_inventory }} of {{ object.total_inventory }} available.</p>
 		</div>
 
-		{% if object.avail_inventory > 0 %***REMOVED***
-			<form name="add_to_cart" action="{% url 'cart-add' object.id %***REMOVED***" method="post">
-				{% csrf_token %***REMOVED***
+		{% if object.avail_inventory > 0 %}
+			<form name="add_to_cart" action="{% url 'cart-add' object.id %}" method="post">
+				{% csrf_token %}
 				<input class="button is-primary" type="submit" value="Add to cart">
 			</form>
-		{% else %***REMOVED***
+		{% else %}
 			<div class="level">
 				<div class="level-right">
 					<div class="level-item">
 						<form name="add_to_waitlist">
-							{% csrf_token %***REMOVED***
+							{% csrf_token %}
 							<input class="button is-small" type="submit" value="Waitlist">
 						</form>
 					</div>
@@ -39,7 +39,7 @@
 					</div>
 				</div>
 			</div>
-		{% endif %***REMOVED***
+		{% endif %}
 	</section>
 
-{% endblock %***REMOVED***
+{% endblock %}

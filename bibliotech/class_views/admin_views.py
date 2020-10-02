@@ -8,9 +8,9 @@ import bibliotech.checkout_manager as checkout_manager
 
 
 def has_librarian_permissions(user):
-    ***REMOVED***
+    """
     Test that the user has permission to act as a librarian.
-    ***REMOVED***
+    """
     groups = user.groups.all()
     # TODO: Don't do this.
     return True
@@ -23,14 +23,14 @@ class LibrarianView(View):
         return render(
             request,
             self.template_name,
-        ***REMOVED***"pending_checkouts": self.get_pending_checkouts()***REMOVED***,
+            {"pending_checkouts": self.get_pending_checkouts()},
         )
 
     @staticmethod
     def get_pending_checkouts():
-        ***REMOVED***
+        """
         Returns the queryset of pending checkouts ordered by oldest -> most recent
-        ***REMOVED***
+        """
         checkouts = Checkout.objects.filter(approval_status="PENDING").order_by(
             "checkout_date"
         )

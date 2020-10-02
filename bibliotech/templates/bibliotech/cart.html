@@ -1,7 +1,7 @@
-{% extends 'bibliotech/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %}
 
-{% block content %***REMOVED***
-	{% if not empty_cart %***REMOVED***
+{% block content %}
+	{% if not empty_cart %}
 	<div class="section">
 	<h1 class="title">Your Cart</h1>
 	<table class="table is-fullwidth">
@@ -12,20 +12,20 @@
 		</thead>
 
 		<tbody>
-		{% for item in cart_items %***REMOVED***
+		{% for item in cart_items %}
 		<tr>
-			<td>{{ item.name ***REMOVED******REMOVED***</td>
-			<td>x{{ item.quantity ***REMOVED******REMOVED***</td>
+			<td>{{ item.name }}</td>
+			<td>x{{ item.quantity }}</td>
 			<td>None</td>
 		</tr>
-		{% endfor %***REMOVED***
+		{% endfor %}
 		</tbody>
 
 	</table>
 	</div>
 	<div class="section">
-		<form action="{% url 'create-checkout' %***REMOVED***" method="post">
-			{% csrf_token %***REMOVED***
+		<form action="{% url 'create-checkout' %}" method="post">
+			{% csrf_token %}
 			<div class="content">
 				<h1>Terms and Conditions</h1>
 				<p>
@@ -50,18 +50,18 @@
 			<div class="field">
 				<input id="agreed" type="checkbox" name="agreed">
 				I have read and agree to the above terms and conditions
-				{% if form.agreed.errors %***REMOVED***
+				{% if form.agreed.errors %}
 				<p class="help is-danger">You must agree to the Terms and Conditions before checking out.</p>
-				{% endif %***REMOVED***
+				{% endif %}
 			</div>
 			<div class="field">
 				<input class="button is-primary" type="submit" value="Checkout">
 			</div>
 		</form>
 	</div>
-	{% else %***REMOVED***
+	{% else %}
 	<div class="content">
 		<h1>No items in cart</h1>
 	</div>
-	{% endif %***REMOVED***
-{% endblock%***REMOVED***
+	{% endif %}
+{% endblock%}

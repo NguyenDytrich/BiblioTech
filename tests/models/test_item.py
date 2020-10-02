@@ -4,14 +4,14 @@ from bibliotech.models import Item, ItemGroup
 
 
 class ItemModelTest(TestCase):
-    ***REMOVED***
+    """
     Test how Item objects interact with ItemGroup objects
-    ***REMOVED***
+    """
 
     def test_item_string_repr(self):
-        ***REMOVED***
+        """
         Assert that if an item has no library id, it uses the parent's inmake, modle, and the item's serial number.
-        ***REMOVED***
+        """
         group = ItemGroup.objects.create(
             make="Nikon", model="D7000", description="Mid-range DSLR camera"
         )
@@ -25,12 +25,12 @@ class ItemModelTest(TestCase):
         )
 
         item.save()
-        self.assertEqual(str(item), f"{group.make***REMOVED*** {group.model***REMOVED*** sn. {item.serial_num***REMOVED***")
+        self.assertEqual(str(item), f"{group.make} {group.model} sn. {item.serial_num}")
 
     def test_item_string_repr_moniker(self):
-        ***REMOVED***
+        """
         Assert string representation uses a moniker over make/model
-        ***REMOVED***
+        """
         group = ItemGroup.objects.create(
             make="Nikon",
             model="D7000",
@@ -47,12 +47,12 @@ class ItemModelTest(TestCase):
         )
         item.save()
 
-        self.assertEqual(str(item), f"{group.moniker***REMOVED*** sn. {item.serial_num***REMOVED***")
+        self.assertEqual(str(item), f"{group.moniker} sn. {item.serial_num}")
 
     def test_item_string_repr_lib_id(self):
-        ***REMOVED***
+        """
         Assert library id takes priority over string representation
-        ***REMOVED***
+        """
         group = ItemGroup.objects.create(
             make="Nikon",
             model="D7000",
@@ -68,12 +68,12 @@ class ItemModelTest(TestCase):
         )
         item.save()
 
-        self.assertEqual(str(item), f"{item.library_id***REMOVED***")
+        self.assertEqual(str(item), f"{item.library_id}")
 
     def test_item_unique_lib_id(self):
-        ***REMOVED***
+        """
         Assert that library ids are unique
-        ***REMOVED***
+        """
         group = ItemGroup.objects.create(
             make="Nikon",
             model="D7000",

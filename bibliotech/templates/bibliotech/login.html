@@ -1,11 +1,11 @@
-{% extends 'bibliotech/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %}
 
-{% block content %***REMOVED***
+{% block content %}
 <div class="box container is-max-desktop is-fluid mt-6">
 	<h1 class="title">Login</h1>
 	<div>
-		<form action="{% url 'login' %***REMOVED***" method="post">
-				{% csrf_token %***REMOVED***
+		<form action="{% url 'login' %}" method="post">
+				{% csrf_token %}
 				<div class="field">
 					<label class="label" for="username">Username</label>
 					<div class="control">
@@ -19,11 +19,11 @@
 					</div>
 				</div>
 
-				{% if request.GET.next %***REMOVED***
-				<input type="hidden" name="next" value="{{ request.GET.next ***REMOVED******REMOVED***"/>
-				{% endif %***REMOVED***
+				{% if request.GET.next %}
+				<input type="hidden" name="next" value="{{ request.GET.next }}"/>
+				{% endif %}
 				<input class="button is-primary" type="submit" value="Login">
 			</form>
 		</div>
 </div>
-{% endblock %***REMOVED***
+{% endblock %}

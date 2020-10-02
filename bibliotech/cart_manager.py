@@ -3,7 +3,7 @@ from .validators import CartValidator as validator
 
 
 def add_to_cart(cart, itemgroup_id, count=1):
-    ***REMOVED***
+    """
     Adds an item to a Dict representing our cart.
 
     :param cart: the dictionary representing our cart
@@ -14,7 +14,7 @@ def add_to_cart(cart, itemgroup_id, count=1):
 
     :param count: the number of items to add, defaults to 1
     :type count: int, optional
-    ***REMOVED***
+    """
     ig_id = str(itemgroup_id)
     if not isinstance(cart, dict):
         raise TypeError("Expected `cart` to be Dict but found %s" % type(cart))
@@ -26,15 +26,15 @@ def add_to_cart(cart, itemgroup_id, count=1):
     validator.has_inventory(item)
     validator.does_not_exceed(cart, item)
     new_val = cart.get(ig_id, 0) + count
-    cart[ig_id***REMOVED*** = new_val
+    cart[ig_id] = new_val
 
 
 def retrieve_for_display(cart):
-    ***REMOVED***
+    """
     Retrieves displayable information in dictionary format
-    ***REMOVED***
-    dto = [***REMOVED***
+    """
+    dto = []
     for key, val in cart.items():
         itemgroup = ItemGroup.objects.get(pk=key)
-        dto.append({"name": str(itemgroup), "quantity": val***REMOVED***)
+        dto.append({"name": str(itemgroup), "quantity": val})
     return dto

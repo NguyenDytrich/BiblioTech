@@ -10,10 +10,10 @@ class LoginViewTests(TransactionTestCase):
         self.user.save()
 
     def test_login_flow_with_registered_user(self):
-        credentials = {"username": "member", "password": "password"***REMOVED***
+        credentials = {"username": "member", "password": "password"}
         response = self.client.post(reverse("login"), credentials, follow=True)
         self.assertIn("user", response.context)
-        self.assertTrue(response.context["user"***REMOVED***.is_authenticated)
+        self.assertTrue(response.context["user"].is_authenticated)
 
     def test_redirect_when_not_anon(self):
         self.client.login(username="member", password="password")

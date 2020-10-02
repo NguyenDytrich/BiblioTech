@@ -1,6 +1,6 @@
-{% extends 'bibliotech/base.html' %***REMOVED***
+{% extends 'bibliotech/base.html' %}
 
-{% block content %***REMOVED***
+{% block content %}
 <div class="tile is-ancestor">
 	<div class="tile">
 		<div class="tile is-parent is-7">
@@ -9,7 +9,7 @@
 					<h1 class="card-header-title has-text-light">Pending Checkouts</h1>
 				</div>
 				<div class="card-content">
-					{% if pending_checkouts %***REMOVED***
+					{% if pending_checkouts %}
 						<table class="table is-fullwidth">
 							<thead>
 								<th>Checkout Date</th>
@@ -19,37 +19,37 @@
 								<th></th>
 							</thead>
 							<tbody>
-							{% for c in pending_checkouts %***REMOVED***
+							{% for c in pending_checkouts %}
 								<tr>
-									<td>{{ c.checkout_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
-									<td>{{ c.due_date|date:"m\/d\/y" ***REMOVED******REMOVED***</td>
-									<td>{{ c.user ***REMOVED******REMOVED***</td>
-									<td>{{ c.item ***REMOVED******REMOVED***</td>
+									<td>{{ c.checkout_date|date:"m\/d\/y" }}</td>
+									<td>{{ c.due_date|date:"m\/d\/y" }}</td>
+									<td>{{ c.user }}</td>
+									<td>{{ c.item }}</td>
 									<td>
 										<div class="level">
 											<div>
-												<form action="{% url 'approve-checkout' c.id %***REMOVED***" method="post">
-													{% csrf_token %***REMOVED***
+												<form action="{% url 'approve-checkout' c.id %}" method="post">
+													{% csrf_token %}
 													<input class="button is-small is-success" type="submit" value="Approve">
 												</form>
 											</div>
 											<div>
 												<a
-													href="{% url 'deny-checkout' c.id %***REMOVED***"
+													href="{% url 'deny-checkout' c.id %}"
 													class="button is-small is-danger is-outlined">Deny</a>
 											</div>
 										</div>
 									</td>
 								</tr>
-							{% endfor %***REMOVED***
+							{% endfor %}
 							</tbody>
 						</table>
-					{% else %***REMOVED***
+					{% else %}
 						No pending checkouts!
-					{% endif %***REMOVED***
+					{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-{% endblock %***REMOVED***
+{% endblock %}

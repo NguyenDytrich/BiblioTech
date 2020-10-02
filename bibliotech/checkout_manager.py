@@ -5,7 +5,7 @@ from bibliotech.validators import ItemValidator
 
 
 def checkout_items(items, due_date, user, checkout_date=None, approval_status=None):
-    ***REMOVED***
+    """
     Create a checkout entry for each of the set of items, validate that those items are
     avaialble, and then mark those items as checked out
 
@@ -20,15 +20,15 @@ def checkout_items(items, due_date, user, checkout_date=None, approval_status=No
 
     :param approval_status: the approval status of the requested checkout, defaults to 'PENDING'
     :type approval_status: str, optional
-    ***REMOVED***
+    """
 
-    checkout_list = [***REMOVED***
+    checkout_list = []
 
     # If the items argument is just a single item
     # e.g. acquired via Item.objets.get(), then put
     # it into an array
     if isinstance(items, Item):
-        items = [items***REMOVED***
+        items = [items]
 
     for item in items:
         # Check if our items are available before preceeding
@@ -54,7 +54,7 @@ def checkout_items(items, due_date, user, checkout_date=None, approval_status=No
 
 
 def return_items(checkout, return_date=None):
-    ***REMOVED***
+    """
     Update a checkout entry, setting the items specified to AVAILABLE
 
     :param checkout: The checkout entry to update
@@ -65,7 +65,7 @@ def return_items(checkout, return_date=None):
 
     :param return_date: Date that items are returned, defaults to current datetime
     :param type: datetime
-    ***REMOVED***
+    """
     # First, assign a return date
     if return_date:
         checkout.return_date = return_date
@@ -85,33 +85,33 @@ def return_items(checkout, return_date=None):
 
 
 def retrieve_items(cart):
-    ***REMOVED***
+    """
     Retrieve a list of items from the inventory according to the entries in
     the cart.
 
     :param cart: A dictionary that represents the PK of the type of Item we want to checkout and
         its quantity
     :type cart: Dict
-    ***REMOVED***
-    item_list = [***REMOVED***
+    """
+    item_list = []
     # For each entry in our cart
     for item, qty in cart.items():
         # Append each available item found into item_list
         for i in Item.objects.filter(item_group_id=int(item), availability="AVAILABLE")[
             :qty
-        ***REMOVED***:
+        ]:
             item_list.append(i)
 
     return item_list
 
 
 def approve_checkout(checkout):
-    ***REMOVED***
+    """
     Set the approval status of the passed checkout as "APPROVED".
 
     :param checkout: Checkout entry to approve
     :type checkout: Checkout
-    ***REMOVED***
+    """
     checkout.approval_status = "APPROVED"
     checkout.clean()
 
@@ -119,13 +119,13 @@ def approve_checkout(checkout):
 
 
 def deny_checkout(checkout):
-    ***REMOVED***
+    """
     Set the approval status of the passed checkout as "DENIED", and set the availability of
     the item as "AVAILABLE"
 
     :param checkout: Checkout entry to deny
     :type checkout: Checkout
-    ***REMOVED***
+    """
     item = checkout.item
 
     checkout.approval_status = "DENIED"

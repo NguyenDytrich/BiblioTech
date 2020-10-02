@@ -59,18 +59,18 @@ def home_view(request):
 
 def cart_view(request):
     empty_cart = False
-    cart_items = [***REMOVED***
+    cart_items = []
 
     cart = request.session.get("cart")
     if cart and sum(cart.values()) > 0:
-        cart_items = cart_manager.retrieve_for_display(request.session["cart"***REMOVED***)
+        cart_items = cart_manager.retrieve_for_display(request.session["cart"])
     else:
         empty_cart = True
 
     return render(
         request,
         "bibliotech/cart.html",
-    ***REMOVED***"cart_items": cart_items, "empty_cart": empty_cart***REMOVED***,
+        {"cart_items": cart_items, "empty_cart": empty_cart},
     )
 
 
@@ -79,8 +79,8 @@ def login_view(request):
         form = LoginForm(request.POST)
         form.is_valid()
 
-        username = form.cleaned_data["username"***REMOVED***
-        password = form.cleaned_data["password"***REMOVED***
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -97,10 +97,10 @@ def login_view(request):
     else:
         # I don't think this actually does anything anymore...
         form = LoginForm()
-        return render(request, "bibliotech/login.html", {"form": form***REMOVED***)
+        return render(request, "bibliotech/login.html", {"form": form})
 
 
-@require_http_methods(["POST"***REMOVED***)
+@require_http_methods(["POST"])
 def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
@@ -118,13 +118,13 @@ def add_to_cart(request, itemgroup_id):
     item = get_object_or_404(ItemGroup, pk=itemgroup_id)
 
     if "cart" not in request.session:
-        request.session["cart"***REMOVED*** = dict()
+        request.session["cart"] = dict()
 
-    cart = request.session["cart"***REMOVED***
+    cart = request.session["cart"]
 
     try:
         cart_manager.add_to_cart(cart, item.id)
-        request.session["cart_sum"***REMOVED*** = sum(cart.values())
+        request.session["cart_sum"] = sum(cart.values())
     except ValidationError:
         messages.error(request, "All available items are already in your cart!")
 
@@ -133,7 +133,7 @@ def add_to_cart(request, itemgroup_id):
     return redirect(request.POST.get("return", detail_view))
 
 
-@require_http_methods(["POST"***REMOVED***)
+@require_http_methods(["POST"])
 @login_required(login_url="/login", redirect_field_name=None)
 def create_checkout(request):
 
@@ -144,7 +144,7 @@ def create_checkout(request):
     form.is_valid()
     agreed = form.cleaned_data.get("agreed")
 
-    cart_items = cart_manager.retrieve_for_display(request.session["cart"***REMOVED***)
+    cart_items = cart_manager.retrieve_for_display(request.session["cart"])
 
     if not agreed:
         return render(
@@ -152,11 +152,11 @@ def create_checkout(request):
             "bibliotech/cart.html",
             # Probably not wise to set to false here, but logically speaking
             # This form isn't accessible unless there is a cart available anyway
-        ***REMOVED***"cart_items": cart_items, "empty_cart": False, "form": form***REMOVED***,
+            {"cart_items": cart_items, "empty_cart": False, "form": form},
         )
 
     try:
-        item_list = checkout_manager.retrieve_items(request.session["cart"***REMOVED***)
+        item_list = checkout_manager.retrieve_items(request.session["cart"])
         # TODO: Hey right now this defaults to 4 days but you probably don't wanna do this
         checkout_manager.checkout_items(
             item_list, timezone.now() + timedelta(4), request.user
@@ -164,7 +164,7 @@ def create_checkout(request):
 
         # Retrieve the session and set the cart to an empty dict.
         session = request.session
-        session["cart"***REMOVED*** = dict()
+        session["cart"] = dict()
         session.save()
 
         return redirect(reverse("success-view"))
@@ -173,9 +173,9 @@ def create_checkout(request):
 
 
 def success(request):
-    ***REMOVED***
+    """
     Catch all success page
-    ***REMOVED***
+    """
     return render(request, "bibliotech/success.html")
 
 
@@ -184,11 +184,11 @@ def librarian_check(user):
     return user.groups.filter(name="librarian").exists()
 
 
-@require_http_methods(["POST"***REMOVED***)
+@require_http_methods(["POST"])
 def approve_checkout(request, checkout_id):
-    ***REMOVED***
+    """
     Mark the checkout as approved
-    ***REMOVED***
+    """
     user = request.user
     # Manually check to see if the user passes all tests
     # TODO: maybe cleaner way to do this?
@@ -205,15 +205,15 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
     raise_exception = True
 
     def test_func(self):
-        ***REMOVED***
+        """
         Test the user is part of the librarian group
-        ***REMOVED***
+        """
         return librarian_check(self.request.user)
 
     def get(self, request, checkout_id):
-        ***REMOVED***
+        """
         Display a form to provide a reason for checkout denial
-        ***REMOVED***
+        """
         checkout = Checkout.objects.get(pk=checkout_id)
         if checkout.approval_status != "PENDING":
             return HttpResponseBadRequest()
@@ -221,13 +221,13 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
             return render(
                 request,
                 "bibliotech/deny_checkout.html",
-            ***REMOVED***"checkout_id": checkout_id, "form": DenyCheckoutForm()***REMOVED***,
+                {"checkout_id": checkout_id, "form": DenyCheckoutForm()},
             )
 
     def post(self, request, checkout_id):
-        ***REMOVED***
+        """
         Mark the checkout as denied, and the item as available
-        ***REMOVED***
+        """
         form = DenyCheckoutForm(request.POST)
         is_valid = form.is_valid()
 
@@ -237,7 +237,7 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
             return render(
                 request,
                 "bibliotech/deny_checkout.html",
-            ***REMOVED***"checkout_id": checkout_id, "form": form***REMOVED***,
+                {"checkout_id": checkout_id, "form": form},
             )
 
         else:

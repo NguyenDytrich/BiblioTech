@@ -5,10 +5,10 @@ from bibliotech.models import ItemGroup
 
 
 class ItemGroupDetailTests(TestCase):
-    ***REMOVED***
+    """
     A set of naive view tests
-    ***REMOVED***
-    fixtures = ["test_fixtures.json"***REMOVED***
+    """
+    fixtures = ["test_fixtures.json"]
 
     itemgroup = ItemGroup.objects.get(pk=1)
     url = reverse("itemgroup-detail", args=(itemgroup.id,))
@@ -29,5 +29,5 @@ class ItemGroupDetailTests(TestCase):
         response = self.client.get(self.url)
         self.assertContains(
             response,
-            f"{self.itemgroup.avail_inventory()***REMOVED*** of {self.itemgroup.total_inventory()***REMOVED*** available",
+            f"{self.itemgroup.avail_inventory()} of {self.itemgroup.total_inventory()} available",
         )

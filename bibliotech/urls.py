@@ -20,7 +20,6 @@ from bibliotech.views import (
     ItemGroupListView,
     ItemGroupDetailView,
     CheckoutListView,
-    DenyCheckoutView,
     home_view,
     login_view,
     logout_view,
@@ -31,7 +30,7 @@ from bibliotech.views import (
     success,
 )
 
-from bibliotech.class_views.admin_views import LibrarianView
+from bibliotech.class_views.admin_views import LibrarianView, DenyCheckoutView
 
 urlpatterns = [
     path("admin/", admin.site.urls),

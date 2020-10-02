@@ -68,9 +68,10 @@ class CartTests(TransactionTestCase):
         the view should redirect with an error message
         """
         item_id = (1,)  # Assign this tuple for readability to pass as args
+        item = ItemGroup.objects.get(pk=item_id[0])
         url = reverse("cart-add", args=item_id)
         redirect_url = reverse("itemgroup-detail", args=item_id)
-        expected_msg = "All available items are already in your cart!"
+        expected_msg = f"All available {item}s are already in your cart!"
 
         # Login a user
         self.client.login(username="member", password="password")

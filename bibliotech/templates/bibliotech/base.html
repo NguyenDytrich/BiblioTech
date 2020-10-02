@@ -2,8 +2,9 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Equilizer</title>
+		<title>BiblioTech</title>
 		{% load static %}
+		{% load group_check %}
 		<link rel="stylesheet" href="{% static 'bulma.min.css' %}">
 	</head>
 	<body>
@@ -11,13 +12,16 @@
 			<div class="navbar-menu">
 				<div class="navbar-brand">
 					<div class="navbar-item">
-						EqLib
+						<!-- EqLib -->
 					</div>
 				</div>
 				<a class="navbar-item" href="{% url 'home' %}">Home</a>
 				<a class="navbar-item" href="{% url 'itemgroup-list' %}">Catalogue</a>
 				<div class="navbar-end">
 				{% if user.is_authenticated %}
+					{% if user|has_group:"librarian" %}
+						<a class="navbar-item" href="{% url 'librarian-control-panel' %}">Library Management</a>
+					{% endif %}
 					<a class="navbar-item" href="{% url 'checkout-list' %}">My Checkouts</a>
 					<a class="navbar-item" href="{% url 'cart-view' %}">My Cart</a>
 					<a class="navbar-item" >

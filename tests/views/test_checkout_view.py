@@ -40,6 +40,9 @@ class CheckoutTests(TransactionTestCase):
         checkout = Checkout.objects.first()
         self.assertIsNotNone(checkout)
 
+        session = response.client.session
+        self.assertEqual(session["cart"***REMOVED***, dict())
+
     def test_anon_user_checkouts(self):
         ***REMOVED***
         Anonymous users should be redirected to a login page

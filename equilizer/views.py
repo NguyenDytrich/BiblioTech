@@ -143,6 +143,12 @@ def create_checkout(request):
         checkout_manager.checkout_items(
             item_list, timezone.now() + timedelta(4), request.user
         )
+
+        # Retrieve the session and set the cart to an empty dict.
+        session = request.session
+        session["cart"***REMOVED*** = dict()
+        session.save()
+
         return redirect(reverse("success-view"))
     except ValidationError:
         return HttpResponseBadRequest()

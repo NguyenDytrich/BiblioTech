@@ -2,16 +2,64 @@
 
 {% block content %***REMOVED***
 	{% if not empty_cart %***REMOVED***
-	<ul>
+	<div class="section">
+	<h1 class="title">Your Cart</h1>
+	<table class="table is-fullwidth">
+		<thead>
+			<th>Item</th>
+			<th>Qty</th>
+			<th>Due Date</th>
+		</thead>
+
+		<tbody>
 		{% for item in cart_items %***REMOVED***
-		<li>{{ item.name ***REMOVED******REMOVED*** (x{{ item.quantity ***REMOVED******REMOVED***)</li>
+			<td>{{ item.name ***REMOVED******REMOVED***</td>
+			<td>x{{ item.quantity ***REMOVED******REMOVED***</td>
+			<td>None</td>
 		{% endfor %***REMOVED***
-	</ul>
-	<form action="{% url 'create-checkout' %***REMOVED***" method="post">
-		{% csrf_token %***REMOVED***
-		<input type="submit" value="Checkout">
-	</form>
+		</tbody>
+
+	</table>
+	</div>
+	<div class="section">
+		<form action="{% url 'create-checkout' %***REMOVED***" method="post">
+			{% csrf_token %***REMOVED***
+			<div class="content">
+				<h1>Terms and Conditions</h1>
+				<p>
+					<strong>By checking out these items you agree to the following conditions:</strong>
+				</p>
+				<ul>
+					<li>
+						I am liable for costs incurred by damage, or replacement of my items for up to
+						<strong>$100 per item</strong>.
+					</li>
+					<li>
+						If I do not pick up my requested items from the library within
+						<strong>24 hours</strong>, I forfeit my checked out itemsand they will be
+						made available for checkout automatically.
+					</li>
+					<li>
+						Failure to return these items by the due date agreed upon will result in a hold
+						on my account, and incur an overdue fee of <strong>$20</strong>.
+					</li>
+				</ul>
+			</div>
+			<div class="field">
+				<input id="agreed" type="checkbox" name="agreed">
+				I have read and agree to the above terms and conditions
+				{% if form.agreed.errors %***REMOVED***
+				<p class="help is-danger">You must agree to the Terms and Conditions before checking out.</p>
+				{% endif %***REMOVED***
+			</div>
+			<div class="field">
+				<input class="button is-primary" type="submit" value="Checkout">
+			</div>
+		</form>
+	</div>
 	{% else %***REMOVED***
-	<h1>No items in cart</h1>
+	<div class="content">
+		<h1>No items in cart</h1>
+	</div>
 	{% endif %***REMOVED***
 {% endblock%***REMOVED***

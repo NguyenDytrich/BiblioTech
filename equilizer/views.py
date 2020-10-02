@@ -14,7 +14,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from .models import ItemGroup, Checkout
-from .forms import LoginForm, DenyCheckoutForm
+from .forms import LoginForm, DenyCheckoutForm, AgreedToTerms
 import equilizer.cart_manager as cart_manager
 import equilizer.checkout_manager as checkout_manager
 
@@ -136,8 +136,25 @@ def add_to_cart(request, itemgroup_id):
 @require_http_methods(["POST"***REMOVED***)
 @login_required(login_url="/login", redirect_field_name=None)
 def create_checkout(request):
+
     if not "cart" in request.session or not request.user.is_authenticated:
         return HttpResponseBadRequest()
+
+    form = AgreedToTerms(request.POST)
+    form.is_valid()
+    agreed = form.cleaned_data.get("agreed")
+
+    cart_items = cart_manager.retrieve_for_display(request.session["cart"***REMOVED***)
+
+    if not agreed:
+        return render(
+            request,
+            "equilizer/cart.html",
+            # Probably not wise to set to false here, but logically speaking
+            # This form isn't accessible unless there is a cart available anyway
+        ***REMOVED***"cart_items": cart_items, "empty_cart": False, "form": form***REMOVED***,
+        )
+
     try:
         item_list = checkout_manager.retrieve_items(request.session["cart"***REMOVED***)
         # TODO: Hey right now this defaults to 4 days but you probably don't wanna do this

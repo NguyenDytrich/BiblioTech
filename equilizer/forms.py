@@ -7,3 +7,6 @@ class LoginForm(forms.Form):
 
 class DenyCheckoutForm(forms.Form):
     reason = forms.CharField(label="Reason for Denial", max_length=500)
+
+class AgreedToTerms(forms.Form):
+    agreed = forms.BooleanField()

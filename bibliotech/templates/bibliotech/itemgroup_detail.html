@@ -3,43 +3,73 @@
 {% block content %}	
 
 	{% if messages %}
-		<ul>
-			{% for message in messages %}
-			<li>{{ message }}</li>
-			{% endfor %}
-		</ul>
+		{% for m in messages %}
+		{% if m.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="notification is-danger">
+		{% else %}
+			<div class="notification is-primary">
+		{% endif %}
+			<button class="delete"></button>
+			{{ m }}
+		</div>
+		{% endfor %}
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+					var $notification = $delete.parentNode;
+
+					$delete.addEventListener('click', () => {
+						$notification.parentNode.removeChild($notification);
+					});
+				});
+			});
+		</script>
 	{% endif %}
 
-	<section class="container">
-		<h1 class="title">{{ object.make }} {{ object.model }}</h1>
-		<div>
-			<h3 class="title is-5 mb-2">Description</h2>
-			<p>{{ object.description }}</p>
-			<p class="is-size-7">{{ object.avail_inventory }} of {{ object.total_inventory }} available.</p>
+
+	<div class="container mt-5 is-max-desktop">
+		<div class="mb-5">
+			<span><h1 class="title" style="display:inline-block">{{ object.make }} {{ object.model }}</h1></span>
+			<span class="is-size-6 ml-6">
+				{{ object.avail_inventory }} of {{ object.total_inventory }} available.
+			</span>
+			<span class="is-pulled-right">
+			{% if object.avail_inventory > 0 %}
+				<form name="add_to_cart" action="{% url 'cart-add' object.id %}" method="post">
+					{% csrf_token %}
+					<input class="button is-primary" type="submit" value="Add to cart">
+				</form>
+				{% else %}
+				<form name="add_to_waitlist">
+					{% csrf_token %}
+					<input class="button is-warning" type="submit" value="Waitlist">
+				</form>
+			{% endif %}
+			</span>
+			{% if object.avail_inventory < 1 %}
+			<div class="is-size-7 has-text-danger mt-2">
+				This item is currently unavailable.
+				You can waitlist this item and we will hold it for you when it is next available.
+			</div>
+			{% endif %}
 		</div>
 
-		{% if object.avail_inventory > 0 %}
-			<form name="add_to_cart" action="{% url 'cart-add' object.id %}" method="post">
-				{% csrf_token %}
-				<input class="button is-primary" type="submit" value="Add to cart">
-			</form>
-		{% else %}
-			<div class="level">
-				<div class="level-right">
-					<div class="level-item">
-						<form name="add_to_waitlist">
-							{% csrf_token %}
-							<input class="button is-small" type="submit" value="Waitlist">
-						</form>
-					</div>
-
-					<div class="is-size-7 has-text-danger level-item">
-						This item is currently unavailable.<br/>
-						You can waitlist this item and we will hold it for you when it is next available.
-					</div>
+		<div class="columns">
+			<div class="column">
+				<div class="block">
+					<img src="https://bulma.io/images/placeholders/128x128.png" class="mb-3">
+					<h2 class="title is-5 mb-2">Description</h2>
+					<p>{{ object.description }}</p>
 				</div>
 			</div>
-		{% endif %}
-	</section>
-
+			<div class="column">
+				<div class="block">
+					<h2 class="title is-5 mb-2">Features</h2>
+				</div>
+				<div class="block">
+					<h2 class="title is-5 mb-2">External Resources</h2>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

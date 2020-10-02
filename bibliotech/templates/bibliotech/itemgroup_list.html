@@ -15,6 +15,18 @@
 			{{ m }}
 		</div>
 		{% endfor %}
+		<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+				var $notification = $delete.parentNode;
+
+				$delete.addEventListener('click', () => {
+					$notification.parentNode.removeChild($notification);
+				});
+			});
+		});
+	</script>
+
 	{% endif %}
 	<ul>
 		{% for itemgroup in object_list %}
@@ -60,17 +72,4 @@
 			<li>No items to display.</li>
 		{% endfor %}
 	</ul>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
-				var $notification = $delete.parentNode;
-
-				$delete.addEventListener('click', () => {
-					$notification.parentNode.removeChild($notification);
-				});
-			});
-		});
-	</script>
-
 {% endblock %}

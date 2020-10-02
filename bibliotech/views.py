@@ -49,7 +49,7 @@ class CheckoutListView(LoginRequiredMixin, ListView):
     # TODO: Test this
     def get_queryset(self):
         queryset = super(CheckoutListView, self).get_queryset()
-        queryset = queryset.filter(user=self.request.user)
+        queryset = queryset.filter(user=self.request.user).order_by("-checkout_date")
         return queryset
 
 

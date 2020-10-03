@@ -30,7 +30,12 @@ from bibliotech.views import (
     success,
 )
 
-from bibliotech.class_views.admin_views import LibrarianView, DenyCheckoutView, ReturnItemView
+from bibliotech.class_views.admin_views import (
+    LibrarianView,
+    DenyCheckoutView,
+    ReturnItemView,
+    MasterCheckoutListView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -47,7 +52,12 @@ urlpatterns = [
     path(
         "checkouts/<int:checkout_id>/approve", approve_checkout, name="approve-checkout"
     ),
-    path("checkouts/<int:checkout_id>/deny", DenyCheckoutView.as_view(), name="deny-checkout"),
-    path("control_panel/returns", ReturnItemView.as_view(), name="return-item"), 
+    path(
+        "checkouts/<int:checkout_id>/deny",
+        DenyCheckoutView.as_view(),
+        name="deny-checkout",
+    ),
+    path("control_panel/returns", ReturnItemView.as_view(), name="return-item"),
+    path("control_panel/checkouts", MasterCheckoutListView.as_view(), name="all-checkouts"),
     path("", home_view, name="home"),
 ]

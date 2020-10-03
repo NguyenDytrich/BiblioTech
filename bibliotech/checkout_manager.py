@@ -129,6 +129,7 @@ def deny_checkout(checkout):
     item = checkout.item
 
     checkout.approval_status = "DENIED"
+    checkout.checkout_status = "RETURNED"
     item.availability = "AVAILABLE"
 
     checkout.clean()

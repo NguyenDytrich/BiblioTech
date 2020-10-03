@@ -235,4 +235,5 @@ class CheckoutManager_Approval_Tests(TestCase):
         db_item = Item.objects.get(pk=item.id)
 
         self.assertEqual(db_checkout.approval_status, "DENIED")
+        self.assertEqual(db_checkout.checkout_status, "RETURNED")
         self.assertEqual(db_item.availability, "AVAILABLE")

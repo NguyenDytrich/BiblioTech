@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic.list import ListView
 from django.urls import reverse
 
 import bibliotech.checkout_manager as checkout_manager
@@ -42,6 +43,7 @@ class LibrarianView(LoginRequiredMixin, UserPassesTestMixin, View):
             return checkouts
         else:
             return None
+
 
 class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
     raise_exception = True
@@ -88,6 +90,29 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
             checkout_manager.deny_checkout(checkout)
             return redirect(reverse("librarian-control-panel"))
 
+
+class MasterCheckoutListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+    model = Checkout
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def test_func(self):
+        return librarian_check(self.request.user)
+
+    # TODO: Test this
+    def get_queryset(self):
+        queryset = super(MasterCheckoutListView, self).get_queryset()
+        queryset = queryset.filter(checkout_status="OUTSTANDING").order_by(
+            "-checkout_date"
+        )
+        return queryset
+
+
 class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = "bibliotech/return_item.html"
     raise_exception = True
@@ -99,6 +124,4 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, View):
         return librarian_check(self.request.user)
 
     def get(self, request, *args, **kwargs):
-        return render(
-                request,
-                self.template_name)
+        return render(request, self.template_name)

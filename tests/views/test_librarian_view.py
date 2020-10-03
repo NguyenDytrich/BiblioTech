@@ -168,3 +168,52 @@ class LibrarianViewAuthTests(TransactionTestCase):
 
         response = self.client.post(self.deny_endpoint, {"reason": ""}, follow=True)
         self.assertContains(response, "This field is required")
+
+class LibrarianReturnViewTests(TransactionTestCase):
+    fixtures = ["test_fixtures.json"]
+
+    def setUp(self):
+        # Create the librarian group
+        librarian_group = Group.objects.get_or_create(name="librarian")[0]
+
+        # Normal user
+        self.normal_user = User.objects.create(
+            username="member", email="member@test.edu"
+        )
+        self.normal_user.set_password("password")
+        self.normal_user.save()
+
+        # Librarian user
+        self.librarian = User.objects.create(
+            username="librarian", email="librarian@test.edu"
+        )
+        self.librarian.set_password("password")
+        self.librarian.groups.add(librarian_group)
+        self.librarian.save()
+
+        # Create a checkout request
+        due_date = timezone.now() + timedelta(4)
+
+        self.item_id = 1
+        self.item = Item.objects.get(pk=self.item_id)
+
+        # Select the first item since checkout manager returns a list
+        self.checkout = checkout_manager.checkout_items(
+            self.item,
+            due_date,
+            self.normal_user,
+        ).pop()
+
+    @parameterized.expand([
+        ({"username":"member", "password":"password"}, 403),
+        ({"username":"librarian", "password":"password"}, 200)])
+    def test_view_inacessible_to_unauthorized_users(self, user, status):
+        """
+        Unauthorized requests to the return item view should return 403
+        """
+        self.client.login(
+                username=user["username"],
+                password=user["password"])
+
+        response = self.client.get(reverse("return-item-view"))
+        self.assertEqual(response.status_code, status)

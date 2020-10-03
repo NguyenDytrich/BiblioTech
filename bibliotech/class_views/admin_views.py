@@ -88,8 +88,15 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
             checkout_manager.deny_checkout(checkout)
             return redirect(reverse("librarian-control-panel"))
 
-class ReturnItemView(View):
+class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, View):
     template_name = "bibliotech/return_item.html"
+    raise_exception = True
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
 
     def get(self, request, *args, **kwargs):
         return render(

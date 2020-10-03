@@ -48,6 +48,6 @@ urlpatterns = [
         "checkouts/<int:checkout_id>/approve", approve_checkout, name="approve-checkout"
     ),
     path("checkouts/<int:checkout_id>/deny", DenyCheckoutView.as_view(), name="deny-checkout"),
-    path("control_panel/returns", ReturnItemView.as_view(), name="return-item-view"), 
+    path("control_panel/returns", ReturnItemView.as_view(), name="return-item"), 
     path("", home_view, name="home"),
 ]

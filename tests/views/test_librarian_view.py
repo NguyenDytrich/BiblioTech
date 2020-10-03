@@ -215,5 +215,5 @@ class LibrarianReturnViewTests(TransactionTestCase):
                 username=user["username"],
                 password=user["password"])
 
-        response = self.client.get(reverse("return-item-view"))
+        response = self.client.get(reverse("return-item"))
         self.assertEqual(response.status_code, status)

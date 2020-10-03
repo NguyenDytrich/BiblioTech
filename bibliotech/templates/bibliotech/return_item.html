@@ -1,0 +1,71 @@
+{% extends 'bibliotech/base.html' %}
+
+{% block content %}
+<form>
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label is-size-3">Return Form</label>
+		</div>
+		<div class="field-body">
+			{% csrf_token %}
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label">Checkout Info</label>
+		</div>
+		<div class="field-body">
+			<table class="table">
+				<tbody>
+					<td>Test</td>
+					<td>Test2</td>
+					<td>Test3</td>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="field is-horizontal">
+		<div class="field-label"></div>
+		<div class="field-body">
+			<label class="checkbox">
+				<input type="checkbox">
+				I have verified the returning item matches the information above
+			</label>
+		</div>
+	</div>
+
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label">Return condition</label>
+		</div>
+		<div class="field-body">
+			<input class="input" type="text">
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label">Inspection notes</label>
+		</div>
+		<div class="field-body">
+			<textarea class="textarea"></textarea>
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label"></div>
+		<div class="field-body">
+			<div class="field is-grouped">
+				<div class="control">
+					<input class="button is-success" type="submit" value="Submit">
+				</div>
+				<div class="control">
+					<a class="button is-danger is-outlined" href="{% url 'librarian-control-panel' %}">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}

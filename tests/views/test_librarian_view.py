@@ -169,6 +169,7 @@ class LibrarianViewAuthTests(TransactionTestCase):
         response = self.client.post(self.deny_endpoint, {"reason": ""}, follow=True)
         self.assertContains(response, "This field is required")
 
+
 class LibrarianReturnViewTests(TransactionTestCase):
     fixtures = ["test_fixtures.json"]
 
@@ -204,16 +205,30 @@ class LibrarianReturnViewTests(TransactionTestCase):
             self.normal_user,
         ).pop()
 
-    @parameterized.expand([
-        ({"username":"member", "password":"password"}, 403),
-        ({"username":"librarian", "password":"password"}, 200)])
+    @parameterized.expand(
+        [
+            ({"username": "member", "password": "password"}, 403),
+            ({"username": "librarian", "password": "password"}, 200),
+        ]
+    )
     def test_view_inacessible_to_unauthorized_users(self, user, status):
         """
         Unauthorized requests to the return item view should return 403
         """
-        self.client.login(
-                username=user["username"],
-                password=user["password"])
+        self.client.login(username=user["username"], password=user["password"])
 
         response = self.client.get(reverse("return-item"))
         self.assertEqual(response.status_code, status)
+
+    def test_post_with_invalid_checkout_id_returns_404(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("return-item"),
+            {
+                "checkout_id": 400,
+                "return_condition": "GOOD",
+                "inspection_notes": "Some notes",
+            }
+        )
+        self.assertEqual(response.status_code, 404)

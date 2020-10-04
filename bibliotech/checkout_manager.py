@@ -53,7 +53,8 @@ def checkout_items(items, due_date, user, checkout_date=None, approval_status=No
     return checkout_list
 
 
-def return_items(checkout, return_date=None):
+# TODO: don't set condition to none
+def return_items(checkout, condition=None, notes=None, return_date=None):
     """
     Update a checkout entry, setting the items specified to AVAILABLE
 
@@ -77,6 +78,8 @@ def return_items(checkout, return_date=None):
     # Then, mark items as returned
     item = checkout.item
     item.availability = "AVAILABLE"
+    if condition:
+        item.condition = condition
     item.save()
 
     # Validate and save

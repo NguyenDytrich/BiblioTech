@@ -22,12 +22,13 @@
 		</div>
 	</div>
 	<div class="tile is-parent is-8">
-		<form style="width: 100%">
+		<form style="width: 100%" action="{% url 'return-item' %}" method="POST">
 			<div class="field is-horizontal">
 				<div class="field-label">
 				</div>
 				<div class="field-body">
 					{% csrf_token %}
+					<input type="hidden" name="checkout_id" value="{{ active.id }}">
 				</div>
 			</div>
 
@@ -54,9 +55,14 @@
 				<div class="field-label"></div>
 				<div class="field-body">
 					<label class="checkbox">
-						<input type="checkbox">
+						<input type="checkbox" name="is_verified">
 						I have verified the returning item matches the information above
 					</label>
+					<p class="help is-danger">
+					{% if errors.is_verified %}
+					{{ errors.is_verified }}
+					{% endif %}
+					<p>
 				</div>
 			</div>
 
@@ -67,7 +73,7 @@
 				</div>
 				<div class="field-body">
 					<div class="select">
-						<select>
+						<select name="return_condition">
 							{% for o in return_condition_choices %}
 							<option>{{ o }}</option>
 							{% endfor %}
@@ -81,7 +87,7 @@
 					<label class="label">Inspection notes</label>
 				</div>
 				<div class="field-body">
-					<textarea class="textarea"></textarea>
+					<textarea class="textarea" name="inspection_notes"></textarea>
 				</div>
 			</div>
 
@@ -90,7 +96,11 @@
 				<div class="field-body">
 					<div class="field is-grouped">
 						<div class="control">
-							<input class="button is-success" type="submit" value="Submit">
+							{% if object_list|length > 0 %}
+								<input class="button is-success" type="submit" value="Submit" {%if not active %}disabled{% endif %}>
+							{% else %}
+								<input class="button is-success" type="submit" value="Submit" disabled>
+							{% endif %}
 						</div>
 						<div class="control">
 							<a class="button is-danger is-outlined" href="{% url 'librarian-control-panel' %}">Cancel</a>

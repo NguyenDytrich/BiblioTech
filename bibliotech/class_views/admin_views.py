@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from django.views import View
 from django.views.generic.list import ListView
 from django.urls import reverse
 
 import bibliotech.checkout_manager as checkout_manager
 from bibliotech.models import Checkout, Item, ItemGroup
-from bibliotech.forms import DenyCheckoutForm
+from bibliotech.forms import DenyCheckoutForm, ReturnCheckoutForm
 
 
 def librarian_check(user):
@@ -122,11 +123,10 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        active = self.request.GET.get('active')
+        active = self.request.GET.get("active")
+        context["return_condition_choices"] = [x[0] for x in Item.Condition.choices]
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.get_queryset().get(pk=active)
-            context["return_condition_choices"] = [ x[0] for x in Item.Condition.choices ]
-        print(context)
         return context
 
     def test_func(self):
@@ -137,5 +137,23 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_queryset(self):
         queryset = super(ReturnItemView, self).get_queryset()
-        queryset = queryset.filter(checkout_status="OUTSTANDING").order_by("-checkout_date")
+        queryset = queryset.filter(checkout_status="OUTSTANDING").order_by(
+            "-checkout_date"
+        )
         return queryset
+
+    def post(self, request, *args, **kwargs):
+        get_object_or_404(Checkout, pk=request.POST.get("checkout_id"))
+        form = ReturnCheckoutForm(request.POST)
+        is_valid = form.is_valid()
+        if not is_valid:
+            # TODO: redirect w/ errors
+            return redirect(
+                f'{reverse("return-item")}?active={request.POST["checkout_id"]}',
+            )
+        else:
+            checkout_id = form.cleaned_data["checkout_id"]
+            condition  = form.cleaned_data["return_condition"]
+            checkout = Checkout.objects.get(pk=checkout_id)
+            checkout_manager.return_items(checkout, condition)
+            return redirect("librarian-control-panel")

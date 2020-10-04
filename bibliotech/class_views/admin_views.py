@@ -113,9 +113,21 @@ class MasterCheckoutListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return queryset
 
 
-class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, View):
+class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = "bibliotech/return_item.html"
+    login_url = "/login/"
+    redirect_field_name = None
     raise_exception = True
+    model = Checkout
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        active = self.request.GET.get('active')
+        if self.get_queryset().filter(pk=active).exists():
+            context["active"] = self.get_queryset().get(pk=active)
+            context["return_condition_choices"] = [ x[0] for x in Item.Condition.choices ]
+        print(context)
+        return context
 
     def test_func(self):
         """
@@ -123,5 +135,7 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, View):
         """
         return librarian_check(self.request.user)
 
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+    def get_queryset(self):
+        queryset = super(ReturnItemView, self).get_queryset()
+        queryset = queryset.filter(checkout_status="OUTSTANDING").order_by("-checkout_date")
+        return queryset

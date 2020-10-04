@@ -1,71 +1,104 @@
 {% extends 'bibliotech/base.html' %}
 
 {% block content %}
-<form>
-	<div class="field is-horizontal">
-		<div class="field-label">
-			<label class="label is-size-3">Return Form</label>
-		</div>
-		<div class="field-body">
-			{% csrf_token %}
-		</div>
-	</div>
-
-	<div class="field is-horizontal">
-		<div class="field-label">
-			<label class="label">Checkout Info</label>
-		</div>
-		<div class="field-body">
-			<table class="table">
-				<tbody>
-					<td>Test</td>
-					<td>Test2</td>
-					<td>Test3</td>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="field is-horizontal">
-		<div class="field-label"></div>
-		<div class="field-body">
-			<label class="checkbox">
-				<input type="checkbox">
-				I have verified the returning item matches the information above
-			</label>
-		</div>
-	</div>
-
-
-	<div class="field is-horizontal">
-		<div class="field-label">
-			<label class="label">Return condition</label>
-		</div>
-		<div class="field-body">
-			<input class="input" type="text">
-		</div>
-	</div>
-
-	<div class="field is-horizontal">
-		<div class="field-label">
-			<label class="label">Inspection notes</label>
-		</div>
-		<div class="field-body">
-			<textarea class="textarea"></textarea>
-		</div>
-	</div>
-
-	<div class="field is-horizontal">
-		<div class="field-label"></div>
-		<div class="field-body">
-			<div class="field is-grouped">
-				<div class="control">
-					<input class="button is-success" type="submit" value="Submit">
+<div class="tile is-ancestor">
+	<div class="tile is-parent">
+		<div class="panel is-dark" style="width: 100%;">
+			<div class="panel-heading">
+				Please select an item to return
+			</div>
+			<div class="panel-body" style="max-height: 100%; overflow: auto;">
+				{% if object_list|length > 0 %}
+				{% for checkout in object_list %}
+				<a class="panel-block {% if checkout.id == active.id %}has-background-link has-text-light{% endif %}" 
+					href="{% url 'return-item' %}?active={{checkout.id}}">
+					{{checkout.item}}
+				</a>
+				{% endfor %}
+				{% else %}
+				No active checkouts!
+				{% endif %}
 				</div>
-				<div class="control">
-					<a class="button is-danger is-outlined" href="{% url 'librarian-control-panel' %}">Cancel</a>
+		</div>
+	</div>
+	<div class="tile is-parent is-8">
+		<form style="width: 100%">
+			<div class="field is-horizontal">
+				<div class="field-label">
+				</div>
+				<div class="field-body">
+					{% csrf_token %}
 				</div>
 			</div>
-		</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label class="label">Item Info</label>
+				</div>
+				<div class="field-body">
+					<table class="table is-fullwidth">
+						<thead>
+							<th>Make</th>
+							<th>Model</th>
+							<th>Sn</th>
+						</thead>
+						<tbody>
+							<td>{{ active.item.item_group.make }}</td>
+							<td>{{ active.item.item_group.model }}</td>
+							<td>{{ active.item.serial_num }}</td>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="field is-horizontal">
+				<div class="field-label"></div>
+				<div class="field-body">
+					<label class="checkbox">
+						<input type="checkbox">
+						I have verified the returning item matches the information above
+					</label>
+				</div>
+			</div>
+
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label class="label">Return condition</label>
+				</div>
+				<div class="field-body">
+					<div class="select">
+						<select>
+							{% for o in return_condition_choices %}
+							<option>{{ o }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label class="label">Inspection notes</label>
+				</div>
+				<div class="field-body">
+					<textarea class="textarea"></textarea>
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label"></div>
+				<div class="field-body">
+					<div class="field is-grouped">
+						<div class="control">
+							<input class="button is-success" type="submit" value="Submit">
+						</div>
+						<div class="control">
+							<a class="button is-danger is-outlined" href="{% url 'librarian-control-panel' %}">Cancel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
-</form>
+</div>
 {% endblock %}

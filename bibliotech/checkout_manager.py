@@ -72,6 +72,8 @@ def return_items(checkout, condition=None, notes=None, return_date=None):
         checkout.return_date = return_date
     else:
         checkout.return_date = timezone.now()
+
+    checkout.checkout_status = "RETURNED"
     # Validate the return date before making changes
     checkout.clean()
 

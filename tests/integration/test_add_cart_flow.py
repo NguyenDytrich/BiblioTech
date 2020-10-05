@@ -7,7 +7,7 @@ from bibliotech.models import ItemGroup
 from bibliotech.views import add_to_cart
 
 
-class CartTests(TransactionTestCase):
+class CartFlowTests(TransactionTestCase):
     fixtures = ["test_fixtures.json"]
 
     def setUp(self):

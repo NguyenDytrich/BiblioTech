@@ -143,7 +143,7 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         active = self.request.GET.get("active")
-        context["return_condition_choices"] = [x[0] for x in Item.Condition.choices]
+        context["form"] = ReturnCheckoutForm()
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.get_queryset().get(pk=active)
         return context
@@ -162,13 +162,19 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return queryset
 
     def post(self, request, *args, **kwargs):
-        get_object_or_404(Checkout, pk=request.POST.get("checkout_id"))
+        checkout = get_object_or_404(Checkout, pk=request.POST.get("checkout_id"))
         form = ReturnCheckoutForm(request.POST)
         is_valid = form.is_valid()
         if not is_valid:
-            # TODO: redirect w/ errors
-            return redirect(
-                f'{reverse("return-item")}?active={request.POST["checkout_id"]}',
+            # render w/ errors
+            return render(
+                request,
+                self.template_name,
+                {
+                    "active": checkout,
+                    "form": form,
+                    "object_list": self.get_queryset,
+                },
             )
         else:
             checkout_id = form.cleaned_data["checkout_id"]
@@ -176,6 +182,7 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             checkout = Checkout.objects.get(pk=checkout_id)
             checkout_manager.return_items(checkout, condition)
             return redirect("librarian-control-panel")
+
 
 class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
     login_url = "/login/"

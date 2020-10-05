@@ -169,7 +169,11 @@ class LibrarianReturnTests(BiblioTechBaseTest):
             follow=True,
         )
 
-        self.assertRedirects(response, reverse("return-item"))
+        self.assertTrue(response.context["form"].errors["is_verified"])
+        self.assertTrue(response.context["form"].errors["return_condition"])
+        self.assertIn(
+            "bibliotech/return_item.html", [x.name for x in response.templates]
+        )
         self.assertContains(
             response, "Please verify the item information matches the returning item"
         )

@@ -116,8 +116,33 @@ class LibrarianReturnViewTests(BiblioTechBaseTest):
             reverse("return-item"),
             {
                 "checkout_id": 400,
+                "is_verified": "true",
                 "return_condition": "GOOD",
                 "inspection_notes": "Some notes",
             },
         )
         self.assertEqual(response.status_code, 404)
+
+    def test_successful_return_flow(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("return-item"),
+            {
+                "checkout_id": self.checkout.id,
+                "return_condition": "GOOD",
+                "is_verified": "true",
+                "inspection_notes": ""
+            },
+            follow=True
+        )
+        self.assertRedirects(response, reverse("librarian-control-panel"))
+
+        # Validate related objects
+        self.checkout.refresh_from_db()
+        self.assertEqual(self.checkout.checkout_status, "RETURNED")
+        self.assertEqual(self.checkout.item.availability, "AVAILABLE")
+
+    def test_form_errors(self):
+        # TODO
+        self.fail("Unimplemented")

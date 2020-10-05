@@ -155,13 +155,58 @@ class LibrarianReturnTests(BiblioTechBaseTest):
         self.assertEqual(self.checkout.checkout_status, "RETURNED")
         self.assertEqual(self.checkout.item.availability, "AVAILABLE")
 
-    @unittest.skip("Skip unimplemented")
     def test_form_errors(self):
-        # TODO
-        self.fail("Unimplemented")
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("return-item"),
+            {
+                "checkout_id": self.checkout.id,
+                "return_condition": "",
+                "is_verified": "",
+                "inspection_notes": "",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("return-item"))
+        self.assertContains(
+            response, "Please verify the item information matches the returning item"
+        )
+        self.assertContains(response, "This field is required")
 
 
 class LibrarianManageItemTests(BiblioTechBaseTest):
-    @unittest.skip("Skip unimplemented")
-    def test_(self):
-        self.fail("Unimplemented")
+    def test_add_item(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("add-item"),
+            {
+                "make": "Shure",
+                "model": "SM57",
+                "description": "Good microphone",
+                "moniker": "SM57",
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, "Item created successfully.")
+        self.assertTrue(Item.objects.filter(moniker="SM57").exists())
+
+    def test_missing_fields(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("add-item"),
+            {
+                "make": "",
+                "model": "",
+                "description": "",
+                "moniker": "",
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("add-item"))
+        self.assertContains(response, "This field is required", count=3)

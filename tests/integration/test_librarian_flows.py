@@ -7,37 +7,17 @@ from parameterized import parameterized
 
 import bibliotech.checkout_manager as checkout_manager
 from bibliotech.models import Checkout, Item
-from bibliotech.class_views.admin_views import LibrarianView
 
 from tests.utils import BiblioTechBaseTest
 
 
-
-class LibrarianViewDataRetrieval(BiblioTechBaseTest):
-    def test_get_pending_checkouts(self):
-        """
-        Assert that only pending checkouts are returned, and that they are sorted by
-        date asc.
-        """
-        view = LibrarianView()
-        expected = Checkout.objects.filter(approval_status="PENDING").order_by(
-            "checkout_date"
-        )
-
-        dto = view.get_pending_checkouts()
-
-        self.assertEqual(list(dto), list(expected))
-        # Checkout date of the first item should be before the next item
-        self.assertLess(list(dto)[0].checkout_date, list(dto)[1].checkout_date)
-
-
-class LibrarianViewAuthTests(BiblioTechBaseTest):
+class LibrarianAuthTests(BiblioTechBaseTest):
     """
     Library management endpoints should be accessible ONLY to users in librarian group.
     """
 
     def setUp(self):
-        super(LibrarianViewAuthTests, self).setUp()
+        super(LibrarianAuthTests, self).setUp()
         self.deny_endpoint = reverse("deny-checkout", args=(self.checkout.id,))
 
     def test_authorized_approve_endpoint(self):
@@ -114,7 +94,6 @@ class LibrarianViewAuthTests(BiblioTechBaseTest):
 
 
 class LibrarianReturnViewTests(BiblioTechBaseTest):
-
     @parameterized.expand(
         [
             ({"username": "member", "password": "password"}, 403),

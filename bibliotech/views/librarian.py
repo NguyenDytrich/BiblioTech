@@ -176,3 +176,18 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             checkout = Checkout.objects.get(pk=checkout_id)
             checkout_manager.return_items(checkout, condition)
             return redirect("librarian-control-panel")
+
+class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+    template_name = "bibliotech/add_item.html"
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
+
+    def get(self, request):
+        return render(request, self.template_name)

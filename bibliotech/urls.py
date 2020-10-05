@@ -17,8 +17,6 @@ from django.contrib import admin
 from django.urls import path
 
 from bibliotech.misc_views import (
-    ItemGroupListView,
-    ItemGroupDetailView,
     CheckoutListView,
     home_view,
     login_view,
@@ -28,6 +26,7 @@ from bibliotech.misc_views import (
     success,
 )
 
+from bibliotech.views.catalogue import ItemGroupListView, ItemGroupDetailView
 from bibliotech.views.cart import cart_view, add_to_cart
 
 from bibliotech.class_views.admin_views import (

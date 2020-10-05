@@ -19,24 +19,6 @@ import bibliotech.cart_manager as cart_manager
 import bibliotech.checkout_manager as checkout_manager
 
 
-class ItemGroupListView(ListView):
-
-    model = ItemGroup
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
-
-class ItemGroupDetailView(DetailView):
-
-    model = ItemGroup
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
-
 class CheckoutListView(LoginRequiredMixin, ListView):
     login_url = "/login/"
     redirect_field_name = None

@@ -3,7 +3,7 @@ from django.test import TransactionTestCase
 from django.urls import reverse
 
 from bibliotech.models import ItemGroup, Checkout, Member
-from bibliotech.views import create_checkout
+from bibliotech.misc_views import create_checkout
 
 
 class CheckoutTests(TransactionTestCase):

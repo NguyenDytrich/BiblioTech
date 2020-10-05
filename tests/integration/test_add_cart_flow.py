@@ -4,7 +4,7 @@ from django.test import TransactionTestCase
 from django.urls import reverse
 
 from bibliotech.models import ItemGroup
-from bibliotech.views import add_to_cart
+from bibliotech.views.cart import add_to_cart
 
 
 class CartFlowTests(TransactionTestCase):

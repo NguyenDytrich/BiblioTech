@@ -16,19 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from bibliotech.views import (
+from bibliotech.misc_views import (
     ItemGroupListView,
     ItemGroupDetailView,
     CheckoutListView,
     home_view,
     login_view,
     logout_view,
-    add_to_cart,
-    cart_view,
     create_checkout,
     approve_checkout,
     success,
 )
+
+from bibliotech.views.cart import cart_view, add_to_cart
 
 from bibliotech.class_views.admin_views import (
     LibrarianView,
@@ -58,6 +58,10 @@ urlpatterns = [
         name="deny-checkout",
     ),
     path("control_panel/returns", ReturnItemView.as_view(), name="return-item"),
-    path("control_panel/checkouts", MasterCheckoutListView.as_view(), name="all-checkouts"),
+    path(
+        "control_panel/checkouts",
+        MasterCheckoutListView.as_view(),
+        name="all-checkouts",
+    ),
     path("", home_view, name="home"),
 ]

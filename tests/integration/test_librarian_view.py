@@ -10,14 +10,30 @@ from bibliotech.models import Checkout, Item
 from bibliotech.class_views.admin_views import LibrarianView
 
 
-class LibrarianViewDataRetrieval(TestCase):
+class BiblioTechBaseTest(TransactionTestCase):
+
     fixtures = ["test_fixtures.json"]
 
     def setUp(self):
-        # Create a test user
+        # Create the librarian group
+        librarian_group = Group.objects.get_or_create(name="librarian")[0]
+
+        # Create two test users
         self.user = User.objects.create(username="member", email="member@test.edu")
         self.user.set_password("password")
         self.user.save()
+
+        self.user2 = User.objects.create(username="member_2", email="member@test.edu")
+        self.user2.set_password("password")
+        self.user2.save()
+
+        # Librarian user
+        self.librarian = User.objects.create(
+            username="librarian", email="librarian@test.edu"
+        )
+        self.librarian.set_password("password")
+        self.librarian.groups.add(librarian_group)
+        self.librarian.save()
 
         # Create some checkouts
         due_date = timezone.now() + timedelta(5)
@@ -33,11 +49,23 @@ class LibrarianViewDataRetrieval(TestCase):
         # Checkout, then return an item
         c = checkout_manager.checkout_items(
             Item.objects.get(pk=4), due_date, self.user
-        )[0]
+        ).pop()
         c.approval_status = "APPROVED"
         c.save()
         checkout_manager.return_items(c)
 
+        self.item_id = 5
+        self.item = Item.objects.get(pk=self.item_id)
+
+        # Select the first item since checkout manager returns a list
+        self.checkout = checkout_manager.checkout_items(
+            self.item,
+            due_date,
+            self.user,
+        ).pop()
+
+
+class LibrarianViewDataRetrieval(BiblioTechBaseTest):
     def test_get_pending_checkouts(self):
         """
         Assert that only pending checkouts are returned, and that they are sorted by
@@ -55,46 +83,13 @@ class LibrarianViewDataRetrieval(TestCase):
         self.assertLess(list(dto)[0].checkout_date, list(dto)[1].checkout_date)
 
 
-class LibrarianViewAuthTests(TransactionTestCase):
+class LibrarianViewAuthTests(BiblioTechBaseTest):
     """
     Library management endpoints should be accessible ONLY to users in librarian group.
     """
 
-    fixtures = ["test_fixtures.json"]
-
     def setUp(self):
-        # Create the librarian group
-        librarian_group = Group.objects.get_or_create(name="librarian")[0]
-
-        # Normal user
-        self.normal_user = User.objects.create(
-            username="member", email="member@test.edu"
-        )
-        self.normal_user.set_password("password")
-        self.normal_user.save()
-
-        # Librarian user
-        self.librarian = User.objects.create(
-            username="librarian", email="librarian@test.edu"
-        )
-        self.librarian.set_password("password")
-        self.librarian.groups.add(librarian_group)
-        self.librarian.save()
-
-        # Create a checkout request
-        due_date = timezone.now() + timedelta(4)
-
-        self.item_id = 1
-        self.item = Item.objects.get(pk=self.item_id)
-
-        # Select the first item since checkout manager returns a list
-        self.checkout = checkout_manager.checkout_items(
-            self.item,
-            due_date,
-            self.normal_user,
-        ).pop()
-
-        # Some other common variables
+        super(LibrarianViewAuthTests, self).setUp()
         self.deny_endpoint = reverse("deny-checkout", args=(self.checkout.id,))
 
     def test_authorized_approve_endpoint(self):
@@ -170,40 +165,7 @@ class LibrarianViewAuthTests(TransactionTestCase):
         self.assertContains(response, "This field is required")
 
 
-class LibrarianReturnViewTests(TransactionTestCase):
-    fixtures = ["test_fixtures.json"]
-
-    def setUp(self):
-        # Create the librarian group
-        librarian_group = Group.objects.get_or_create(name="librarian")[0]
-
-        # Normal user
-        self.normal_user = User.objects.create(
-            username="member", email="member@test.edu"
-        )
-        self.normal_user.set_password("password")
-        self.normal_user.save()
-
-        # Librarian user
-        self.librarian = User.objects.create(
-            username="librarian", email="librarian@test.edu"
-        )
-        self.librarian.set_password("password")
-        self.librarian.groups.add(librarian_group)
-        self.librarian.save()
-
-        # Create a checkout request
-        due_date = timezone.now() + timedelta(4)
-
-        self.item_id = 1
-        self.item = Item.objects.get(pk=self.item_id)
-
-        # Select the first item since checkout manager returns a list
-        self.checkout = checkout_manager.checkout_items(
-            self.item,
-            due_date,
-            self.normal_user,
-        ).pop()
+class LibrarianReturnViewTests(BiblioTechBaseTest):
 
     @parameterized.expand(
         [
@@ -229,6 +191,6 @@ class LibrarianReturnViewTests(TransactionTestCase):
                 "checkout_id": 400,
                 "return_condition": "GOOD",
                 "inspection_notes": "Some notes",
-            }
+            },
         )
         self.assertEqual(response.status_code, 404)

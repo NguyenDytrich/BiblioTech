@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from bibliotech.class_views.admin_views import LibrarianView
+from bibliotech.views.librarian import LibrarianView
 from bibliotech.models import Checkout
 
 from tests.utils import BiblioTechBaseTest

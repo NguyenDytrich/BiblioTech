@@ -16,24 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from bibliotech.misc_views import (
-    home_view,
-    login_view,
-    logout_view,
-    success,
-)
-
+from bibliotech.views.login import login_view, logout_view
 from bibliotech.views.catalogue import ItemGroupListView, ItemGroupDetailView
 from bibliotech.views.cart import cart_view, add_to_cart
 from bibliotech.views.checkout import CheckoutListView, create_checkout
-from bibliotech.views.librarian import approve_checkout
-
-from bibliotech.class_views.admin_views import (
+from bibliotech.views.librarian import (
+    approve_checkout,
     LibrarianView,
     DenyCheckoutView,
     ReturnItemView,
     MasterCheckoutListView,
 )
+from bibliotech.views.misc import home_view, success
 
 urlpatterns = [
     path("admin/", admin.site.urls),

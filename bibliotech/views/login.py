@@ -1,27 +1,8 @@
-from datetime import timedelta
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.exceptions import ValidationError, PermissionDenied
-from django.http import HttpResponseBadRequest
-from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse
-from django.utils import timezone
-from django.views import View
+from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
-from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
 
-from .models import ItemGroup, Checkout
-from .forms import LoginForm, DenyCheckoutForm, AgreedToTerms
-import bibliotech.cart_manager as cart_manager
-import bibliotech.checkout_manager as checkout_manager
-
-
-def home_view(request):
-    return render(request, "bibliotech/home.html")
-
+from bibliotech.forms import LoginForm
 
 def login_view(request):
     if request.method == "POST":
@@ -55,11 +36,3 @@ def logout_view(request):
         logout(request)
     # Redirect to value specified by 'return' otherwise, redirect to th list view
     return redirect(request.POST.get("next", "home"))
-
-
-# TODO: you can access this page from wherever, whenever
-def success(request):
-    """
-    Catch all success page
-    """
-    return render(request, "bibliotech/success.html")

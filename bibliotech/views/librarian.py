@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.list import ListView
 from django.urls import reverse
 
-from bibliotech.forms import DenyCheckoutForm
+from bibliotech.forms import DenyCheckoutForm, ReturnCheckoutForm
 from bibliotech.models import Checkout, Item
 import bibliotech.checkout_manager as checkout_manager
 

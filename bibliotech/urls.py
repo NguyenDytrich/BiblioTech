@@ -17,17 +17,16 @@ from django.contrib import admin
 from django.urls import path
 
 from bibliotech.misc_views import (
-    CheckoutListView,
     home_view,
     login_view,
     logout_view,
-    create_checkout,
-    approve_checkout,
     success,
 )
 
 from bibliotech.views.catalogue import ItemGroupListView, ItemGroupDetailView
 from bibliotech.views.cart import cart_view, add_to_cart
+from bibliotech.views.checkout import CheckoutListView, create_checkout
+from bibliotech.views.librarian import approve_checkout
 
 from bibliotech.class_views.admin_views import (
     LibrarianView,

@@ -8,15 +8,17 @@
 		<link rel="stylesheet" href="{% static 'bulma.min.css' %}">
 	</head>
 	<body>
-		<nav class="navbar" role="navigation" aria-label="main navigation">
+		<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
 			<div class="navbar-menu">
 				<div class="navbar-brand">
 					<div class="navbar-item">
 						<!-- EqLib -->
 					</div>
 				</div>
-				<a class="navbar-item" href="{% url 'home' %}">Home</a>
-				<a class="navbar-item" href="{% url 'itemgroup-list' %}">Catalogue</a>
+				<div class="navbar-start">
+					<a class="navbar-item" href="{% url 'home' %}">Home</a>
+					<a class="navbar-item" href="{% url 'itemgroup-list' %}">Catalogue</a>
+				</div>
 				<div class="navbar-end">
 				{% if user.is_authenticated %}
 					{% if user|has_group:"librarian" %}
@@ -37,7 +39,7 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container">
+		<div class="container mt-6">
 		{% block content %}
 		{% endblock %}
 		</div>

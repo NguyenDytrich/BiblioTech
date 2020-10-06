@@ -9,6 +9,21 @@
 			</div>
 			<div class="panel-body" style="max-height: 100%; overflow: auto;">
 				{% if object_list|length > 0 %}
+				<div class="panel-block">
+					<div class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<input class="input" type="text" placeholder="Filter/search">
+							</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<button class="button is-success">Add new</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				{% for itemgroup in object_list %}
 				<a class="panel-block {% if itemgroup.id == active.id %}has-background-link has-text-light{% endif %}" 
 					href="{% url 'master-inventory' %}?active={{itemgroup.id}}">
@@ -29,6 +44,20 @@
 			</div>
 			<div class="panel-body">
 				{% if active_item_set and active %}
+				<div class="panel-block" style="display: block">
+					<div class="level">
+						<div class="level-left">
+							<div class="level-item">
+								<input class="input" type="text" placeholder="Filter/search">
+							</div>
+						</div>
+						<div class="level-right">
+							<div class="level-item">
+								<button class="button is-success">Add new</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				<table class="table is-fullwidth">
 					<thead>
 						<th>Library Id</th>
@@ -44,7 +73,12 @@
 						<td>{{ item.serial_num }}</td>
 						<td>{{ item.condition }}</td>
 						<td>{{ item.availability }}</td>
-						<td>Actions</td>
+						<td>
+							<div class="buttons">
+								<button class="button is-warning is-small">Update</button>
+								<button class="button is-danger is-small is-outlined">Delete</button>
+							</div>
+						</td>
 					</tr>
 					{% endfor %}
 					</tbody>

@@ -29,9 +29,26 @@
 			</div>
 			<div class="panel-body">
 				{% if active_item_set and active %}
+				<table class="table is-fullwidth">
+					<thead>
+						<th>Library Id</th>
+						<th>Serial Num</th>
+						<th>Condition</th>
+						<th>Availability</th>
+						<th>Actions</th>
+					</thead>
+					<tbody>
 					{% for item in active_item_set %}
-					<a class="panel-block">{{ item }}</a>
+					<tr>
+						<td>{{ item.library_id }}</td>
+						<td>{{ item.serial_num }}</td>
+						<td>{{ item.condition }}</td>
+						<td>{{ item.availability }}</td>
+						<td>Actions</td>
+					</tr>
 					{% endfor %}
+					</tbody>
+				</table>
 				{% else %}
 				<div>No ItemGroup selected</div>
 				{% endif %}

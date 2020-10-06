@@ -7,7 +7,7 @@ from parameterized import parameterized
 import unittest
 
 import bibliotech.checkout_manager as checkout_manager
-from bibliotech.models import Checkout, Item
+from bibliotech.models import Checkout, Item, ItemGroup
 
 from tests.utils import BiblioTechBaseTest
 
@@ -195,7 +195,7 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
             follow=True,
         )
 
-        self.assertContains(response, "Item created successfully.")
+        self.assertContains(response, "successfully added to catalogue")
         self.assertTrue(ItemGroup.objects.filter(moniker="SM57").exists())
 
     def test_add_item_missing_fields(self):
@@ -220,8 +220,9 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
         self.client.login(username="librarian", password="password")
 
         response = self.client.post(
-            reverse("add-item"),
+            reverse("add-holding"),
             {
+                "is_verified": "TRUE",
                 "itemgroup_id": "1",
                 "library_id": "Nikon-D7000-2",
                 "serial_num": "0002",
@@ -232,8 +233,8 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
             follow=True,
         )
 
-        self.assertContains(response, "Item added successfully.")
-        self.assertTrue(Item.objects.filter(library_id="SM57-1").exists())
+        self.assertContains(response, "successfully added to inventory.")
+        self.assertTrue(Item.objects.filter(library_id="Nikon-D7000-2").exists())
 
     def test_add_holding_missing_fields(self):
         self.client.login(username="librarian", password="password")
@@ -241,7 +242,6 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
         response = self.client.post(
             reverse("add-holding"),
             {
-                "itemgroup_id": "",
                 "is_verified":"",
                 "library_id": "",
                 "serial_num": "",

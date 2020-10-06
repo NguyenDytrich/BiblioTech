@@ -8,6 +8,7 @@ from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic.list import ListView
 from django.urls import reverse
+from django.utils import timezone
 
 from bibliotech.forms import (
     DenyCheckoutForm,
@@ -17,6 +18,7 @@ from bibliotech.forms import (
 )
 from bibliotech.models import Checkout, Item, ItemGroup
 import bibliotech.checkout_manager as checkout_manager
+import bibliotech.inventory_manager as inventory_manager
 
 
 def librarian_check(user):
@@ -205,10 +207,19 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
     def get(self, request):
         return render(request, self.template_name)
 
-    # TODO: Implement creation
     def post(self, request):
         form = AddItemForm(request.POST)
         if form.is_valid():
+            # Retrieve clean data from form
+            data = form.cleaned_data
+
+            # Send data to the manager
+            item = inventory_manager.create_itemgroup_record(
+                make=data.get("make"),
+                model=data.get("model"),
+                description=data.get("description"),
+                moniker=data.get("moniker"),
+            )
             messages.success(request, f"{item} successfully added to catalogue.")
             return redirect("librarian-control-panel")
         else:
@@ -236,15 +247,29 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         """
         return librarian_check(self.request.user)
 
-    # TODO: Implement creation
     def post(self, request):
         form = AddHoldingForm(request.POST)
         if form.is_valid():
+            # Retrieve clean data from form
+            data = form.cleaned_data
+
+            # Send data to the manager
+            item = inventory_manager.create_item_record(
+                itemgroup_id=data["itemgroup_id"],
+                library_id=data["library_id"],
+                serial_num=data["serial_num"],
+                condition=data["condition"],
+                availability=data["availability"],
+                notes=data["notes"],
+                date_acquired=data.get("date_acquuired", timezone.now()),
+                last_inspected=data.get("last_inspected", timezone.now()),
+            )
+
             messages.success(request, f"{item} successfully added to inventory.")
             return redirect("librarian-control-panel")
         else:
             try:
-                active = self.queryset.get(pk=self.request.POST.get("active"))
+                active = self.queryset.get(pk=self.request.POST.get("itemgroup_id"))
             except ItemGroup.DoesNotExist:
                 active = None
             return render(

@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<div class="tile is-parent is-8">
-		<form style="width: 100%" action="{% url 'add-holding' %}" method="POST">
+		<form style="width: 100%" action="{% url 'add-holding' %}{%if active %}?active={{ active.id }}{% endif %}" method="POST">
 			<div class="field is-horizontal">
 				<div class="field-label">
 				</div>
@@ -69,9 +69,9 @@
 				<div class="field-label">
 					<label for="serial_num" class="label">Serial Number</label>
 				</div>
-				<div class="field-body">
-					<input type="text" name="serial_num">
-					{% if form.condition.errors %}
+				<div class="field-body" style="display: block">
+					<input class="input" type="text" name="serial_num">
+					{% if form.serial_num.errors %}
 						{% for e in form.serial_num.errors %}
 						<p class="help is-danger">{{ e }}</p>
 						{% endfor %}
@@ -83,10 +83,10 @@
 				<div class="field-label">
 					<label for="library_id" class="label">Library Identifier</label>
 				</div>
-				<div class="field-body">
-					<input id="library_id" type="text" name="library_id">
+				<div class="field-body" style="display: block">
+					<input id="library_id" type="text" name="library_id" class="input">
 					<p class="help">A unique, easily readable identifier for this item<p>
-					{% if form.condition.errors %}
+					{% if form.library_id.errors %}
 						{% for e in form.library_id.errors %}
 						<p class="help is-danger">{{ e }}</p>
 						{% endfor %}
@@ -99,7 +99,7 @@
 				<div class="field-label">
 					<label for="condition" class="label">Item condition</label>
 				</div>
-				<div class="field-body">
+				<div class="field-body" style="display: block">
 					<div class="select">
 						<select id="condition" name="condition">
 							{% for u,l in form.fields.condition.choices %}

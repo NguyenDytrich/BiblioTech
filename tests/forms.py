@@ -28,7 +28,7 @@ class DenyCheckoutFormTests(TestCase):
         self.assertEqual(form.is_valid(), validity)
 
 
-class AgreedToTerms(TestCase):
+class AgreedToTermsTests(TestCase):
     @parameterized.expand(
         [
             ({"agreed": "TRUE"}, true),
@@ -41,7 +41,7 @@ class AgreedToTerms(TestCase):
         self.assertEqual(form.is_valid(), validity)
 
 
-class ReturnCheckoutForm(forms.Form):
+class ReturnCheckoutFormTests(TestCase):
     @parameterized.expand(
         [
             (
@@ -86,6 +86,42 @@ class ReturnCheckoutForm(forms.Form):
                     "is_verified": "TRUE",
                     "return_condition": "notgood",
                     "inspection_notes": "",
+                },
+                false,
+            ),
+        ]
+    )
+    def test_validation(self, info_dict, validity):
+        form = AgreedToTerms(info_dict)
+        self.assertEqual(form.is_valid(), validity)
+
+class AddItemFormTests(TestCase):
+    @parameterized.expand(
+        [
+            (
+                {
+                    "make": "Shure",
+                    "model": "SM57",
+                    "moniker": "SM57",
+                    "description": "A microphone",
+                },
+                true,
+            ),
+            (
+                {
+                    "make": "",
+                    "model": "",
+                    "moniker": "",
+                    "description": "",
+                },
+                false,
+            ),
+            (
+                {
+                    "make": "Shure",
+                    "model": "SM57",
+                    "moniker": "",
+                    "description": "A microphone",
                 },
                 false,
             ),

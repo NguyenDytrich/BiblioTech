@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError, PermissionDenied
@@ -8,7 +9,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.list import ListView
 from django.urls import reverse
 
-from bibliotech.forms import DenyCheckoutForm, ReturnCheckoutForm
+from bibliotech.forms import DenyCheckoutForm, ReturnCheckoutForm, AddItemForm
 from bibliotech.models import Checkout, Item
 import bibliotech.checkout_manager as checkout_manager
 
@@ -198,3 +199,11 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def get(self, request):
         return render(request, self.template_name)
+
+    def post(self, request):
+        form = AddItemForm(request.POST)
+        if form.is_valid():
+            messages.success(request, f"{item} successfully added to catalogue.")
+            return redirect("librarian-control-panel")
+        else:
+            return render(request, self.template_name, {"form": form})

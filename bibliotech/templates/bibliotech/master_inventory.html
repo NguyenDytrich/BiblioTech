@@ -1,0 +1,42 @@
+{% extends "bibliotech/base.html" %}
+
+{% block content %}
+<div class="tile is-ancestor">
+	<div class="tile is-parent">
+		<div class="panel is-dark" style="width: 100%;">
+			<div class="panel-heading">
+				Item Groups
+			</div>
+			<div class="panel-body" style="max-height: 100%; overflow: auto;">
+				{% if object_list|length > 0 %}
+				{% for itemgroup in object_list %}
+				<a class="panel-block {% if itemgroup.id == active.id %}has-background-link has-text-light{% endif %}" 
+					href="{% url 'master-inventory' %}?active={{itemgroup.id}}">
+					{{itemgroup}}
+				</a>
+				{% endfor %}
+				{% else %}
+				No items to display!
+				{% endif %}
+				</div>
+		</div>
+	</div>
+
+	<div class="tile is-parent is-8">
+		<div class="panel is-dark" style="width: 100%;">
+			<div class="panel-heading">
+				Items
+			</div>
+			<div class="panel-body">
+				{% if active_item_set and active %}
+					{% for item in active_item_set %}
+					<a class="panel-block">{{ item }}</a>
+					{% endfor %}
+				{% else %}
+				<div>No ItemGroup selected</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

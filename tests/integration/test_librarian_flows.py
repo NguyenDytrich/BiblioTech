@@ -23,6 +23,8 @@ class LibrarianAuthTests(BiblioTechBaseTest):
             ("deny-checkout", {"username": "librarian", "password": "password"}, 200),
             ("add-item", {"username": "member", "password": "password"}, 403),
             ("add-item", {"username": "librarian", "password": "password"}, 200),
+            ("master-inventory", {"username": "member", "password": "password"}, 403),
+            ("master-inventory", {"username": "librarian", "password": "password"}, 200),
         ]
     )
     def test_view_inacessible_to_unauthorized_users(self, reverse_string, user, status):

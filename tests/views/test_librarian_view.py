@@ -1,7 +1,7 @@
 from django.urls import reverse
 
-from bibliotech.views.librarian import LibrarianView
-from bibliotech.models import Checkout
+from bibliotech.views.librarian import LibrarianView, AddHoldingView
+from bibliotech.models import Checkout, ItemGroup
 
 from tests.utils import BiblioTechBaseTest
 
@@ -33,3 +33,11 @@ class LibrarianViewTests(BiblioTechBaseTest):
         # Checkout date of the first item should be before the next item
         self.assertLess(list(dto)[0].checkout_date, list(dto)[1].checkout_date)
 
+
+class AddHoldingViewTests(BiblioTechBaseTest):
+
+    def setUp(self):
+        self.view = AddHoldingView()
+
+    def test_queryset(self):
+        self.assertEqual(list(self.view.queryset), list(ItemGroup.objects.all()))

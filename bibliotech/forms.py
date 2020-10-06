@@ -24,3 +24,13 @@ class AddItemForm(forms.Form):
     model = forms.CharField()
     moniker = forms.CharField(required=False)
     description = forms.CharField()
+
+# TODO: might need to swap holding & items
+class AddHoldingForm(forms.Form):
+    itemgroup_id = forms.IntegerField()
+    is_verified = forms.BooleanField()
+    library_id = forms.SlugField()
+    serial_num = forms.CharField()
+    availability = forms.ChoiceField(choices=Item.Availability.choices)
+    condition = forms.ChoiceField(choices=Item.Condition.choices)
+    notes = forms.CharField(required=False)

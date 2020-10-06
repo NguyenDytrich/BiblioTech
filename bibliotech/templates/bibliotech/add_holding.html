@@ -1,0 +1,168 @@
+{% extends "bibliotech/base.html" %}
+
+{% block content %}
+<div class="tile is-ancestor">
+	<div class="tile is-parent">
+		<div class="panel is-dark" style="width: 100%;">
+			<div class="panel-heading">
+				Item to add a holding to
+			</div>
+			<div class="panel-body" style="max-height: 100%; overflow: auto;">
+				{% if object_list|length > 0 %}
+				{% for item in object_list %}
+				<a class="panel-block {% if item.id == active.id %}has-background-link has-text-light{% endif %}" 
+					href="{% url 'add-holding' %}?active={{item.id}}">
+					{{item}}
+				</a>
+				{% endfor %}
+				{% else %}
+				No items to add to yet!
+				{% endif %}
+				</div>
+		</div>
+	</div>
+	<div class="tile is-parent is-8">
+		<form style="width: 100%" action="{% url 'add-holding' %}" method="POST">
+			<div class="field is-horizontal">
+				<div class="field-label">
+				</div>
+				<div class="field-body">
+					{% csrf_token %}
+					<input type="hidden" name="itemgroup_id" value="{{ active.id }}">
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label class="label">Item Group Info</label>
+				</div>
+				<div class="field-body">
+					<table class="table is-fullwidth">
+						<thead>
+							<th>Make</th>
+							<th>Model</th>
+						</thead>
+						<tbody>
+							<td>{{ active.make }}</td>
+							<td>{{ active.model }}</td>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="field is-horizontal">
+				<div class="field-label"></div>
+				<div class="field-body" style="display: block">
+					<label class="checkbox">
+						<input type="checkbox" name="is_verified">
+						I have confirmed that this above information matches the holding I am adding.
+					</label>
+					<p class="help is-danger">
+					{% if form.is_verified.errors %}
+						Please verify the item information matches the new holding
+					{% endif %}
+					<p>
+				</div>
+			</div>
+
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label for="serial_num" class="label">Serial Number</label>
+				</div>
+				<div class="field-body">
+					<input type="text" name="serial_num">
+					{% if form.condition.errors %}
+						{% for e in form.serial_num.errors %}
+						<p class="help is-danger">{{ e }}</p>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label for="library_id" class="label">Library Identifier</label>
+				</div>
+				<div class="field-body">
+					<input id="library_id" type="text" name="library_id">
+					<p class="help">A unique, easily readable identifier for this item<p>
+					{% if form.condition.errors %}
+						{% for e in form.library_id.errors %}
+						<p class="help is-danger">{{ e }}</p>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label for="condition" class="label">Item condition</label>
+				</div>
+				<div class="field-body">
+					<div class="select">
+						<select id="condition" name="condition">
+							{% for u,l in form.fields.condition.choices %}
+							<option value="{{u}}">{{ l }}</option>
+							{% endfor %}
+						</select>
+						{% if form.condition.errors %}
+							{% for e in form.condition.errors %}
+							<p class="help is-danger">{{ e }}</p>
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label class="label">Item availability</label>
+				</div>
+				<div class="field-body">
+					<div class="select">
+						<select id="availability" name="availability">
+							{% for u,l in form.fields.availability.choices %}
+							<option value="{{u}}">{{ l }}</option>
+							{% endfor %}
+						</select>
+						{% if form.availability.errors %}
+							{% for e in form.availability.errors %}
+							<p class="help is-danger">{{ e }}</p>
+							{% endfor %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label">
+					<label class="label">Notes</label>
+				</div>
+				<div class="field-body">
+					<textarea class="textarea" name="inspection_notes"></textarea>
+				</div>
+			</div>
+
+			<div class="field is-horizontal">
+				<div class="field-label"></div>
+				<div class="field-body">
+					<div class="field is-grouped">
+						<div class="control">
+							{% if object_list|length > 0 %}
+								<input class="button is-success" type="submit" value="Submit" {%if not active %}disabled{% endif %}>
+							{% else %}
+								<input class="button is-success" type="submit" value="Submit" disabled>
+							{% endif %}
+						</div>
+						<div class="control">
+							<a class="button is-danger is-outlined" href="{% url 'librarian-control-panel' %}">Cancel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% endblock %}

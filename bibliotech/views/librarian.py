@@ -9,8 +9,13 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.list import ListView
 from django.urls import reverse
 
-from bibliotech.forms import DenyCheckoutForm, ReturnCheckoutForm, AddItemForm
-from bibliotech.models import Checkout, Item
+from bibliotech.forms import (
+    DenyCheckoutForm,
+    ReturnCheckoutForm,
+    AddItemForm,
+    AddHoldingForm,
+)
+from bibliotech.models import Checkout, Item, ItemGroup
 import bibliotech.checkout_manager as checkout_manager
 
 
@@ -200,6 +205,7 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
     def get(self, request):
         return render(request, self.template_name)
 
+    # TODO: Implement creation
     def post(self, request):
         form = AddItemForm(request.POST)
         if form.is_valid():
@@ -207,3 +213,46 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
             return redirect("librarian-control-panel")
         else:
             return render(request, self.template_name, {"form": form})
+
+
+class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+    template_name = "bibliotech/add_holding.html"
+    queryset = ItemGroup.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        active = self.request.GET.get("active")
+        context["form"] = AddHoldingForm()
+        if self.get_queryset().filter(pk=active).exists():
+            context["active"] = self.queryset.get(pk=active)
+        return context
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
+
+    # TODO: Implement creation
+    def post(self, request):
+        form = AddHoldingForm(request.POST)
+        if form.is_valid():
+            messages.success(request, f"{item} successfully added to inventory.")
+            return redirect("librarian-control-panel")
+        else:
+            try:
+                active = self.queryset.get(pk=self.request.POST.get("active"))
+            except ItemGroup.DoesNotExist:
+                active = None
+            return render(
+                request,
+                self.template_name,
+                {
+                    "form": form,
+                    "active": active,
+                    "object_list": self.queryset,
+                },
+            )

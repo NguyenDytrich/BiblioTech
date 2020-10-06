@@ -196,9 +196,9 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
         )
 
         self.assertContains(response, "Item created successfully.")
-        self.assertTrue(Item.objects.filter(moniker="SM57").exists())
+        self.assertTrue(ItemGroup.objects.filter(moniker="SM57").exists())
 
-    def test_missing_fields(self):
+    def test_add_item_missing_fields(self):
         self.client.login(username="librarian", password="password")
 
         response = self.client.post(
@@ -214,3 +214,43 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
 
         self.assertIn("bibliotech/add_item.html", [x.name for x in response.templates])
         self.assertContains(response, "This field is required", count=3)
+
+    # TODO: might have to swap names of item vs holding?
+    def test_add_holding(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("add-item"),
+            {
+                "itemgroup_id": "1",
+                "library_id": "Nikon-D7000-2",
+                "serial_num": "0002",
+                "availability": "AVAILABLE",
+                "condition": "EXCELLENT",
+                "notes": "Some notes"
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, "Item added successfully.")
+        self.assertTrue(Item.objects.filter(library_id="SM57-1").exists())
+
+    def test_add_holding_missing_fields(self):
+        self.client.login(username="librarian", password="password")
+
+        response = self.client.post(
+            reverse("add-holding"),
+            {
+                "itemgroup_id": "",
+                "is_verified":"",
+                "library_id": "",
+                "serial_num": "",
+                "availability": "",
+                "condition": "",
+                "notes": ""
+            }
+        )
+
+        self.assertIn("bibliotech/add_holding.html", [x.name for x in response.templates])
+        self.assertContains(response, "Please verify the item information matches the new holding", count=1)
+        self.assertContains(response, "This field is required", count=4)

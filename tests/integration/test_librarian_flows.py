@@ -212,5 +212,5 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
             follow=True,
         )
 
-        self.assertRedirects(response, reverse("add-item"))
+        self.assertIn("bibliotech/add_item.html", [x.name for x in response.templates])
         self.assertContains(response, "This field is required", count=3)

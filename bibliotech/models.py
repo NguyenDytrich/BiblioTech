@@ -59,7 +59,7 @@ class Item(models.Model):
     # Protect prevents an ItemGroup with referenced items from being deleted
     # automatically in a CASCADE.
     item_group = models.ForeignKey(ItemGroup, on_delete=models.PROTECT)
-    library_id = models.CharField(max_length=20, unique=True)
+    library_id = models.SlugField(max_length=20, unique=True)
     serial_num = models.CharField(max_length=100)
     availability = models.CharField(
         max_length=15, choices=Availability.choices, default=Availability.AVAILABLE

@@ -26,6 +26,8 @@ from bibliotech.views.librarian import (
     DenyCheckoutView,
     ReturnItemView,
     MasterCheckoutListView,
+    AddItemView,
+    AddHoldingView
 )
 from bibliotech.views.misc import home_view, success
 
@@ -55,5 +57,7 @@ urlpatterns = [
         MasterCheckoutListView.as_view(),
         name="all-checkouts",
     ),
+    path("control_panel/add_item", AddItemView.as_view(), name="add-item"),
+    path("control_panel/add_holding", AddHoldingView.as_view(), name="add-holding"),
     path("", home_view, name="home"),
 ]

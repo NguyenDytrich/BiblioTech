@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError, PermissionDenied
@@ -7,10 +8,17 @@ from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic.list import ListView
 from django.urls import reverse
+from django.utils import timezone
 
-from bibliotech.forms import DenyCheckoutForm, ReturnCheckoutForm
-from bibliotech.models import Checkout, Item
+from bibliotech.forms import (
+    DenyCheckoutForm,
+    ReturnCheckoutForm,
+    AddItemForm,
+    AddHoldingForm,
+)
+from bibliotech.models import Checkout, Item, ItemGroup
 import bibliotech.checkout_manager as checkout_manager
+import bibliotech.inventory_manager as inventory_manager
 
 
 def librarian_check(user):
@@ -143,7 +151,7 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         active = self.request.GET.get("active")
-        context["return_condition_choices"] = [x[0] for x in Item.Condition.choices]
+        context["form"] = ReturnCheckoutForm()
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.get_queryset().get(pk=active)
         return context
@@ -162,13 +170,19 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return queryset
 
     def post(self, request, *args, **kwargs):
-        get_object_or_404(Checkout, pk=request.POST.get("checkout_id"))
+        checkout = get_object_or_404(Checkout, pk=request.POST.get("checkout_id"))
         form = ReturnCheckoutForm(request.POST)
         is_valid = form.is_valid()
         if not is_valid:
-            # TODO: redirect w/ errors
-            return redirect(
-                f'{reverse("return-item")}?active={request.POST["checkout_id"]}',
+            # render w/ errors
+            return render(
+                request,
+                self.template_name,
+                {
+                    "active": checkout,
+                    "form": form,
+                    "object_list": self.get_queryset,
+                },
             )
         else:
             checkout_id = form.cleaned_data["checkout_id"]
@@ -176,3 +190,94 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             checkout = Checkout.objects.get(pk=checkout_id)
             checkout_manager.return_items(checkout, condition)
             return redirect("librarian-control-panel")
+
+
+class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+    template_name = "bibliotech/add_item.html"
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        form = AddItemForm(request.POST)
+        if form.is_valid():
+            # Retrieve clean data from form
+            data = form.cleaned_data
+
+            # Send data to the manager
+            item = inventory_manager.create_itemgroup_record(
+                make=data.get("make"),
+                model=data.get("model"),
+                description=data.get("description"),
+                moniker=data.get("moniker"),
+            )
+            messages.success(request, f"{item} successfully added to catalogue.")
+            return redirect("librarian-control-panel")
+        else:
+            return render(request, self.template_name, {"form": form})
+
+
+class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+    template_name = "bibliotech/add_holding.html"
+    queryset = ItemGroup.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        active = self.request.GET.get("active")
+        context["form"] = AddHoldingForm()
+        if self.get_queryset().filter(pk=active).exists():
+            context["active"] = self.queryset.get(pk=active)
+        return context
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
+
+    def post(self, request):
+        form = AddHoldingForm(request.POST)
+        if form.is_valid():
+            # Retrieve clean data from form
+            data = form.cleaned_data
+
+            # Send data to the manager
+            item = inventory_manager.create_item_record(
+                itemgroup_id=data["itemgroup_id"],
+                library_id=data["library_id"],
+                serial_num=data["serial_num"],
+                condition=data["condition"],
+                availability=data["availability"],
+                notes=data["notes"],
+                date_acquired=data.get("date_acquuired", timezone.now()),
+                last_inspected=data.get("last_inspected", timezone.now()),
+            )
+
+            messages.success(request, f"{item} successfully added to inventory.")
+            return redirect("librarian-control-panel")
+        else:
+            try:
+                active = self.queryset.get(pk=self.request.POST.get("itemgroup_id"))
+            except ItemGroup.DoesNotExist:
+                active = None
+            return render(
+                request,
+                self.template_name,
+                {
+                    "form": form,
+                    "active": active,
+                    "object_list": self.queryset,
+                },
+            )

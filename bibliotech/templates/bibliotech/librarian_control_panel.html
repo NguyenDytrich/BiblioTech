@@ -60,10 +60,20 @@
 					</div>
 					<div class="card-content">
 						<div class="block content">
+							{% if messages  %}
 							<ul>
-								<li><a href={% url 'return-item' %}>Return an item</a></li>
-								<li><a>Add a new item</a></li>
-								<li><a>Add a new holding</a></li>
+								{% for m in messages %}
+								<li class="notification">
+									{{ m }}
+								</li>
+								{% endfor %}
+							</ul>
+							{% endif %}
+							<p>
+							<ul>
+								<li><a href="{% url 'return-item' %}">Return an item</a></li>
+								<li><a href="{% url 'add-item' %}">Add a new item</a></li>
+								<li><a href="{% url 'add-holding' %}">Add a new holding</a></li>
 							</ul>
 						</div>
 					</div>

@@ -53,14 +53,14 @@
 			</div>
 			<div class="field is-horizontal">
 				<div class="field-label"></div>
-				<div class="field-body">
+				<div class="field-body" style="display: block">
 					<label class="checkbox">
 						<input type="checkbox" name="is_verified">
 						I have verified the returning item matches the information above
 					</label>
 					<p class="help is-danger">
-					{% if errors.is_verified %}
-					{{ errors.is_verified }}
+					{% if form.is_verified.errors %}
+						Please verify the item information matches the returning item
 					{% endif %}
 					<p>
 				</div>
@@ -74,10 +74,15 @@
 				<div class="field-body">
 					<div class="select">
 						<select name="return_condition">
-							{% for o in return_condition_choices %}
-							<option>{{ o }}</option>
+							{% for u,l in form.fields.return_condition.choices %}
+							<option value="{{u}}">{{ l }}</option>
 							{% endfor %}
 						</select>
+						{% if form.return_condition.errors %}
+							{% for e in form.return_condition.errors %}
+							<p class="help is-danger">{{ e }}</p>
+							{% endfor %}
+						{% endif %}
 					</div>
 				</div>
 			</div>

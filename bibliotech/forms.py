@@ -18,3 +18,19 @@ class ReturnCheckoutForm(forms.Form):
     is_verified = forms.BooleanField()
     return_condition = forms.ChoiceField(choices=Item.Condition.choices)
     inspection_notes = forms.CharField(required=False)
+
+class AddItemForm(forms.Form):
+    make = forms.CharField()
+    model = forms.CharField()
+    moniker = forms.CharField(required=False)
+    description = forms.CharField()
+
+# TODO: might need to swap holding & items
+class AddHoldingForm(forms.Form):
+    itemgroup_id = forms.IntegerField()
+    is_verified = forms.BooleanField()
+    library_id = forms.SlugField()
+    serial_num = forms.CharField()
+    availability = forms.ChoiceField(choices=Item.Availability.choices)
+    condition = forms.ChoiceField(choices=Item.Condition.choices)
+    notes = forms.CharField(required=False)

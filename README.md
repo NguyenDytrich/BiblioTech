@@ -5,6 +5,6 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 
 
 # Roadmap to beta release
-[] Audit log
-[] Add items and holdings
-[] Searchable tags/categories for items
+	[] Audit log
+	[] Add items and holdings
+	[] Searchable tags/categories for items

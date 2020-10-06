@@ -1,0 +1,61 @@
+{% extends "bibliotech/base.html" %}
+
+{% block content %}
+<div>
+	<form action="{% url 'add-item' %}" method="post">
+		{% csrf_token %}
+		<div class="field is-grouped">
+			<div class="control">
+				<label for="make" class="label">Make/Brand</label>
+				<input id="make" name="make" type="text" class="input">
+				{% if form.make.errors %}
+					{% for e in form.make.errors %}
+						<p class="help is-danger">{{e}}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
+			<div class="control">
+				<label for="model" class="label">Model</label>
+				<input id="model" name="model" type="text" class="input">
+				{% if form.model.errors %}
+					{% for e in form.model.errors %}
+						<p class="help is-danger">{{e}}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+
+		<div class="field">
+			<label for="moniker" class="label">Moniker (optional)</label>
+			<input id="moniker" name="moniker" type="text" class="input">
+			<p class="help">Alternative name for this item</p>
+			{% if form.model.errors %}
+				{% for e in form.moniker.errors %}
+					<p class="help is-danger">{{e}}</p>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+		<div class="field">
+			<label for="description" class="label">Item Description</label>
+			<textarea id="description" name="description" class="textarea"></textarea>
+			{% if form.model.errors %}
+				{% for e in form.description.errors %}
+					<p class="help is-danger">{{e}}</p>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+		<div class="field is-grouped">
+			<div class="control">
+				<input class="button is-primary" type="submit" value="Submit">
+			</div>
+			<div class="control">
+				<a href="{% url 'librarian-control-panel' %}" class="button is-danger is-outlined">
+					Cancel
+				</a>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}

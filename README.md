@@ -8,3 +8,7 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 	[] Audit log
 	[] Add items and holdings
 	[] Searchable tags/categories for items
+
+
+# Bugs
+Forms do not return errors if values violate uniqueness

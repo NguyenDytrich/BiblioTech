@@ -9,6 +9,7 @@
 			</div>
 			<div class="panel-body" style="max-height: 100%; overflow: auto;">
 				{% if object_list|length > 0 %}
+
 				<div class="panel-block">
 					<div class="level">
 						<div class="level-left">
@@ -25,7 +26,7 @@
 				</div>
 
 				{% for itemgroup in object_list %}
-				<a class="panel-block {% if itemgroup.id == active.id %}has-background-link has-text-light{% endif %}" 
+				<a class="panel-block {% if itemgroup.id == active.id %}has-background-grey-lighter{% endif %}" 
 					href="{% url 'master-inventory' %}?active={{itemgroup.id}}">
 					{{itemgroup}}
 				</a>
@@ -48,7 +49,9 @@
 					<div class="level">
 						<div class="level-left">
 							<div class="level-item">
-								<input class="input" type="text" placeholder="Filter/search">
+								<div class="control">
+									<input class="input" type="text" placeholder="Filter/search">
+								</div>
 							</div>
 						</div>
 						<div class="level-right">

@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
-from django.views import View 
+from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
@@ -17,6 +17,7 @@ from bibliotech.forms import (
     ReturnCheckoutForm,
     AddItemForm,
     AddHoldingForm,
+    UpdateItemForm,
 )
 from bibliotech.models import Checkout, Item, ItemGroup
 import bibliotech.checkout_manager as checkout_manager
@@ -284,6 +285,7 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                 },
             )
 
+
 # TODO: refactor all librarian views to derive from this class
 class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
     login_url = "/login/"
@@ -295,6 +297,7 @@ class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
         Test the user is part of the librarian group
         """
         return librarian_check(self.request.user)
+
 
 class MasterInventoryView(LibrarianViewBase, ListView):
     queryset = ItemGroup.objects.all()
@@ -311,6 +314,7 @@ class MasterInventoryView(LibrarianViewBase, ListView):
             context["active_item_set"] = context["active"].item_set.all()
         return context
 
+
 class UpdateItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
     template_name = "bibliotech/update_item.html"
     model = Item
@@ -318,4 +322,25 @@ class UpdateItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
     def get_context_data(self, **kwargs):
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
+        context["form"] = UpdateItemForm()
         return context
+
+    def post(self, request, pk):
+        form = UpdateItemForm(request.POST)
+        valid = form.is_valid()
+
+        if valid:
+            item = self.get_object()
+            item.availability = form.cleaned_data.get("availability")
+            item.condition = form.cleaned_data.get("condition")
+            item.notes = form.cleaned_data.get("notes")
+            try:
+                item.full_clean()
+                item.save()
+                return redirect(f"{reverse('master-inventory')}?active={item.item_group_id}")
+            except ValidationError:
+                # TODO: return form w/ additional errors?
+                return HttpResponseBadRequest()
+        else:
+            # Pop an error message, maybe?
+            return render(request, self.template_name, {"form": form})

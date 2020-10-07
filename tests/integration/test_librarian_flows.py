@@ -24,7 +24,11 @@ class LibrarianAuthTests(BiblioTechBaseTest):
             ("add-item", {"username": "member", "password": "password"}, 403),
             ("add-item", {"username": "librarian", "password": "password"}, 200),
             ("master-inventory", {"username": "member", "password": "password"}, 403),
-            ("master-inventory", {"username": "librarian", "password": "password"}, 200),
+            (
+                "master-inventory",
+                {"username": "librarian", "password": "password"},
+                200,
+            ),
             ("update-item", {"username": "member", "password": "password"}, 403),
             ("update-item", {"username": "librarian", "password": "password"}, 200),
         ]
@@ -234,7 +238,7 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
                 "serial_num": "0002",
                 "availability": "AVAILABLE",
                 "condition": "EXCELLENT",
-                "notes": "Some notes"
+                "notes": "Some notes",
             },
             follow=True,
         )
@@ -248,15 +252,38 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
         response = self.client.post(
             reverse("add-holding"),
             {
-                "is_verified":"",
+                "is_verified": "",
                 "library_id": "",
                 "serial_num": "",
                 "availability": "",
                 "condition": "",
-                "notes": ""
-            }
+                "notes": "",
+            },
         )
 
-        self.assertIn("bibliotech/add_holding.html", [x.name for x in response.templates])
-        self.assertContains(response, "Please verify the item information matches the new holding", count=1)
+        self.assertIn(
+            "bibliotech/add_holding.html", [x.name for x in response.templates]
+        )
+        self.assertContains(
+            response,
+            "Please verify the item information matches the new holding",
+            count=1,
+        )
         self.assertContains(response, "This field is required", count=4)
+
+
+class UpdateItemFlowTests(BiblioTechBaseTest):
+    def test_success_redirect(self):
+        """
+        Should return properly
+        """
+        self.client.login(username="librarian", password="password")
+        expected_model = Item.objects.get(pk=1)
+        url = reverse("update-item", args=(expected_model.id,))
+        response = self.client.post(
+            url,
+            {"availability": "AVAILABLE", "condition": "GOOD", "notes": ""},
+            follow=True,
+        )
+
+        self.assertRedirects(response, "/control_panel/master_inventory?active=1")

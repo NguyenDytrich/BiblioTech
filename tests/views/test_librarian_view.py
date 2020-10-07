@@ -71,6 +71,7 @@ class MasterInventoryViewTests(BiblioTechBaseTest):
         self.assertTrue(response.context.get("active_item_set"))
         self.assertEqual(1, response.context.get("active_item_set").count())
 
+
 class UpdateItemViewTests(BiblioTechBaseTest):
     def setUp(self):
         super(UpdateItemViewTests, self).setUp()

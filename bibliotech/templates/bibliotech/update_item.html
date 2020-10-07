@@ -1,0 +1,98 @@
+{% extends "bibliotech/base.html" %}
+
+{% block content %}
+<form style="width: 100%" method="POST">
+	<div class="field is-horizontal">
+		<div class="field-label">
+		</div>
+		<div class="field-body">
+			{% csrf_token %}
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label">Item Info</label>
+		</div>
+		<div class="field-body">
+			<table class="table is-fullwidth">
+				<thead>
+					<th>Make</th>
+					<th>Model</th>
+					<th>Sn</th>
+					<th>LID</th>
+				</thead>
+				<tbody>
+					<td>{{ object.item_group.make }}</td>
+					<td>{{ object.item_group.model }}</td>
+					<td>{{ object.serial_num }}</td>
+					<td>{{ object.library_id }}</td>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label for="condition" class="label">Item condition</label>
+		</div>
+		<div class="field-body" style="display: block">
+			<div class="select">
+				<select id="condition" name="condition">
+					{% for u,l in form.fields.condition.choices %}
+					<option value="{{u}}" {% if u == object.condition %}selected{% endif %}>{{ l }}</option>
+					{% endfor %}
+				</select>
+				{% if form.condition.errors %}
+					{% for e in form.condition.errors %}
+					<p class="help is-danger">{{ e }}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label">Item availability</label>
+		</div>
+		<div class="field-body">
+			<div class="select">
+				<select id="availability" name="availability">
+					{% for u,l in form.fields.availability.choices %}
+					<option value="{{u}}" {% if u == object.availability %}selected{% endif %}>{{ l }}</option>
+					{% endfor %}
+				</select>
+				{% if form.availability.errors %}
+					{% for e in form.availability.errors %}
+					<p class="help is-danger">{{ e }}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label">
+			<label class="label">Notes</label>
+		</div>
+		<div class="field-body">
+			<textarea class="textarea" name="inspection_notes" value="{{ object.notes }}"></textarea>
+		</div>
+	</div>
+
+	<div class="field is-horizontal">
+		<div class="field-label"></div>
+		<div class="field-body">
+			<div class="field is-grouped">
+				<div class="control">
+					<input class="button is-success" type="submit" value="Save">
+				</div>
+				<div class="control">
+					<a class="button is-danger is-outlined" href="{% url 'master-inventory' %}?active={{object.item_group_id}}">Cancel</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+{% endblock %}

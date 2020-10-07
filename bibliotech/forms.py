@@ -34,3 +34,9 @@ class AddHoldingForm(forms.Form):
     availability = forms.ChoiceField(choices=Item.Availability.choices)
     condition = forms.ChoiceField(choices=Item.Condition.choices)
     notes = forms.CharField(required=False)
+
+class UpdateItemForm(forms.Form):
+    availability = forms.ChoiceField(choices=Item.Availability.choices)
+    condition = forms.ChoiceField(choices=Item.Condition.choices)
+    notes = forms.CharField(required=False)
+

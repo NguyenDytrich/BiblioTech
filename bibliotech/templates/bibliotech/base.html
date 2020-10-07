@@ -39,9 +39,25 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container mt-6">
-		{% block content %}
-		{% endblock %}
+		<div class="container pt-6" style="height: calc(100vh - 5.25rem);">
+			<div style="height: calc(100% - 2rem)">
+				{% block content %}
+				{% endblock %}
+			</div>
+		<div class="content">
+			<div class="level">
+				<div class="level-left">
+					<div>
+						<strong>BiblioTech</strong> built by <a href="http://dytrich-nguyen">Dytrich Nguyen</a> &#169; 2020.<br/>
+					</div>
+				</div>
+				<div class="level-right">
+					<div>
+						Email questions, comments, criticisms, to <a href="mailto:me@dytrich-nguyen.com">me@dytrich-nguyen.com</a>.
+					</div>
+				</div>
+			</div>
+		</div>
 		</div>
 	</body>
 </html>

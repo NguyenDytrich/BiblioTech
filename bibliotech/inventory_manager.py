@@ -9,7 +9,7 @@ def create_item_record(
     serial_num,
     condition,
     availability,
-    notes,
+    notes=None,
     date_acquired=None,
     last_inspected=None,
 ):
@@ -24,6 +24,8 @@ def create_item_record(
         condition=condition,
         availability=availability,
         notes=notes,
+        date_acquired=date_acquired if date_acquired else timezone.now(),
+        last_inspected=last_inspected if last_inspected else timezone.now(),
     )
 
     item.full_clean()

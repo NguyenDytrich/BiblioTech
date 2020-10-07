@@ -29,6 +29,7 @@ from bibliotech.views.librarian import (
     AddItemView,
     AddHoldingView,
     MasterInventoryView,
+    UpdateItemView,
 )
 from bibliotech.views.misc import home_view, success
 
@@ -64,6 +65,11 @@ urlpatterns = [
         "control_panel/master_inventory",
         MasterInventoryView.as_view(),
         name="master-inventory",
+    ),
+    path(
+        "control_panel/master_inventory/<int:pk>/update",
+        UpdateItemView.as_view(),
+        name="update-item",
     ),
     path("", home_view, name="home"),
 ]

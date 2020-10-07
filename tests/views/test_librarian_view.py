@@ -4,8 +4,9 @@ from bibliotech.views.librarian import (
     LibrarianView,
     AddHoldingView,
     MasterInventoryView,
+    UpdateItemView,
 )
-from bibliotech.models import Checkout, ItemGroup
+from bibliotech.models import Checkout, ItemGroup, Item
 
 from tests.utils import BiblioTechBaseTest
 
@@ -69,3 +70,19 @@ class MasterInventoryViewTests(BiblioTechBaseTest):
         # There is exactly 1 D7000 item entry
         self.assertTrue(response.context.get("active_item_set"))
         self.assertEqual(1, response.context.get("active_item_set").count())
+
+class UpdateItemViewTests(BiblioTechBaseTest):
+    def setUp(self):
+        super(UpdateItemViewTests, self).setUp()
+        self.view = UpdateItemView()
+
+    def test_context_data(self):
+        """
+        View should have the specified object in the context
+        """
+        self.client.login(username="librarian", password="password")
+
+        expected_model = Item.objects.get(pk=1)
+        url = reverse("update-item", args=(expected_model.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.context.get("object"), expected_model)

@@ -4,9 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
-from django.views import View
+from django.views import View 
 from django.views.decorators.http import require_http_methods
+from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import SingleObjectMixin
 from django.urls import reverse
 from django.utils import timezone
 
@@ -307,4 +309,13 @@ class MasterInventoryView(LibrarianViewBase, ListView):
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.queryset.get(pk=active)
             context["active_item_set"] = context["active"].item_set.all()
+        return context
+
+class UpdateItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
+    template_name = "bibliotech/update_item.html"
+    model = Item
+
+    def get_context_data(self, **kwargs):
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
         return context

@@ -25,6 +25,8 @@ class LibrarianAuthTests(BiblioTechBaseTest):
             ("add-item", {"username": "librarian", "password": "password"}, 200),
             ("master-inventory", {"username": "member", "password": "password"}, 403),
             ("master-inventory", {"username": "librarian", "password": "password"}, 200),
+            ("update-item", {"username": "member", "password": "password"}, 403),
+            ("update-item", {"username": "librarian", "password": "password"}, 200),
         ]
     )
     def test_view_inacessible_to_unauthorized_users(self, reverse_string, user, status):
@@ -35,6 +37,8 @@ class LibrarianAuthTests(BiblioTechBaseTest):
 
         if reverse_string == "deny-checkout":
             endpoint = reverse("deny-checkout", args=(self.checkout.id,))
+        elif reverse_string == "update-item":
+            endpoint = reverse(reverse_string, args=(Item.objects.first().id,))
         else:
             endpoint = reverse(reverse_string)
 

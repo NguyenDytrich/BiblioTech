@@ -14,12 +14,15 @@
 					<div class="level">
 						<div class="level-left">
 							<div class="level-item">
+								<!--  
+								TODO 
 								<input class="input" type="text" placeholder="Filter/search">
+								-->
 							</div>
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<button class="button is-success">Add new</button>
+								<a href="{% url 'add-item' %}" class="button is-success">Add new</a>
 							</div>
 						</div>
 					</div>
@@ -50,13 +53,16 @@
 						<div class="level-left">
 							<div class="level-item">
 								<div class="control">
+									<!--
+					 				TODO
 									<input class="input" type="text" placeholder="Filter/search">
+									-->
 								</div>
 							</div>
 						</div>
 						<div class="level-right">
 							<div class="level-item">
-								<button class="button is-success">Add new</button>
+								<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
 							</div>
 						</div>
 					</div>
@@ -78,7 +84,7 @@
 						<td>{{ item.availability }}</td>
 						<td>
 							<div class="buttons">
-								<button class="button is-warning is-small">Update</button>
+								<a href="{% url 'update-item' item.id %}" class="button is-warning is-small">Update</a>
 								<button class="button is-danger is-small is-outlined">Delete</button>
 							</div>
 						</td>

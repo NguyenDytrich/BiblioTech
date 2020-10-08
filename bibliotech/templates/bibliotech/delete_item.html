@@ -1,0 +1,52 @@
+{% extends "bibliotech/base.html" %}
+
+{% block content %}
+<div class="container px-6">
+	<div class="notification has-background-danger-light">
+		<div class="block">
+			<h1 class="title has-text-danger">WARNING</h1>
+		</div>
+		<div class="block">
+			The action you are doing will delete this item, <strong>and all checkout records related</strong> to that item.
+			If you would just like to make this item unavailable for checkout, we suggest that you mark
+			it as such rather than deleting it.
+		</div>
+		<div class="block">
+			<strong>This action is irreversable</strong> and the item will be deleted <em>forever</em>.
+		</div>
+	</div>
+	<form class="form" action="{% url 'delete-item' object.id %}" method="post">
+		{% csrf_token %}
+		<input name="item_id" type="hidden" value="{{object.id}}">
+		<div class="field">
+			<label class="label" for="item_name" style="font-weight: normal">Please enter "<strong>{{ object }}</strong>" below to confirm deletion</label>
+			<input name="item_name" type="text" class="input {% if form.item_name.errors %}is-danger{% endif %}">
+			{% if form.item_name.errors %}
+			<p class="help is-danger">
+				{% for e in form.item_name.errors %}
+				{{ e }}
+				{% endfor %}
+			</p>
+			{% endif %}
+		</div>
+		<div class="field">
+			<label class="checkbox">
+				<input name="is_sure" type="checkbox">
+				I understand that this action is irreversable, and that this action will
+				be logged.
+			</label>
+			{% if form.is_sure.errors %}
+			<p class="help is-danger">
+				{% for e in form.is_sure.errors %}
+				{{ e }}
+				{% endfor %}
+			</p>
+			{% endif %}
+		</div>
+		<div class="buttons">
+			<input class="button is-danger" type="submit" value="Delete Forever">
+			<a class="button is-warning is-outlined" href="{% url 'master-inventory' %}?active={{object.item_group_id}}">Cancel</a>
+		</div>
+	</form>
+</div>
+{% endblock %}

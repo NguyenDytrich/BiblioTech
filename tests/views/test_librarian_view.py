@@ -87,3 +87,13 @@ class UpdateItemViewTests(BiblioTechBaseTest):
         url = reverse("update-item", args=(expected_model.id,))
         response = self.client.get(url)
         self.assertEqual(response.context.get("object"), expected_model)
+
+class DeleteItemViewTests(BiblioTechBaseTest):
+
+    def test_context_data(self):
+        self.client.login(username="librarian", password="password")
+
+        expected_model = Item.objects.get(pk=1)
+        url = reverse("delete-item", args=(expected_model.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.context.get("object"), expected_model)

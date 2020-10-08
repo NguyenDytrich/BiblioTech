@@ -31,6 +31,8 @@ class LibrarianAuthTests(BiblioTechBaseTest):
             ),
             ("update-item", {"username": "member", "password": "password"}, 403),
             ("update-item", {"username": "librarian", "password": "password"}, 200),
+            ("delete-item", {"username": "member", "password": "password"}, 403),
+            ("delete-item", {"username": "librarian", "password": "password"}, 200),
         ]
     )
     def test_view_inacessible_to_unauthorized_users(self, reverse_string, user, status):
@@ -41,7 +43,7 @@ class LibrarianAuthTests(BiblioTechBaseTest):
 
         if reverse_string == "deny-checkout":
             endpoint = reverse("deny-checkout", args=(self.checkout.id,))
-        elif reverse_string == "update-item":
+        elif reverse_string in ["update-item", "delete-item"]:
             endpoint = reverse(reverse_string, args=(Item.objects.first().id,))
         else:
             endpoint = reverse(reverse_string)
@@ -287,3 +289,42 @@ class UpdateItemFlowTests(BiblioTechBaseTest):
         )
 
         self.assertRedirects(response, "/control_panel/master_inventory?active=1")
+
+
+class DeleteItemFlowTests(BiblioTechBaseTest):
+    def test_success_flow(self):
+        self.client.login(username="librarian", password="password")
+        expected_model = Item.objects.get(pk=1)
+        url = reverse("delete-item", args=(expected_model.id,))
+        response = self.client.post(
+            url,
+            {"item_id": 1, "item_name": str(expected_model), "is_sure": "TRUE"},
+            follow=True,
+        )
+
+        self.assertRedirects(response, "/control_panel/master_inventory?active=1")
+
+        with self.assertRaises(Item.DoesNotExist):
+            Item.objects.get(pk=1)
+
+    def test_item_id_mismatch(self):
+        self.client.login(username="librarian", password="password")
+        expected_model = Item.objects.get(pk=1)
+        url = reverse("delete-item", args=(expected_model.id,))
+        response = self.client.post(
+            url,
+            {"item_id": 1, "item_name": "notmatch", "is_sure": "TRUE"},
+            follow=True,
+        )
+        self.assertContains(response, "This field must match the item identifier above!")
+
+    def test_empty_fields(self):
+        self.client.login(username="librarian", password="password")
+        expected_model = Item.objects.get(pk=1)
+        url = reverse("delete-item", args=(expected_model.id,))
+        response = self.client.post(
+            url,
+            {"item_id": "", "item_name": "", "is_sure": ""},
+            follow=True,
+        )
+        self.assertContains(response, "This field is required.", count=2)

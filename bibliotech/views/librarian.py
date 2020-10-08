@@ -18,6 +18,7 @@ from bibliotech.forms import (
     AddItemForm,
     AddHoldingForm,
     UpdateItemForm,
+    DeleteItemForm,
 )
 from bibliotech.models import Checkout, Item, ItemGroup
 import bibliotech.checkout_manager as checkout_manager
@@ -337,10 +338,39 @@ class UpdateItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
             try:
                 item.full_clean()
                 item.save()
-                return redirect(f"{reverse('master-inventory')}?active={item.item_group_id}")
+                return redirect(
+                    f"{reverse('master-inventory')}?active={item.item_group_id}"
+                )
             except ValidationError:
                 # TODO: return form w/ additional errors?
                 return HttpResponseBadRequest()
         else:
             # Pop an error message, maybe?
             return render(request, self.template_name, {"form": form})
+
+
+class DeleteItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
+    template_name = "bibliotech/delete_item.html"
+    model = Item
+
+    def get_context_data(self, **kwargs):
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context["form"] = DeleteItemForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = DeleteItemForm(request.POST)
+        form.full_clean()
+        valid = form.is_valid()
+        self.object = self.get_object()
+
+        if valid:
+            itemgroup_id = self.object.item_group_id
+            # Delete all related checkout entries
+            Checkout.objects.filter(item=self.object).delete()
+            # Then delete the item
+            self.object.delete()
+            return redirect(f"{reverse('master-inventory')}?active={itemgroup_id}")
+        else:
+            return render(request, self.template_name, {"form": form, "object": self.object})

@@ -85,7 +85,7 @@
 						<td>
 							<div class="buttons">
 								<a href="{% url 'update-item' item.id %}" class="button is-warning is-small">Update</a>
-								<button class="button is-danger is-small is-outlined">Delete</button>
+								<a href="{% url 'delete-item' item.id %}" class="button is-danger is-small is-outlined">Delete</a>
 							</div>
 						</td>
 					</tr>

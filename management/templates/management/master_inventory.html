@@ -85,7 +85,7 @@
 							</div>
 							<div class="level-right">
 								<div class="level-item">
-									<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
+									<a href="{% url 'add-holding' %}{% if active %}?active={{ active.id }}{% endif %}" class="button is-success">Add new</a>
 								</div>
 							</div>
 						</div>

@@ -5,7 +5,7 @@
 	<div class="tile is-parent">
 		<div class="panel is-dark" style="width: 100%; height: 100%;">
 			<div class="panel-heading">
-				Item Groups
+				Items 
 			</div>
 			<div class="panel-body" style="max-height: 100%; overflow: auto;">
 				{% if object_list|length > 0 %}
@@ -119,7 +119,7 @@
 					<div>No Items belong to this ItemGroup yet.</div>
 					<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
 					{% else %}
-					<div>No ItemGroup selected</div>
+					<div class="panel-block">Inventory of your selected item will appear here!</div>
 					{% endif %}
 				</div>
 			</div>

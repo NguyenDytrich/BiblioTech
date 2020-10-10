@@ -5,6 +5,7 @@ from parameterized import parameterized
 
 
 class ItemGroupClassTests(TestCase):
+    fixtures = ["test_orgs.json"]
     def test_itemgroup_string_repr(self):
         """
         Assert that item group string representation is human-readable
@@ -28,12 +29,12 @@ class ItemGroupClassTests(TestCase):
         Assert that trying to delete item groups that have children throws an error
         """
         group = ItemGroup.objects.create(
-            make="Nikon", model="D7000", description="Mid range DSLR camera"
+            make="Nikon", model="D7000", description="Mid range DSLR camera", organization_id=1
         )
         group.save()
 
         item = Item.objects.create(
-            item_group=group, serial_num="0000", library_id="D7000-1"
+            item_group=group, serial_num="0000", library_id="D7000-1", organization_id=1
         )
         item.save()
 

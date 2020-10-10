@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from library.models import Checkout, Item
+from library.models import Checkout, Item, Member
 from library.validators import ItemValidator
 
 
@@ -34,11 +34,22 @@ def checkout_items(items, due_date, user, checkout_date=None, approval_status=No
         # Check if our items are available before preceeding
         ItemValidator.is_available(item)
 
+        # Check that the user is checkout out an item from an organization they are apart of
+        # TODO: Can replace w/ a more complex validation method...?
+        if item.organization != Member.objects.get(user=user).organization:
+            raise ValidationError(
+                _(
+                    f"User not permitted to checkout from organization: {item.organization}"
+                )
+            )
+
         # Set the availability
         item.availability = "CHECKED_OUT"
         item.save()
 
-        checkout = Checkout.objects.create(item=item, due_date=due_date, user=user)
+        checkout = Checkout.objects.create(
+            item=item, due_date=due_date, user=user, organization=item.organization
+        )
         if checkout_date:
             checkout.checkout_date = checkout_date
         if approval_status:

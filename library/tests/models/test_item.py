@@ -7,13 +7,14 @@ class ItemModelTest(TestCase):
     """
     Test how Item objects interact with ItemGroup objects
     """
+    fixtures = ["test_fixtures.json"]
 
     def test_item_string_repr(self):
         """
         Assert that if an item has no library id, it uses the parent's inmake, modle, and the item's serial number.
         """
         group = ItemGroup.objects.create(
-            make="Nikon", model="D7000", description="Mid-range DSLR camera"
+            make="Nikon", model="D7000", description="Mid-range DSLR camera", organization_id=1
         )
 
         group.save()
@@ -22,6 +23,7 @@ class ItemModelTest(TestCase):
             item_group=group,
             library_id="",
             serial_num="0000",
+            organization_id=1,
         )
 
         item.save()
@@ -36,6 +38,7 @@ class ItemModelTest(TestCase):
             model="D7000",
             moniker="Nikon-D7000",
             description="Mid-range DSLR camera",
+            organization_id=1,
         )
 
         group.save()
@@ -44,6 +47,7 @@ class ItemModelTest(TestCase):
             item_group=group,
             library_id="",
             serial_num="0000",
+            organization_id=1,
         )
         item.save()
 
@@ -58,6 +62,7 @@ class ItemModelTest(TestCase):
             model="D7000",
             moniker="Nikon-D7000",
             description="Mid-range DSLR camera",
+            organization_id=1
         )
         group.save()
 
@@ -65,6 +70,7 @@ class ItemModelTest(TestCase):
             item_group=group,
             library_id="Library-Id-1",
             serial_num="0000",
+            organization_id=1
         )
         item.save()
 
@@ -79,6 +85,7 @@ class ItemModelTest(TestCase):
             model="D7000",
             moniker="Nikon-D7000",
             description="Mid-range DSLR camera",
+            organization_id=1
         )
         group.save()
 
@@ -86,6 +93,7 @@ class ItemModelTest(TestCase):
             item_group=group,
             library_id="Library-Id-1",
             serial_num="0000",
+            organization_id=1
         )
         item.save()
 
@@ -94,6 +102,7 @@ class ItemModelTest(TestCase):
                 item_group=group,
                 library_id="Library-Id-1",
                 serial_num="0001",
+                organization_id=1
             )
             item2.save()
 

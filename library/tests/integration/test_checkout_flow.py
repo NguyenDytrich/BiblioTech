@@ -15,7 +15,7 @@ class CheckoutTests(TransactionTestCase):
         self.user.set_password("password")
         self.user.save()
         # Create our proxy model
-        self.member = Member.objects.create(user=self.user, member_id="000000")
+        self.member = Member.objects.create(user=self.user, member_id="000000", organization_id=1)
         self.member.save()
 
     def test_good_create_checkout(self):

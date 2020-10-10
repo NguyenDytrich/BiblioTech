@@ -12,7 +12,7 @@ tz = pytz.timezone("UTC")
 member_validator = MemberValidator
 
 class Organization(models.Model):
-    org_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
     owner = models.OneToOneField(User, on_delete=models.PROTECT)
 
 

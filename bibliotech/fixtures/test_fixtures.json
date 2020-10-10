@@ -1,11 +1,64 @@
 [
 	{
+			"model": "auth.user",
+			"pk": 1,
+			"fields": {
+					"password": "!L3hfiJCiiXPdkDVebK5fswkIU0VPQLvOOFNdHOhT",
+					"last_login": null,
+					"is_superuser": false,
+					"username": "user",
+					"first_name": "",
+					"last_name": "",
+					"email": "",
+					"is_staff": false,
+					"is_active": true,
+					"date_joined": "2020-10-10T01:14:48.730Z",
+					"groups": [],
+					"user_permissions": []
+			}
+	},
+	{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "!YB6tmhCdh8YUY7eUvCkY1iIHqHHMugpXRyX65i4o",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "user2",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-10-10T01:15:04.530Z",
+        "groups": [],
+        "user_permissions": []
+    }
+	},
+	{
+		"model": "library.Organization",
+		"pk": 1,
+		"fields": {
+			"name": "Test Organization 1",
+			"owner": "1"
+		}
+	},
+	{
+		"model": "library.Organization",
+		"pk": 2,
+		"fields": {
+			"name": "Test Organization 2",
+			"owner": "2"
+		}
+	},
+	{
 		"model": "library.ItemGroup",
 		"pk": 1,
 		"fields": {
 			"make": "Nikon",
 			"model": "D7000",
-			"description": "A mid-range DSLR camera"
+			"description": "A mid-range DSLR camera",
+			"organization": 1
 		}
 	},
 	{
@@ -15,7 +68,8 @@
 			"moniker": "Focusrite 2i2",
 			"make": "Focusrite",
 			"model": "Scarlett 2i2",
-			"description": "An entry-level audio interface"
+			"description": "An entry-level audio interface",
+			"organization": 1
 		}
 	},
 	{
@@ -24,7 +78,8 @@
 		"fields": {
 			"make": "Nikon",
 			"model": "AF-S Nikkor 18-105mm/3.5-5.6",
-			"description": "Nikon zoom lens"
+			"description": "Nikon zoom lens",
+			"organization": 1
 		}
 	},
 	{
@@ -33,7 +88,8 @@
 		"fields": {
 			"item_group": 1,
 			"serial_num":"0000",
-			"library_id":"D7000-1"
+			"library_id":"D7000-1",
+			"organization": 1
 		}
 	},
 	{
@@ -42,7 +98,8 @@
 		"fields": {
 			"item_group": 2,
 			"serial_num":"0000",
-			"library_id":"F2i2-1"
+			"library_id":"F2i2-1",
+			"organization": 1
 		}
 	},
 	{
@@ -52,7 +109,8 @@
 			"item_group": 2,
 			"serial_num":"0001",
 			"library_id":"F2i2-2",
-			"availability": "UNAVAILABLE"
+			"availability": "UNAVAILABLE",
+			"organization": 1
 		}
 	},
 	{
@@ -61,7 +119,8 @@
 		"fields": {
 			"item_group": 3,
 			"serial_num":"0000",
-			"library_id":"Nikkor-Zoom-1"
+			"library_id":"Nikkor-Zoom-1",
+			"organization": 1
 		}
 	},
 	{
@@ -70,7 +129,8 @@
 		"fields": {
 			"item_group": 3,
 			"serial_num":"0001",
-			"library_id":"Nikkor-Zoom-2"
+			"library_id":"Nikkor-Zoom-2",
+			"organization": 1
 		}
 	},
 	{
@@ -79,7 +139,8 @@
 		"fields": {
 			"item_group": 3,
 			"serial_num":"0002",
-			"library_id":"Nikkor-Zoom-3"
+			"library_id":"Nikkor-Zoom-3",
+			"organization": 1
 		}
 	}
 ]

@@ -11,7 +11,7 @@ class InventoryManagerTests(TestCase):
 
     def test_good_create_item_record(self):
         # Omit optional fields
-        item = manager.create_item_record(1, "Test-1", "TEST000", "GOOD", "UNAVAILABLE")
+        item = manager.create_item_record(1, "Test-1", "TEST000", "GOOD", "UNAVAILABLE", 1)
 
         past_acquired = timezone.now() + timedelta(-5)
         past_inspected = timezone.now() + timedelta(-4)
@@ -23,6 +23,7 @@ class InventoryManagerTests(TestCase):
             "TEST001",
             "GOOD",
             "UNAVAILABLE",
+            1,
             notes="Some notes",
             date_acquired=past_acquired,
             last_inspected=past_inspected,
@@ -37,11 +38,11 @@ class InventoryManagerTests(TestCase):
 
     def test_good_create_itemgroup_record(self):
         # Omit optional fields
-        itemgroup = manager.create_itemgroup_record("Test", "Model", "A test object")
+        itemgroup = manager.create_itemgroup_record("Test", "Model", "A test object", 1)
 
         # With optional fields
         itemgroup2 = manager.create_itemgroup_record(
-            "Test", "Model", "A test object", "Test Model Moniker"
+            "Test", "Model", "A test object", 1, "Test Model Moniker"
         )
 
         # Manager returns items if no errors occur

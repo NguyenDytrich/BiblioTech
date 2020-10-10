@@ -1,0 +1,54 @@
+[
+	{
+			"model": "auth.user",
+			"pk": 1,
+			"fields": {
+					"password": "!L3hfiJCiiXPdkDVebK5fswkIU0VPQLvOOFNdHOhT",
+					"last_login": null,
+					"is_superuser": false,
+					"username": "user",
+					"first_name": "",
+					"last_name": "",
+					"email": "",
+					"is_staff": false,
+					"is_active": true,
+					"date_joined": "2020-10-10T01:14:48.730Z",
+					"groups": [],
+					"user_permissions": []
+			}
+	},
+	{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "password": "!YB6tmhCdh8YUY7eUvCkY1iIHqHHMugpXRyX65i4o",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "user2",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-10-10T01:15:04.530Z",
+        "groups": [],
+        "user_permissions": []
+    }
+	},
+	{
+		"model": "library.Organization",
+		"pk": 1,
+		"fields": {
+			"name": "Test Organization 1",
+			"owner": "1"
+		}
+	},
+	{
+		"model": "library.Organization",
+		"pk": 2,
+		"fields": {
+			"name": "Test Organization 2",
+			"owner": "2"
+		}
+	}
+]

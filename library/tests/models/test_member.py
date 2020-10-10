@@ -9,6 +9,8 @@ from library.validators import MemberValidator
 
 
 class MemberTestCase(TestCase):
+    fixtures = ["test_orgs.json"]
+
     def setUp(self):
         self.user = User.objects.create(
             username="member", password="password", email="member@test.edu"
@@ -21,7 +23,7 @@ class MemberTestCase(TestCase):
         Test that invalid student IDs don't pass when we clean the model
         """
         with self.assertRaises(ValidationError):
-            member = Member.objects.create(user=self.user, member_id=id)
+            member = Member.objects.create(user=self.user, member_id=id, organization_id=1)
             member.full_clean()
             member.save()
 
@@ -30,7 +32,7 @@ class MemberTestCase(TestCase):
         """
         Test that valid student IDs are created
         """
-        member = Member.objects.create(user=self.user, member_id=id)
+        member = Member.objects.create(user=self.user, member_id=id, organization_id=1)
         member.full_clean()
         member.save()
 

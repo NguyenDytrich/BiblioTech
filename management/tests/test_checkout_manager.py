@@ -4,7 +4,8 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.test import TestCase
 
-from library.models import Checkout, Item
+from library.models import Checkout, Item, Member
+from library.tests.utils import BiblioTechBaseTest
 import library.checkout_manager as manager
 
 
@@ -21,6 +22,9 @@ class CheckoutManager_Returns_TestCase(TestCase):
         self.user = User.objects.create(username="member", email="member@test.edu")
         self.user.set_password("password")
         self.user.save()
+
+        member = Member.objects.create(user=self.user, organization_id=1, member_id="MEMBER1")
+        member.save()
 
         # Set up the checkout entry in the database
         self.items = Item.objects.filter(availability="AVAILABLE")
@@ -57,7 +61,7 @@ class CheckoutManager_Returns_TestCase(TestCase):
         self.assertEqual(item.availability, "CHECKED_OUT")
 
 
-class CheckoutManager_Approval_Tests(TestCase):
+class CheckoutManager_Approval_Tests(BiblioTechBaseTest):
     """
     Test approval behavior for checkout_manager
     """
@@ -69,6 +73,9 @@ class CheckoutManager_Approval_Tests(TestCase):
         self.user = User.objects.create(username="member", email="member@test.edu")
         self.user.set_password("password")
         self.user.save()
+
+        member = Member.objects.create(user=self.user, organization_id=1, member_id="MEMBER1")
+        member.save()
 
         # Set a due date 4 days from now
         self.due_date = timezone.now() + timedelta(4)

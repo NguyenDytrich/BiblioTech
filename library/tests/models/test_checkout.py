@@ -96,7 +96,7 @@ class CheckoutTestCase(TestCase):
         """
         item = Item.objects.get(pk=1)
         checkout = Checkout.objects.create(
-            due_date=self.due_date, item=item, user=self.user
+            due_date=self.due_date, item=item, user=self.user, organization_id=1
         )
 
         checkout.save()

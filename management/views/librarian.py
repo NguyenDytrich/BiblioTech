@@ -20,13 +20,33 @@ from management.forms import (
     UpdateItemForm,
     DeleteItemForm,
 )
-from library.models import Checkout, Item, ItemGroup
+from library.models import Checkout, Item, ItemGroup, Member
 import library.checkout_manager as checkout_manager
 import management.inventory_manager as inventory_manager
 
 
 def librarian_check(user):
     return user.groups.filter(name="librarian").exists()
+
+
+def get_org_from_user(user):
+    """
+    Get the organization objects referenced by the proxy model for the user
+    """
+    return Member.objects.get(user=user).organization
+
+
+# TODO: refactor all librarian views to derive from this class
+class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
 
 
 @require_http_methods(["POST"])
@@ -223,6 +243,7 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
                 model=data.get("model"),
                 description=data.get("description"),
                 moniker=data.get("moniker"),
+                organization_id=get_org_from_user(request.user).id,
             )
             messages.success(request, f"{item} successfully added to catalogue.")
             return redirect("librarian-control-panel")
@@ -257,6 +278,8 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
             # Retrieve clean data from form
             data = form.cleaned_data
 
+            organization_id = Member.objects.get(user=request.user).organization_id
+
             # Send data to the manager
             item = inventory_manager.create_item_record(
                 itemgroup_id=data["itemgroup_id"],
@@ -265,6 +288,7 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                 condition=data["condition"],
                 availability=data["availability"],
                 notes=data["notes"],
+                organization_id=organization_id,
                 date_acquired=data.get("date_acquuired", timezone.now()),
                 last_inspected=data.get("last_inspected", timezone.now()),
             )
@@ -285,19 +309,6 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                     "object_list": self.queryset,
                 },
             )
-
-
-# TODO: refactor all librarian views to derive from this class
-class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
-    login_url = "/login/"
-    redirect_field_name = None
-    raise_exception = True
-
-    def test_func(self):
-        """
-        Test the user is part of the librarian group
-        """
-        return librarian_check(self.request.user)
 
 
 class MasterInventoryView(LibrarianViewBase, ListView):
@@ -373,4 +384,6 @@ class DeleteItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
             self.object.delete()
             return redirect(f"{reverse('master-inventory')}?active={itemgroup_id}")
         else:
-            return render(request, self.template_name, {"form": form, "object": self.object})
+            return render(
+                request, self.template_name, {"form": form, "object": self.object}
+            )

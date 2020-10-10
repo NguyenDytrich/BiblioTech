@@ -4,7 +4,7 @@ from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 
 import library.checkout_manager as checkout_manager
-from library.models import Checkout, Item
+from library.models import Checkout, Item, Member
 
 
 class BiblioTechBaseTest(TransactionTestCase):
@@ -20,9 +20,15 @@ class BiblioTechBaseTest(TransactionTestCase):
         self.user.set_password("password")
         self.user.save()
 
+        member = Member.objects.create(user=self.user, organization_id=1, member_id="MEMBER0")
+        member.save()
+
         self.user2 = User.objects.create(username="member_2", email="member@test.edu")
         self.user2.set_password("password")
         self.user2.save()
+
+        member = Member.objects.create(user=self.user2, organization_id=1, member_id="MEMBER1")
+        member.save()
 
         # Librarian user
         self.librarian = User.objects.create(
@@ -31,6 +37,10 @@ class BiblioTechBaseTest(TransactionTestCase):
         self.librarian.set_password("password")
         self.librarian.groups.add(librarian_group)
         self.librarian.save()
+
+        member = Member.objects.create(user=self.librarian, organization_id=1, member_id="LIBRARIAN1")
+        member.save()
+
 
         # Create some checkouts
         due_date = timezone.now() + timedelta(5)

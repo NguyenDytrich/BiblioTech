@@ -1,6 +1,6 @@
 [
 	{
-		"model": "bibliotech.ItemGroup",
+		"model": "library.ItemGroup",
 		"pk": 1,
 		"fields": {
 			"make": "Nikon",
@@ -9,7 +9,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.ItemGroup",
+		"model": "library.ItemGroup",
 		"pk": 2,
 		"fields": {
 			"moniker": "Focusrite 2i2",
@@ -19,7 +19,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.ItemGroup",
+		"model": "library.ItemGroup",
 		"pk": 3,
 		"fields": {
 			"make": "Nikon",
@@ -28,7 +28,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.Item",
+		"model": "library.Item",
 		"pk": 1,
 		"fields": {
 			"item_group": 1,
@@ -37,7 +37,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.Item",
+		"model": "library.Item",
 		"pk": 2,
 		"fields": {
 			"item_group": 2,
@@ -46,7 +46,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.Item",
+		"model": "library.Item",
 		"pk": 3,
 		"fields": {
 			"item_group": 2,
@@ -56,7 +56,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.Item",
+		"model": "library.Item",
 		"pk": 4,
 		"fields": {
 			"item_group": 3,
@@ -65,7 +65,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.Item",
+		"model": "library.Item",
 		"pk": 5,
 		"fields": {
 			"item_group": 3,
@@ -74,7 +74,7 @@
 		}
 	},
 	{
-		"model": "bibliotech.Item",
+		"model": "library.Item",
 		"pk": 6,
 		"fields": {
 			"item_group": 3,

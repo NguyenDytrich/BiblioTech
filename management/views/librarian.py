@@ -223,6 +223,7 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
                 model=data.get("model"),
                 description=data.get("description"),
                 moniker=data.get("moniker"),
+                default_checkout_len=data.get("default_checkout_len"),
             )
             messages.success(request, f"{item} successfully added to catalogue.")
             return redirect("librarian-control-panel")

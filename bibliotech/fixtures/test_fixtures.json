@@ -5,7 +5,8 @@
 		"fields": {
 			"make": "Nikon",
 			"model": "D7000",
-			"description": "A mid-range DSLR camera"
+			"description": "A mid-range DSLR camera",
+			"default_checkout_len": 7
 		}
 	},
 	{
@@ -15,7 +16,8 @@
 			"moniker": "Focusrite 2i2",
 			"make": "Focusrite",
 			"model": "Scarlett 2i2",
-			"description": "An entry-level audio interface"
+			"description": "An entry-level audio interface",
+			"default_checkout_len": 7
 		}
 	},
 	{
@@ -24,7 +26,8 @@
 		"fields": {
 			"make": "Nikon",
 			"model": "AF-S Nikkor 18-105mm/3.5-5.6",
-			"description": "Nikon zoom lens"
+			"description": "Nikon zoom lens",
+			"default_checkout_len": 7
 		}
 	},
 	{

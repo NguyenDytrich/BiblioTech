@@ -201,6 +201,7 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
                 "model": "SM57",
                 "description": "Good microphone",
                 "moniker": "SM57",
+                "default_checkout_len": 7,
             },
             follow=True,
         )

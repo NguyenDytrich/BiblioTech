@@ -1,4 +1,6 @@
+from datetime import timedelta
 from django.test import TestCase
+from django.utils import timezone
 from django.db.models import ProtectedError
 from library.models import ItemGroup, Item
 from parameterized import parameterized
@@ -28,7 +30,10 @@ class ItemGroupClassTests(TestCase):
         Assert that trying to delete item groups that have children throws an error
         """
         group = ItemGroup.objects.create(
-            make="Nikon", model="D7000", description="Mid range DSLR camera"
+            make="Nikon",
+            model="D7000",
+            description="Mid range DSLR camera",
+            default_checkout_len=7,
         )
         group.save()
 
@@ -81,3 +86,12 @@ class ItemGroupTests(TestCase):
         actual_avail = Item.objects.filter(item_group=itemg, availability="AVAILABLE")
 
         self.assertEqual(itemg.avail_inventory(), len(actual_avail))
+
+    def test_default_return_date(self):
+        """
+        default_return_date() should return now + default_checkout_len days
+        """
+        itemg = ItemGroup.objects.get(pk=1)
+        expected = timezone.now() + timedelta(itemg.default_checkout_len)
+        date = itemg.default_return_date
+        self.assertEqual(date.date(), expected.date())

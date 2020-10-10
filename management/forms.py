@@ -20,6 +20,7 @@ class AddItemForm(forms.Form):
     model = forms.CharField()
     moniker = forms.CharField(required=False)
     description = forms.CharField()
+    default_checkout_len = forms.IntegerField()
 
 
 # TODO: might need to swap holding & items

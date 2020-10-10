@@ -36,65 +36,92 @@
 				{% endfor %}
 				{% else %}
 				No items to display!
+				<a href="{% url 'add-item' %}" class="button is-success">Add new</a>
 				{% endif %}
 				</div>
 		</div>
 	</div>
 
-	<div class="tile is-parent is-8">
-		<div class="panel is-dark" style="width: 100%;">
-			<div class="panel-heading">
-				Items
+	<div class="tile is-parent is-vertical is-8">
+		<div class="tile is-child">
+			<div class="panel is-dark" style="width: 100%; height: 100%;">
+				<div class="panel-heading">
+					About {% if active %}the {{ active }}{% endif %}
+				</div>
+				<div class="panel-block">
+					<div class="content">
+						{% if active %}
+							<div>
+								<a href="{% url 'itemgroup-detail' active.id %}" class="button is-info">Catalogue Page</a>
+							</div>
+							Description: {{ active.description }}
+						{% else %}
+						<div class="block">
+							Information about your selected item will appear here!
+						</div>
+						{% endif %}
+					</div>
+				</div>
 			</div>
-			<div class="panel-body">
-				{% if active_item_set and active %}
-				<div class="panel-block" style="display: block">
-					<div class="level">
-						<div class="level-left">
-							<div class="level-item">
-								<div class="control">
-									<!--
-					 				TODO
-									<input class="input" type="text" placeholder="Filter/search">
-									-->
+		</div>
+		<div class="tile is-child">
+			<div class="panel is-dark" style="width: 100%; height: 100%;">
+				<div class="panel-heading">
+					Inventory	
+				</div>
+				<div class="panel-body">
+					{% if active_item_set and active %}
+					<div class="panel-block" style="display: block">
+						<div class="level">
+							<div class="level-left">
+								<div class="level-item">
+									<div class="control">
+										<!--
+										TODO
+										<input class="input" type="text" placeholder="Filter/search">
+										-->
+									</div>
+								</div>
+							</div>
+							<div class="level-right">
+								<div class="level-item">
+									<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
 								</div>
 							</div>
 						</div>
-						<div class="level-right">
-							<div class="level-item">
-								<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
-							</div>
-						</div>
 					</div>
+					<table class="table is-fullwidth">
+						<thead>
+							<th>Library Id</th>
+							<th>Serial Num</th>
+							<th>Condition</th>
+							<th>Availability</th>
+							<th>Actions</th>
+						</thead>
+						<tbody>
+						{% for item in active_item_set %}
+						<tr>
+							<td>{{ item.library_id }}</td>
+							<td>{{ item.serial_num }}</td>
+							<td>{{ item.condition }}</td>
+							<td>{{ item.availability }}</td>
+							<td>
+								<div class="buttons">
+									<a href="{% url 'update-item' item.id %}" class="button is-warning is-small">Update</a>
+									<a href="{% url 'delete-item' item.id %}" class="button is-danger is-small is-outlined">Delete</a>
+								</div>
+							</td>
+						</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+					{% elif active and not active_item_set %}
+					<div>No Items belong to this ItemGroup yet.</div>
+					<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
+					{% else %}
+					<div>No ItemGroup selected</div>
+					{% endif %}
 				</div>
-				<table class="table is-fullwidth">
-					<thead>
-						<th>Library Id</th>
-						<th>Serial Num</th>
-						<th>Condition</th>
-						<th>Availability</th>
-						<th>Actions</th>
-					</thead>
-					<tbody>
-					{% for item in active_item_set %}
-					<tr>
-						<td>{{ item.library_id }}</td>
-						<td>{{ item.serial_num }}</td>
-						<td>{{ item.condition }}</td>
-						<td>{{ item.availability }}</td>
-						<td>
-							<div class="buttons">
-								<a href="{% url 'update-item' item.id %}" class="button is-warning is-small">Update</a>
-								<a href="{% url 'delete-item' item.id %}" class="button is-danger is-small is-outlined">Delete</a>
-							</div>
-						</td>
-					</tr>
-					{% endfor %}
-					</tbody>
-				</table>
-				{% else %}
-				<div>No ItemGroup selected</div>
-				{% endif %}
 			</div>
 		</div>
 	</div>

@@ -36,9 +36,15 @@ def create_item_record(
     return item
 
 
-def create_itemgroup_record(make, model, description, moniker=None):
+def create_itemgroup_record(
+    make, model, description, default_checkout_len, moniker=None
+):
     itemgroup = ItemGroup(
-        make=make, model=model, description=description, moniker=moniker
+        make=make,
+        model=model,
+        description=description,
+        moniker=moniker,
+        default_checkout_len=default_checkout_len,
     )
     itemgroup.full_clean()
     itemgroup.save()

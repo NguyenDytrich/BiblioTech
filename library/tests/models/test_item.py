@@ -13,7 +13,7 @@ class ItemModelTest(TestCase):
         Assert that if an item has no library id, it uses the parent's inmake, modle, and the item's serial number.
         """
         group = ItemGroup.objects.create(
-            make="Nikon", model="D7000", description="Mid-range DSLR camera"
+            make="Nikon", model="D7000", description="Mid-range DSLR camera", default_checkout_len=7
         )
 
         group.save()
@@ -36,6 +36,7 @@ class ItemModelTest(TestCase):
             model="D7000",
             moniker="Nikon-D7000",
             description="Mid-range DSLR camera",
+            default_checkout_len=7,
         )
 
         group.save()
@@ -58,6 +59,7 @@ class ItemModelTest(TestCase):
             model="D7000",
             moniker="Nikon-D7000",
             description="Mid-range DSLR camera",
+            default_checkout_len=7,
         )
         group.save()
 
@@ -79,6 +81,7 @@ class ItemModelTest(TestCase):
             model="D7000",
             moniker="Nikon-D7000",
             description="Mid-range DSLR camera",
+            default_checkout_len=7,
         )
         group.save()
 

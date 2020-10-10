@@ -37,11 +37,15 @@ class InventoryManagerTests(TestCase):
 
     def test_good_create_itemgroup_record(self):
         # Omit optional fields
-        itemgroup = manager.create_itemgroup_record("Test", "Model", "A test object")
+        itemgroup = manager.create_itemgroup_record("Test", "Model", "A test object", 7)
 
         # With optional fields
         itemgroup2 = manager.create_itemgroup_record(
-            "Test", "Model", "A test object", "Test Model Moniker"
+            "Test",
+            "Model",
+            "A test object",
+            7,
+            "Test Model Moniker",
         )
 
         # Manager returns items if no errors occur

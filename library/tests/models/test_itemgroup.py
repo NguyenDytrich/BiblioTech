@@ -28,7 +28,10 @@ class ItemGroupClassTests(TestCase):
         Assert that trying to delete item groups that have children throws an error
         """
         group = ItemGroup.objects.create(
-            make="Nikon", model="D7000", description="Mid range DSLR camera"
+            make="Nikon",
+            model="D7000",
+            description="Mid range DSLR camera",
+            default_checkout_len=7,
         )
         group.save()
 

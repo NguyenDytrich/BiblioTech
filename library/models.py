@@ -24,6 +24,7 @@ class ItemGroup(models.Model):
     make = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     description = models.TextField()
+    default_checkout_len = models.IntegerField()
 
     def __str__(self):
         if self.moniker:

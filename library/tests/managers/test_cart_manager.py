@@ -59,7 +59,12 @@ class CartManagerTests(TestCase):
 
         dto = manager.retrieve_for_display(cart)
 
-        self.assertEqual(dto, [{"name": str(item), "quantity": cart[str_id]}])
+        for d in dto:
+            self.assertEqual(
+                {key: d[key] for key in ["name", "quantity"]},
+                {"name": str(item), "quantity": cart[str_id]},
+            )
+            self.assertTrue(d.get("return_date"))
 
     @parameterized.expand(["UNAVAILABLE", "CHECKED_OUT", "HOLD", "LOST"])
     def test_bad_add_to_cart_no_inventory(self, avail):

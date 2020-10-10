@@ -36,5 +36,11 @@ def retrieve_for_display(cart):
     dto = []
     for key, val in cart.items():
         itemgroup = ItemGroup.objects.get(pk=key)
-        dto.append({"name": str(itemgroup), "quantity": val})
+        dto.append(
+            {
+                "name": str(itemgroup),
+                "quantity": val,
+                "return_date": itemgroup.default_return_date,
+            }
+        )
     return dto

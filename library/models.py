@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -31,6 +32,10 @@ class ItemGroup(models.Model):
             return self.moniker
         else:
             return f"{self.make} {self.model}"
+
+    @property
+    def default_return_date(self):
+        return timezone.now() + timedelta(self.default_checkout_len)
 
     def total_inventory(self):
         return len(self.item_set.all())

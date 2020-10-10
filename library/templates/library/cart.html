@@ -16,7 +16,7 @@
 		<tr>
 			<td>{{ item.name }}</td>
 			<td>x{{ item.quantity }}</td>
-			<td>None</td>
+			<td>{{ item.return_date|date:"m-d-y" }}</td>
 		</tr>
 		{% endfor %}
 		</tbody>

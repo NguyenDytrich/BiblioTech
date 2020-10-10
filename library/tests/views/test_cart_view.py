@@ -24,4 +24,4 @@ class CartViewTests(TransactionTestCase):
         self.assertContains(response, str(item))
         self.assertContains(response, f"x{count}")
 
-        self.assertContains(response, expected_due_date.strftime("%m-%d-%Y"))
+        self.assertContains(response, expected_due_date.strftime("%m-%d-%y"))

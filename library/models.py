@@ -11,9 +11,14 @@ tz = pytz.timezone("UTC")
 
 member_validator = MemberValidator
 
+class Organization(models.Model):
+    org_name = models.CharField(max_length=255)
+    owner = models.OneToOneField(User, on_delete=models.PROTECT)
+
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     member_id = models.CharField(
         max_length=6, unique=True, validators=[member_validator.member_id]
     )
@@ -24,6 +29,7 @@ class ItemGroup(models.Model):
     make = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     description = models.TextField()
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     def __str__(self):
         if self.moniker:
@@ -58,6 +64,7 @@ class Item(models.Model):
 
     # Protect prevents an ItemGroup with referenced items from being deleted
     # automatically in a CASCADE.
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     item_group = models.ForeignKey(ItemGroup, on_delete=models.PROTECT)
     library_id = models.SlugField(max_length=20, unique=True)
     serial_num = models.CharField(max_length=100)
@@ -96,6 +103,7 @@ class Checkout(models.Model):
         LOST = "LOST", _("Lost")
         OUTSTANDING = "OUTSTANDING", _("Outstanding")
 
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     approver = models.ForeignKey(
         User, on_delete=models.PROTECT, related_name="approver_id", blank=True, null=True

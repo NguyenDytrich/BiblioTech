@@ -1,31 +1,18 @@
 from django.test import TestCase
 from parameterized import parameterized
 
-from library.forms import *
+from management.forms import *
 
 
 class DenyCheckoutFormTests(TestCase):
     @parameterized.expand(
         [
-            ({"reason": "reason"}, true),
-            ({"reason": ""}, false),
+            ({"reason": "reason"}, True),
+            ({"reason": ""}, False),
         ]
     )
     def test_validation(self, info_dict, validity):
         form = DenyCheckoutForm(info_dict)
-        self.assertEqual(form.is_valid(), validity)
-
-
-class AgreedToTermsTests(TestCase):
-    @parameterized.expand(
-        [
-            ({"agreed": "TRUE"}, true),
-            ({"agreed": "FALSE"}, false),
-            ({"agreed": ""}, false),
-        ]
-    )
-    def test_validation(self, info_dict, validity):
-        form = AgreedToTerms(info_dict)
         self.assertEqual(form.is_valid(), validity)
 
 
@@ -39,7 +26,7 @@ class ReturnCheckoutFormTests(TestCase):
                     "return_condition": "GOOD",
                     "inspection_notes": "test",
                 },
-                true,
+                True,
             ),
             (
                 {
@@ -48,7 +35,7 @@ class ReturnCheckoutFormTests(TestCase):
                     "return_condition": "",
                     "inspection_notes": "",
                 },
-                false,
+                False,
             ),
             (
                 {
@@ -57,7 +44,7 @@ class ReturnCheckoutFormTests(TestCase):
                     "return_condition": "GOOD",
                     "inspection_notes": "",
                 },
-                false,
+                False,
             ),
             (
                 {
@@ -66,7 +53,7 @@ class ReturnCheckoutFormTests(TestCase):
                     "return_condition": "GOOD",
                     "inspection_notes": "",
                 },
-                false,
+                False,
             ),
             (
                 {
@@ -75,12 +62,12 @@ class ReturnCheckoutFormTests(TestCase):
                     "return_condition": "notgood",
                     "inspection_notes": "",
                 },
-                false,
+                False,
             ),
         ]
     )
     def test_validation(self, info_dict, validity):
-        form = AgreedToTerms(info_dict)
+        form = ReturnCheckoutForm(info_dict)
         self.assertEqual(form.is_valid(), validity)
 
 
@@ -94,7 +81,7 @@ class AddItemFormTests(TestCase):
                     "moniker": "SM57",
                     "description": "A microphone",
                 },
-                true,
+                True,
             ),
             (
                 {
@@ -103,7 +90,7 @@ class AddItemFormTests(TestCase):
                     "moniker": "",
                     "description": "",
                 },
-                false,
+                False,
             ),
             (
                 {
@@ -112,10 +99,10 @@ class AddItemFormTests(TestCase):
                     "moniker": "",
                     "description": "A microphone",
                 },
-                false,
+                True,
             ),
         ]
     )
     def test_validation(self, info_dict, validity):
-        form = AgreedToTerms(info_dict)
+        form = AddItemForm(info_dict)
         self.assertEqual(form.is_valid(), validity)

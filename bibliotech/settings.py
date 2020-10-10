@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "bibliotech",
+    "library",
+    "management",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

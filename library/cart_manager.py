@@ -35,7 +35,7 @@ def remove_from_cart(cart, itemgroup_id, count=1):
 
     cart[ig_id] = cart[ig_id] - 1
 
-    if cart[ig_id] < 0:
+    if cart[ig_id] <= 0:
         cart.pop(ig_id)
 
 

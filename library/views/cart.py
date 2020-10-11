@@ -1,11 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, render, get_object_or_404
+from django.views import View
 from django.urls import reverse
 
 import library.cart_manager as cart_manager
 from library.models import ItemGroup
+
 
 def cart_view(request):
     empty_cart = False
@@ -22,6 +25,7 @@ def cart_view(request):
         "library/cart.html",
         {"cart_items": cart_items, "empty_cart": empty_cart},
     )
+
 
 @login_required(login_url="/login", redirect_field_name=None)
 def add_to_cart(request, itemgroup_id):
@@ -48,3 +52,16 @@ def add_to_cart(request, itemgroup_id):
 
     return redirect(request.POST.get("return", detail_view))
 
+
+class RemoveFromCart(LoginRequiredMixin, View):
+    login_url = "/login"
+    redirect_field_name = None
+    raise_exception = True
+
+    def post(self, request, *args, **kwargs):
+        if "cart" in request.session and request.GET.get("item"):
+            cart_manager.remove_from_cart(
+                request.session["cart"], request.GET.get("item")
+            )
+            request.session["cart_sum"] = sum(request.session["cart"].values())
+        return redirect(reverse("cart-view"))

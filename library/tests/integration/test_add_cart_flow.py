@@ -32,7 +32,7 @@ class CartFlowTests(TransactionTestCase):
         )
         redirect_url = reverse("itemgroup-detail", args=(1,))
 
-        self.assertRedirects(response, reverse('login'))
+        self.assertRedirects(response, reverse("login"))
 
         credentials = {
             "username": "member",
@@ -96,3 +96,22 @@ class CartFlowTests(TransactionTestCase):
         self.assertRedirects(response, redirect_url)
         # The message should be rendered in the DOM
         self.assertContains(response, expected_msg)
+
+    def test_remove_cart_flow(self):
+        self.client.login(username="member", password="password")
+        url = f"{reverse('cart-remove')}?item=3"
+        redirect_url = reverse("itemgroup-detail", args=(3,))
+
+        session = self.client.session
+
+        session["cart"] = {"3": 1}
+        session["cart_sum"] = 1
+        session.save()
+
+        response = self.client.post(url, follow=True)
+        self.assertRedirects(response, reverse("cart-view"))
+
+        self.assertEqual(self.client.session["cart"], {})
+        self.assertEqual(self.client.session["cart_sum"], 0)
+
+        self.assertNotContains(response, ItemGroup.objects.get(pk=3))

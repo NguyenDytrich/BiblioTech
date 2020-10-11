@@ -1,0 +1,84 @@
+{% extends 'bibliotech/base.html' %}
+
+{% block content %}
+<form action="{% url 'signup' %}" method="POST">
+	{% csrf_token %}
+	<div class="field is-grouped">
+		<div class="control">
+			<label for="fname" class="label">First Name</label>
+			<input class="input" name="fname" type="text">
+			{% if form.fname.errors %}
+			<ul class="help is-danger">
+				{% for e in form.fname.errors %}
+				<li>{{ e }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+		<div class="control">
+			<label for="lname" class="label">Last Name</label>
+			<input class="input" name="lname" type="text">
+			{% if form.lname.errors %}
+			<ul class="help is-danger">
+				{% for e in form.lname.errors %}
+				<li>{{ e }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="username" class="label">Username</label>
+		<input class="input" name="username" type="text">
+		{% if form.username.errors %}
+		<ul class="help is-danger">
+			{% for e in form.username.errors %}
+			<li>{{ e }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+	</div>
+
+	<div class="field">
+		<label for="email" class="label">Email</label>
+		<input class="input" name="email" type="text">
+		{% if form.email.errors %}
+		<ul class="help is-danger">
+			{% for e in form.email.errors %}
+			<li>{{ e }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+
+	<div class="field">
+		<label class="label" for="password">Password</label>
+		<input class="input" type="password" name="password">
+		{% if form.password.errors %}
+		<ul class="help is-danger">
+			{% for e in form.password.errors %}
+			<li>{{ e }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+
+	<div class="field">
+		<label class="label" for="password_confirm">Password (again)</label>
+		<input class="input" type="password" name="password_confirm">
+		{% if form.password_confirm.errors %}
+		<ul class="help is-danger">
+			{% for e in form.password_confirm.errors %}
+			<li>{{ e }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	</div>
+
+	<div class="field">
+		<input type="submit" class="button is-success" value="Signup">
+	</div>
+</form>
+{% endblock %}

@@ -28,6 +28,16 @@ def add_to_cart(cart, itemgroup_id, count=1):
     new_val = cart.get(ig_id, 0) + count
     cart[ig_id] = new_val
 
+def remove_from_cart(cart, itemgroup_id, count=1):
+    ig_id = str(itemgroup_id)
+    if not isinstance(cart, dict):
+        raise TypeError("Expected `cart` to be Dict but found %s" % type(cart))
+
+    cart[ig_id] = cart[ig_id] - 1
+
+    if cart[ig_id] < 0:
+        cart.pop(ig_id)
+
 
 def retrieve_for_display(cart):
     """

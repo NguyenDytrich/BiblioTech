@@ -2,7 +2,7 @@
 
 {% block content %}
 	{% if not empty_cart %}
-	<div class="section">
+	<div class="section px-6">
 	<h1 class="title">Your Cart</h1>
 	<table class="table is-fullwidth">
 		<thead>
@@ -16,14 +16,20 @@
 		<tr>
 			<td>{{ item.name }}</td>
 			<td>x{{ item.quantity }}</td>
-			<td>{{ item.return_date|date:"m-d-y" }}</td>
+			<td class="level">
+				{{ item.return_date|date:"m-d-y" }}
+				<form action="{% url 'cart-remove' %}?item={{item.id}}" method="POST">
+					{% csrf_token %}
+					<input type="submit" class="button is-danger is-outlined is-small" value="Remove">
+				</form>
+			</td>
 		</tr>
 		{% endfor %}
 		</tbody>
 
 	</table>
 	</div>
-	<div class="section">
+	<div class="section px-6">
 		<form action="{% url 'create-checkout' %}" method="post">
 			{% csrf_token %}
 			<div class="content">

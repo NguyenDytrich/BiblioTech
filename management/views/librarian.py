@@ -28,6 +28,19 @@ import management.inventory_manager as inventory_manager
 def librarian_check(user):
     return user.groups.filter(name="librarian").exists()
 
+# TODO: refactor all librarian views to derive from this class
+class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
+    login_url = "/login/"
+    redirect_field_name = None
+    raise_exception = True
+
+    def test_func(self):
+        """
+        Test the user is part of the librarian group
+        """
+        return librarian_check(self.request.user)
+
+
 
 @require_http_methods(["POST"])
 def approve_checkout(request, checkout_id):
@@ -46,15 +59,9 @@ def approve_checkout(request, checkout_id):
         raise PermissionDenied
 
 
-class LibrarianView(LoginRequiredMixin, UserPassesTestMixin, View):
+class LibrarianView(LibrarianViewBase, View):
     template_name = "management/librarian_control_panel.html"
     raise_exception = True
-
-    def test_func(self):
-        """
-        Test the user is part of the librarian group
-        """
-        return librarian_check(self.request.user)
 
     def get(self, request, *args, **kwargs):
         return render(
@@ -77,15 +84,8 @@ class LibrarianView(LoginRequiredMixin, UserPassesTestMixin, View):
             return None
 
 
-class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
-    raise_exception = True
-
-    def test_func(self):
-        """
-        Test the user is part of the librarian group
-        """
-        return librarian_check(self.request.user)
-
+class DenyCheckoutView(LibrarianViewBase, View):
+    
     def get(self, request, checkout_id):
         """
         Display a form to provide a reason for checkout denial
@@ -123,18 +123,12 @@ class DenyCheckoutView(LoginRequiredMixin, UserPassesTestMixin, View):
             return redirect(reverse("librarian-control-panel"))
 
 
-class MasterCheckoutListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    login_url = "/login/"
-    redirect_field_name = None
-    raise_exception = True
+class MasterCheckoutListView(LibrarianViewBase, ListView):
     model = Checkout
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-
-    def test_func(self):
-        return librarian_check(self.request.user)
 
     # TODO: Test this
     def get_queryset(self):
@@ -145,11 +139,8 @@ class MasterCheckoutListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return queryset
 
 
-class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+class ReturnItemView(LibrarianViewBase, ListView):
     template_name = "management/return_item.html"
-    login_url = "/login/"
-    redirect_field_name = None
-    raise_exception = True
     model = Checkout
 
     def get_context_data(self, **kwargs):
@@ -159,12 +150,6 @@ class ReturnItemView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.get_queryset().get(pk=active)
         return context
-
-    def test_func(self):
-        """
-        Test the user is part of the librarian group
-        """
-        return librarian_check(self.request.user)
 
     def get_queryset(self):
         queryset = super(ReturnItemView, self).get_queryset()
@@ -287,18 +272,6 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                 },
             )
 
-
-# TODO: refactor all librarian views to derive from this class
-class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
-    login_url = "/login/"
-    redirect_field_name = None
-    raise_exception = True
-
-    def test_func(self):
-        """
-        Test the user is part of the librarian group
-        """
-        return librarian_check(self.request.user)
 
 
 class MasterInventoryView(LibrarianViewBase, ListView):

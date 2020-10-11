@@ -26,14 +26,28 @@
 		</div>
 
 		<div class="field">
-			<label for="moniker" class="label">Moniker (optional)</label>
-			<input id="moniker" name="moniker" type="text" class="input">
-			<p class="help">Alternative name for this item</p>
-			{% if form.model.errors %}
-				{% for e in form.moniker.errors %}
-					<p class="help is-danger">{{e}}</p>
-				{% endfor %}
-			{% endif %}
+			<div class="control">
+				<label for="moniker" class="label">Moniker (optional)</label>
+				<input id="moniker" name="moniker" type="text" class="input">
+				<p class="help">Alternative name for this item</p>
+				{% if form.model.errors %}
+					{% for e in form.moniker.errors %}
+						<p class="help is-danger">{{e}}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+		
+		<div class="field">
+			<div class="control">
+				<label for="default_checkout_len" class="label">Default Loan Period (in days)</label>
+				<input id="default_checkout_len" name="default_checkout_len" class="input" type="text">
+				{% if form.model.errors %}
+					{% for e in form.default_checkout_len.errors %}
+						<p class="help is-danger">{{e}}</p>
+					{% endfor %}
+				{% endif %}
+			</div>
 		</div>
 
 		<div class="field">

@@ -183,7 +183,9 @@ class LibrarianReturnTests(BiblioTechBaseTest):
 
         self.assertTrue(response.context["form"].errors["is_verified"])
         self.assertTrue(response.context["form"].errors["return_condition"])
-        self.assertIn("management/return_item.html", [x.name for x in response.templates])
+        self.assertIn(
+            "management/return_item.html", [x.name for x in response.templates]
+        )
         self.assertContains(
             response, "Please verify the item information matches the returning item"
         )
@@ -224,7 +226,7 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
         )
 
         self.assertIn("management/add_item.html", [x.name for x in response.templates])
-        self.assertContains(response, "This field is required", count=3)
+        self.assertContains(response, "This field is required", count=4)
 
     # TODO: might have to swap names of item vs holding?
     def test_add_holding(self):
@@ -262,13 +264,35 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
             },
         )
 
-        self.assertIn("management/add_holding.html", [x.name for x in response.templates])
+        self.assertIn(
+            "management/add_holding.html", [x.name for x in response.templates]
+        )
         self.assertContains(
             response,
             "Please verify the item information matches the new holding",
             count=1,
         )
         self.assertContains(response, "This field is required", count=4)
+
+    def test_add_holding_unique_violation(self):
+        self.client.login(username="librarian", password="password")
+
+        item = self.item
+
+        response = self.client.post(
+            reverse("add-holding"),
+            {
+                "is_verified": "TRUE",
+                "library_id": item.library_id,
+                "serial_num": item.serial_num,
+                "availability": "AVAILABLE",
+                "condition": "GOOD",
+                "notes": "",
+            },
+        )
+
+        self.assertContains(response, f"Serial number {item.serial_num} already in system!")
+        self.assertContains(response, f"Library id {item.library_id} already in system!")
 
 
 class UpdateItemFlowTests(BiblioTechBaseTest):

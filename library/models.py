@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import pytz
@@ -62,6 +63,13 @@ class Item(models.Model):
         GOOD = "GOOD", _("Good")
         EXCELLENT = "EXCELLENT", _("Excellent")
 
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["item_group", "serial_num"], name="unique_itemgroup_member"
+            )
+        ]
+
     # Protect prevents an ItemGroup with referenced items from being deleted
     # automatically in a CASCADE.
     item_group = models.ForeignKey(ItemGroup, on_delete=models.PROTECT)
@@ -104,7 +112,11 @@ class Checkout(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     approver = models.ForeignKey(
-        User, on_delete=models.PROTECT, related_name="approver_id", blank=True, null=True
+        User,
+        on_delete=models.PROTECT,
+        related_name="approver_id",
+        blank=True,
+        null=True,
     )
     item = models.ForeignKey(Item, on_delete=models.PROTECT)
     checkout_date = models.DateTimeField(default=timezone.now(), blank=True)

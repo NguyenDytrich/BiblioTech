@@ -10,6 +10,9 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 
 
 # Roadmap to release
+- [ ] User Sign ups
+- [ ] User profiles
+- [ ] User password recovery
 - [ ] Audit Logs
 - [ ] Reservations
 - [ ] Waitlists

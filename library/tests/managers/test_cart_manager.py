@@ -66,6 +66,22 @@ class CartManagerTests(TestCase):
             )
             self.assertTrue(d.get("return_date"))
 
+    def test_remove(self):
+        """
+        Assert that remove_from_cart() removes an item from
+        """
+        item = ItemGroup.objects.get(pk=3)
+        str_id = str(item.id)
+        cart = {str_id: 2}
+
+        # Removing once should default to removing 1
+        manager.remove_from_cart(cart, str_id)
+        self.assertEqual(cart[str_id], 1)
+
+        # Removing again should remove the item entirely
+        manager.remove_from_cart(cart, str_id)
+        self.assertFalse(cart.get(str_id))
+
     @parameterized.expand(["UNAVAILABLE", "CHECKED_OUT", "HOLD", "LOST"])
     def test_bad_add_to_cart_no_inventory(self, avail):
         """

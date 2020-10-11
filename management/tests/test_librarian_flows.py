@@ -283,16 +283,18 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
             reverse("add-holding"),
             {
                 "is_verified": "TRUE",
+                "itemgroup_id": item.item_group_id,
                 "library_id": item.library_id,
                 "serial_num": item.serial_num,
                 "availability": "AVAILABLE",
                 "condition": "GOOD",
                 "notes": "",
             },
+            follow=True,
         )
 
-        self.assertContains(response, f"Serial number {item.serial_num} already in system!")
         self.assertContains(response, f"Library id {item.library_id} already in system!")
+        self.assertContains(response, f"Serial number {item.serial_num} already in system!")
 
 
 class UpdateItemFlowTests(BiblioTechBaseTest):

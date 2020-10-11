@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.db import IntegrityError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
 from django.views import View
@@ -28,6 +29,7 @@ import management.inventory_manager as inventory_manager
 def librarian_check(user):
     return user.groups.filter(name="librarian").exists()
 
+
 # TODO: refactor all librarian views to derive from this class
 class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
     login_url = "/login/"
@@ -39,7 +41,6 @@ class LibrarianViewBase(LoginRequiredMixin, UserPassesTestMixin):
         Test the user is part of the librarian group
         """
         return librarian_check(self.request.user)
-
 
 
 @require_http_methods(["POST"])
@@ -85,7 +86,6 @@ class LibrarianView(LibrarianViewBase, View):
 
 
 class DenyCheckoutView(LibrarianViewBase, View):
-    
     def get(self, request, checkout_id):
         """
         Display a form to provide a reason for checkout denial
@@ -216,10 +216,7 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
             return render(request, self.template_name, {"form": form})
 
 
-class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
-    login_url = "/login/"
-    redirect_field_name = None
-    raise_exception = True
+class AddHoldingView(LibrarianViewBase, ListView):
     template_name = "management/add_holding.html"
     queryset = ItemGroup.objects.all()
 
@@ -230,12 +227,6 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.queryset.get(pk=active)
         return context
-
-    def test_func(self):
-        """
-        Test the user is part of the librarian group
-        """
-        return librarian_check(self.request.user)
 
     def post(self, request):
         form = AddHoldingForm(request.POST)
@@ -254,7 +245,6 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                 date_acquired=data.get("date_acquuired", timezone.now()),
                 last_inspected=data.get("last_inspected", timezone.now()),
             )
-
             messages.success(request, f"{item} successfully added to inventory.")
             return redirect("librarian-control-panel")
         else:
@@ -271,7 +261,6 @@ class AddHoldingView(LoginRequiredMixin, UserPassesTestMixin, ListView):
                     "object_list": self.queryset,
                 },
             )
-
 
 
 class MasterInventoryView(LibrarianViewBase, ListView):
@@ -347,4 +336,6 @@ class DeleteItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
             self.object.delete()
             return redirect(f"{reverse('master-inventory')}?active={itemgroup_id}")
         else:
-            return render(request, self.template_name, {"form": form, "object": self.object})
+            return render(
+                request, self.template_name, {"form": form, "object": self.object}
+            )

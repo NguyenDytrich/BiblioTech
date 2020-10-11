@@ -1,4 +1,4 @@
-from django.db import IntegrityError 
+from django.db import IntegrityError
 from django.test import TestCase
 from library.models import Item, ItemGroup
 
@@ -13,7 +13,10 @@ class ItemModelTest(TestCase):
         Assert that if an item has no library id, it uses the parent's inmake, modle, and the item's serial number.
         """
         group = ItemGroup.objects.create(
-            make="Nikon", model="D7000", description="Mid-range DSLR camera", default_checkout_len=7
+            make="Nikon",
+            model="D7000",
+            description="Mid-range DSLR camera",
+            default_checkout_len=7,
         )
 
         group.save()
@@ -100,3 +103,64 @@ class ItemModelTest(TestCase):
             )
             item2.save()
 
+
+class ItemCompositeUniqueness(TestCase):
+    def setUp(self):
+        self.group = ItemGroup.objects.create(
+            make="Nikon",
+            model="D7000",
+            moniker="Nikon-D7000",
+            description="Mid-range DSLR camera",
+            default_checkout_len=7,
+        )
+        self.group.save()
+
+        self.group2 = ItemGroup.objects.create(
+            make="Canon",
+            model="5D",
+            moniker="Canon-D5",
+            description="Professional grade DSLR camera",
+            default_checkout_len=7,
+        )
+        self.group2.save()
+
+    def test_itemitemgroup_unique_violation(self):
+        """
+        (serial_num, ItemGroup) should be unique
+        """
+        with self.assertRaises(IntegrityError):
+            item = Item.objects.create(
+                item_group=self.group,
+                library_id="Library-Id-1",
+                serial_num="0000",
+            )
+            item.save()
+
+            item = Item.objects.create(
+                item_group=self.group,
+                library_id="Library-Id-2",
+                serial_num="0000",
+            )
+            item.save()
+
+    def test_itemgroup_unique(self):
+        """
+        Should not throw any errors if there is a duplicate serial number so long
+        as it belongs to a separate ItemGroup
+        """
+
+        item = Item.objects.create(
+            item_group=self.group,
+            library_id="Library-Id-2",
+            serial_num="0000",
+        )
+        item.save()
+        self.assertTrue(item)
+
+        item = Item.objects.create(
+            item_group=self.group2,
+            library_id="Library-id-1",
+            serial_num="0000",
+        )
+        item.save()
+        self.assertTrue(item)

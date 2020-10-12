@@ -228,6 +228,25 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
         self.assertIn("management/add_item.html", [x.name for x in response.templates])
         self.assertContains(response, "This field is required", count=4)
 
+    def test_add_item_sanitized_description(self):
+        self.client.login(username="librarian", password="password")
+        fields = {
+            "make": "Shure",
+            "model": "SM57",
+            "description": "a test <script>What if this</script><p onClick='nobueno_func()'>This?</p><p>How about some valid stuff</p>",
+            "moniker": "SM57",
+            "default_checkout_len": 7,
+        }
+
+        response = self.client.post(reverse("add-item"), fields, follow=True)
+        self.assertEqual(response.status_code, 200)
+        item = ItemGroup.objects.filter(moniker="SM57").first()
+
+        # They should not be equal, as the input should be sanitized.
+        self.assertNotEqual(fields["description"], item.description)
+        self.assertEqual("<div>a test <p>This?</p><p>How about some valid stuff</p></div>", item.description)
+
+
     # TODO: might have to swap names of item vs holding?
     def test_add_holding(self):
         self.client.login(username="librarian", password="password")
@@ -293,8 +312,12 @@ class LibrarianManageItemTests(BiblioTechBaseTest):
             follow=True,
         )
 
-        self.assertContains(response, f"Library id {item.library_id} already in system!")
-        self.assertContains(response, f"Serial number {item.serial_num} already in system!")
+        self.assertContains(
+            response, f"Library id {item.library_id} already in system!"
+        )
+        self.assertContains(
+            response, f"Serial number {item.serial_num} already in system!"
+        )
 
 
 class UpdateItemFlowTests(BiblioTechBaseTest):

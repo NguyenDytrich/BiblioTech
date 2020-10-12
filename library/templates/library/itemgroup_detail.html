@@ -59,15 +59,27 @@
 				<div class="block">
 					<img src="https://bulma.io/images/placeholders/128x128.png" class="mb-3">
 					<h2 class="title is-5 mb-2">Description</h2>
-					<p>{{ object.description }}</p>
+					<div class="content">{{ object.description|safe }}</div>
 				</div>
 			</div>
 			<div class="column">
 				<div class="block">
 					<h2 class="title is-5 mb-2">Features</h2>
+					<div class="content">
+						{% if object.features %}
+						{{ object.features|safe }}
+						{% else %}
+						No features listed.
+						{% endif %}
+					</div>
 				</div>
 				<div class="block">
 					<h2 class="title is-5 mb-2">External Resources</h2>
+						{% if object.external_resources %}
+						{{ object.external_resources|safe }}
+						{% else %}
+						No external resources listed.
+						{% endif %}
 				</div>
 			</div>
 		</div>

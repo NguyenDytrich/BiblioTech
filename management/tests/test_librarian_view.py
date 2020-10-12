@@ -51,6 +51,7 @@ class MasterInventoryViewTests(BiblioTechBaseTest):
     def setUp(self):
         super(MasterInventoryViewTests, self).setUp()
         self.view = MasterInventoryView()
+        self.client.login(username="librarian", password="password")
 
     def test_queryset(self):
         """
@@ -62,14 +63,26 @@ class MasterInventoryViewTests(BiblioTechBaseTest):
         """
         View should have an active_item_set variable when there is an active item group selected.
         """
-        self.client.login(username="librarian", password="password")
-
         # In this test we are getting the Nikon D7000 itemgroup fixture
         response = self.client.get(f"{reverse('master-inventory')}?active=1")
 
         # There is exactly 1 D7000 item entry
         self.assertTrue(response.context.get("active_item_set"))
         self.assertEqual(1, response.context.get("active_item_set").count())
+
+    def test_about_view_query(self):
+        """
+        View should set an about_view parameter in the context.
+        """
+        response = self.client.get(f"{reverse('master-inventory')}?active=1&about_view=features")
+        self.assertEqual(response.context.get("about_view"), "features")
+
+    def test_about_view_invalid(self):
+        """
+        View should not set the about_view parameter unless we corresponding content
+        """
+        response = self.client.get(f"{reverse('master-inventory')}?active=1&about_view=notvalid")
+        self.assertFalse(response.context.get("about_view"))
 
 
 class UpdateItemViewTests(BiblioTechBaseTest):

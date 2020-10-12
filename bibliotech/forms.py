@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -21,6 +22,10 @@ class SignupForm(forms.Form):
         pwd = cleaned_data.get("password")
         pwd_conf = cleaned_data.get("password_confirm")
         if pwd and pwd_conf:
+            try:
+                validate_password(pwd)
+            except ValidationError as e:
+                self.add_error("password", e)
             if pwd != pwd_conf:
                 self.add_error(
                     "password_confirm",

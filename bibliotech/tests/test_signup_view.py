@@ -16,8 +16,8 @@ class SignupTests(TransactionTestCase):
                 "lname": "Smith",
                 "username": "bobsmith",
                 "email": "bobertsmith@test.com",
-                "password": "password",
-                "password_confirm": "password2",
+                "password": "asfeh52389",
+                "password_confirm": "pasfeh52389assword2",
             },
         )
         self.assertInHTML("Passwords don't match!", response.content.decode('utf-8'))
@@ -28,8 +28,8 @@ class SignupTests(TransactionTestCase):
             "lname": "Smith",
             "email": "bobertsmith@test.com",
             "username": "bobsmith",
-            "password": "password",
-            "password_confirm": "password",
+            "password": "passwordasfeh52389",
+            "password_confirm": "passwordasfeh52389",
         }
 
         response = self.client.post(reverse("signup"), fields, follow=True)

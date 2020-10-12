@@ -49,7 +49,10 @@ class SignUpView(View):
         if request.user.is_authenticated:
             return redirect("home")
         else:
-            return render(request, self.template_name)
+            return render(
+                request,
+                self.template_name,
+            )
 
     def post(self, request, **kwargs):
         form = SignupForm(request.POST)
@@ -58,7 +61,9 @@ class SignUpView(View):
         if valid:
             data = form.cleaned_data
             try:
-                user = User.objects.create_user(username=data.get("username"), email=data.get("email"))
+                user = User.objects.create_user(
+                    username=data.get("username"), email=data.get("email")
+                )
                 user.set_password(data.get("password"))
                 user.first_name = data.get("fname")
                 user.last_name = data.get("lname")
@@ -68,5 +73,10 @@ class SignUpView(View):
             except Exception as e:
                 print(e)
         else:
-            print(form.errors.as_data())
-            return render(request, self.template_name, {"form": form})
+            return render(
+                request,
+                self.template_name,
+                {
+                    "form": form,
+                },
+            )

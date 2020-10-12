@@ -10,6 +10,7 @@ from management.views.librarian import (
     AddHoldingView,
     MasterInventoryView,
     UpdateItemView,
+    UpdateItemGroupView,
     DeleteItemView,
 )
 
@@ -45,5 +46,10 @@ urlpatterns = [
         "inventory/<int:pk>/delete",
         DeleteItemView.as_view(),
         name="delete-item",
+    ),
+    path(
+        "items/<int:pk>/update",
+        UpdateItemGroupView.as_view(),
+        name="update-itemgroup",
     ),
 ]

@@ -23,6 +23,7 @@ from management.forms import (
     AddHoldingForm,
     UpdateItemForm,
     DeleteItemForm,
+    UpdateItemGroupForm,
 )
 from library.models import Checkout, Item, ItemGroup
 import library.checkout_manager as checkout_manager
@@ -350,3 +351,35 @@ class DeleteItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
             return render(
                 request, self.template_name, {"form": form, "object": self.object}
             )
+
+
+class UpdateItemGroupView(LibrarianViewBase, SingleObjectMixin, View):
+    template_name = "bibliotech/base.html"
+    model = ItemGroup
+
+    def post(self, request, *args, **kwargs):
+        item = self.get_object()
+
+        form = UpdateItemGroupForm(request.POST)
+        valid = form.is_valid()
+
+        if valid:
+
+            # Retrieve clean data from form
+            data = form.cleaned_data
+            cleaner = Cleaner()
+
+            if data.get("description"):
+                item.description = cleaner.clean_html(
+                    f"<div>{data.get('description')}</div>"
+                )
+            if data.get("features"):
+                item.features = cleaner.clean_html(f"<div>{data.get('features')}</div>")
+            if data.get("external_resources"):
+                item.external_resources = cleaner.clean_html(
+                    f"<div>{data.get('external_resources')}</div>"
+                )
+
+            item.full_clean()
+            item.save()
+        return redirect(f"{reverse('master-inventory')}?active={item.id}")

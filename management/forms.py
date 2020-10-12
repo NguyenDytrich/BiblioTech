@@ -61,6 +61,11 @@ class UpdateItemForm(forms.Form):
     condition = forms.ChoiceField(choices=Item.Condition.choices)
     notes = forms.CharField(required=False)
 
+class UpdateItemGroupForm(forms.Form):
+    description = forms.CharField(required=False)
+    features = forms.CharField(required=False)
+    external_resources = forms.CharField(required=False)
+
 
 class DeleteItemForm(forms.Form):
     item_id = forms.IntegerField()

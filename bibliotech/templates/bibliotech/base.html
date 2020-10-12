@@ -25,7 +25,7 @@
 						<a class="navbar-item" href="{% url 'librarian-control-panel' %}">Library Management</a>
 					{% endif %}
 					<a class="navbar-item" href="{% url 'checkout-list' %}">My Checkouts</a>
-					<a class="navbar-item" href="{% url 'cart-view' %}">My Cart</a>
+					<a class="navbar-item" href="{% url 'cart-view' %}">My Cart {% if request.session.cart_sum > 0 %}({{request.session.cart_sum}}){% endif %}</a>
 					<a class="navbar-item" >
 						<form id="logout" name="logout" action="{% url 'logout' %}" method="post">
 							{% csrf_token %}

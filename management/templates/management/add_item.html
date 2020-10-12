@@ -1,5 +1,9 @@
 {% extends "bibliotech/base.html" %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.21.0/ui/trumbowyg.min.css" integrity="sha512-XjpikIIW1P7jUS8ZWIznGs9KHujZQxhbnEsqMVQ5GBTTRmmJe32+ULipOxFePB8F8j9ahKmCjyJJ22VNEX60yg==" crossorigin="anonymous" />
+{% endblock %}
+
 {% block content %}
 <div>
 	<form action="{% url 'add-item' %}" method="post">
@@ -52,7 +56,9 @@
 
 		<div class="field">
 			<label for="description" class="label">Item Description</label>
-			<textarea id="description" name="description" class="textarea"></textarea>
+			<div id="editor" class="content"></div>
+
+			<input id="description" name="description" type="hidden">
 			{% if form.model.errors %}
 				{% for e in form.description.errors %}
 					<p class="help is-danger">{{e}}</p>
@@ -60,7 +66,7 @@
 			{% endif %}
 		</div>
 
-		<div class="field is-grouped">
+				<div class="field is-grouped">
 			<div class="control">
 				<input class="button is-primary" type="submit" value="Submit">
 			</div>
@@ -72,4 +78,16 @@
 		</div>
 	</form>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.21.0/trumbowyg.min.js" integrity="sha512-l6MMck8/SpFCgbJnIEfVsWQ8MaNK/n2ppTiELW3I2BFY5pAm/WjkNHSt+2OD7+CZtygs+jr+dAgzNdjNuCU7kw==" crossorigin="anonymous"></script>
+<script>
+	$('#editor').trumbowyg();
+	$('#editor').blur(function() {
+		$('#description').val($('#editor').trumbowyg('html'));
+	});
+</script>
 {% endblock %}

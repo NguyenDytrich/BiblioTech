@@ -13,6 +13,9 @@ from django.views.generic.detail import SingleObjectMixin
 from django.urls import reverse
 from django.utils import timezone
 
+from lxml.html import document_fromstring
+from lxml.html.clean import Cleaner
+
 from management.forms import (
     DenyCheckoutForm,
     ReturnCheckoutForm,
@@ -201,12 +204,14 @@ class AddItemView(LoginRequiredMixin, UserPassesTestMixin, View):
         if form.is_valid():
             # Retrieve clean data from form
             data = form.cleaned_data
+            cleaner = Cleaner()
 
             # Send data to the manager
             item = inventory_manager.create_itemgroup_record(
                 make=data.get("make"),
                 model=data.get("model"),
-                description=data.get("description"),
+                # Wrap the description in a div to ensure the document has a root node
+                description=cleaner.clean_html(f"<div>{data.get('description')}</div>"),
                 moniker=data.get("moniker"),
                 default_checkout_len=data.get("default_checkout_len"),
             )

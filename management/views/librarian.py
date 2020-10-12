@@ -275,12 +275,18 @@ class MasterInventoryView(LibrarianViewBase, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        about_views = ["features", "links"]
+
         # The id of our selected item
         active = self.request.GET.get("active")
+        about_view = self.request.GET.get("about_view")
+        if about_view not in about_views:
+            about_view = None
         # Set the context variable if the item exists in our dataset
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.queryset.get(pk=active)
             context["active_item_set"] = context["active"].item_set.all()
+            context["about_view"] = about_view
         return context
 
 

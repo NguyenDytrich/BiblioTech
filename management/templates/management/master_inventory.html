@@ -48,13 +48,14 @@
 				<div class="panel-heading">
 					About {% if active %}the {{ active }}{% endif %}
 				</div>
+				<div class="panel-tabs">
+					<a {% if not about_view %}class="is-active"{% endif %}>Description</a>
+					<a {% if about_view == 'features' %}class="is-active"{% endif %}>Features</a>
+					<a {% if about_view == 'links' %}class="is-active"{% endif %}>External Links</a>
+				</div>
 				<div class="panel-block">
 					<div class="content">
 						{% if active %}
-							<div>
-								<a href="{% url 'itemgroup-detail' active.id %}" class="button is-info">Catalogue Page</a>
-							</div>
-							<h1>Description</h1>
 							<div class="block">
 								{{ active.description|safe }}
 							</div>
@@ -63,6 +64,11 @@
 							Information about your selected item will appear here!
 						</div>
 						{% endif %}
+					</div>
+				</div>
+				<div class="panel-block">
+					<div>
+						<a href="{% url 'itemgroup-detail' active.id %}" class="button is-info">Catalogue Page</a>
 					</div>
 				</div>
 			</div>

@@ -49,15 +49,35 @@
 					About {% if active %}the {{ active }}{% endif %}
 				</div>
 				<div class="panel-tabs">
-					<a {% if not about_view %}class="is-active"{% endif %}>Description</a>
-					<a {% if about_view == 'features' %}class="is-active"{% endif %}>Features</a>
-					<a {% if about_view == 'links' %}class="is-active"{% endif %}>External Links</a>
+					<a 
+						href="{% url 'master-inventory' %}?active={{active.id}}" 
+						{% if not about_view %}class="is-active"{% endif %}>Description</a>
+					<a 
+						href="{% url 'master-inventory' %}?active={{active.id}}&about_view=features" 
+						{% if about_view == 'features' %}class="is-active"{% endif %}>Features</a>
+					<a 
+						href="{% url 'master-inventory' %}?active={{active.id}}&about_view=links" 
+						{% if about_view == 'links' %}class="is-active"{% endif %}>External Links</a>
 				</div>
 				<div class="panel-block">
 					<div class="content">
 						{% if active %}
 							<div class="block">
-								{{ active.description|safe }}
+								{% if about_view == 'links' %}
+									{% if active.external_resources %}
+										{{ active.external_resources|safe }}
+									{% else %}
+										<div>No external links yet</div>
+									{% endif %}
+								{% elif about_view == 'features' %}
+									{% if active.features %}
+										{{ active.features|safe }}
+									{% else %}
+										<div>No features yet</div>
+									{% endif %}
+								{% else %}
+									{{ active.description|safe }}
+								{% endif %}
 							</div>
 						{% else %}
 						<div class="block">
@@ -66,11 +86,13 @@
 						{% endif %}
 					</div>
 				</div>
+				{% if active %}
 				<div class="panel-block">
 					<div>
-						<a href="{% url 'itemgroup-detail' active.id %}" class="button is-info">Catalogue Page</a>
+							<a href="{% url 'itemgroup-detail' active.id %}" class="button is-info">Catalogue Page</a>
 					</div>
 				</div>
+				{% endif %}
 			</div>
 		</div>
 		<div class="tile is-child">

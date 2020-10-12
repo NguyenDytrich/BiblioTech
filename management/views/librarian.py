@@ -383,3 +383,6 @@ class UpdateItemGroupView(LibrarianViewBase, SingleObjectMixin, View):
             item.full_clean()
             item.save()
         return redirect(f"{reverse('master-inventory')}?active={item.id}")
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)

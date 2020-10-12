@@ -9,7 +9,7 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 - Return checked out items into the system
 
 
-# Roadmap to release
+# Roadmap to beta release
 - [x] User Sign ups
 - [ ] User profiles
 - [ ] User password recovery
@@ -22,6 +22,11 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 - [ ] Automatically email users for overdue items
 - [ ] Frozen accounts (accounts that cannot checkout items)
 - [ ] Full text search (very low priority)
+
+# Long-term objectives
+- SPA for relevant pages
+- GraphQL API
+- Explore JWT for auth (but the bandwidth is not so high that scalability would be an issue at the moment)
 
 # Bugs
 Haven't gone bug hunting... yet.

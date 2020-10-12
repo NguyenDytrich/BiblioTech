@@ -33,7 +33,7 @@
 						</form>
 					</a>
 				{% else %}
-					<a class="navbar-item">Sign Up</a>
+				<a class="navbar-item" href="{% url 'signup' %}">Sign Up</a>
 					<a class="navbar-item" href="{% url 'login' %}">Login</a>
 				{% endif %}
 				</div>

@@ -54,7 +54,10 @@
 							<div>
 								<a href="{% url 'itemgroup-detail' active.id %}" class="button is-info">Catalogue Page</a>
 							</div>
-							Description: {{ active.description }}
+							<h1>Description</h1>
+							<div class="block">
+								{{ active.description|safe }}
+							</div>
 						{% else %}
 						<div class="block">
 							Information about your selected item will appear here!

@@ -38,13 +38,17 @@
 					</figure>
 				</div>
 				<div class="media-content">
-					<div class="content">
+					<div class="block">
 						<strong>
 							<a href="{% url 'itemgroup-detail' itemgroup.id %}">{{ itemgroup }}</a>
 						</strong>
-						<p>{{ itemgroup.description }}</p>
-						<div class="is-size-7">
-							({{ itemgroup.avail_inventory }} of {{ itemgroup.total_inventory }} available)
+						<div class="block">
+							<p>{{ itemgroup.description|safe }}</p>
+						</div>
+						<div class="block">
+							<div class="is-size-7">
+								({{ itemgroup.avail_inventory }} of {{ itemgroup.total_inventory }} available)
+							</div>
 						</div>
 					</div>
 					<div class="level is-mobile">

@@ -65,9 +65,21 @@
 			<div class="column">
 				<div class="block">
 					<h2 class="title is-5 mb-2">Features</h2>
+					<div class="content">
+						{% if object.features %}
+						{{ object.features|safe }}
+						{% else %}
+						No features listed.
+						{% endif %}
+					</div>
 				</div>
 				<div class="block">
 					<h2 class="title is-5 mb-2">External Resources</h2>
+						{% if object.external_resources %}
+						{{ object.external_resources|safe }}
+						{% else %}
+						No external resources listed.
+						{% endif %}
 				</div>
 			</div>
 		</div>

@@ -33,6 +33,8 @@ class LibrarianAuthTests(BiblioTechBaseTest):
             ("update-item", {"username": "librarian", "password": "password"}, 200),
             ("delete-item", {"username": "member", "password": "password"}, 403),
             ("delete-item", {"username": "librarian", "password": "password"}, 200),
+            ("update-itemgroup", {"username": "member", "password": "password"}, 403),
+            ("update-itemgroup", {"username": "librarian", "password": "password"}, 200),
         ]
     )
     def test_view_inacessible_to_unauthorized_users(self, reverse_string, user, status):
@@ -45,13 +47,19 @@ class LibrarianAuthTests(BiblioTechBaseTest):
             endpoint = reverse("deny-checkout", args=(self.checkout.id,))
         elif reverse_string in ["update-item", "delete-item"]:
             endpoint = reverse(reverse_string, args=(Item.objects.first().id,))
+        elif reverse_string in ["update-itemgroup"]:
+            endpoint = reverse(reverse_string, args=(ItemGroup.objects.first().id,)) + "?field=description"
         else:
             endpoint = reverse(reverse_string)
 
         self.client.login(username=user["username"], password=user["password"])
 
-        response = self.client.get(endpoint)
-        self.assertEqual(response.status_code, status)
+        get_response = self.client.get(endpoint)
+        post_response = self.client.post(endpoint)
+        if get_response:
+            self.assertEqual(get_response.status_code, status)
+        if post_response:
+            self.assertEqual(get_response.status_code, status)
 
     def test_authorized_approve_endpoint(self):
         """

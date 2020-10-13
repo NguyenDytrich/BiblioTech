@@ -23,6 +23,7 @@ from management.forms import (
     AddHoldingForm,
     UpdateItemForm,
     DeleteItemForm,
+    UpdateItemGroupForm,
 )
 from library.models import Checkout, Item, ItemGroup
 import library.checkout_manager as checkout_manager
@@ -350,3 +351,53 @@ class DeleteItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
             return render(
                 request, self.template_name, {"form": form, "object": self.object}
             )
+
+
+class UpdateItemGroupView(LibrarianViewBase, SingleObjectMixin, View):
+    template_name = "management/update_itemgroup.html"
+    model = ItemGroup
+
+    def post(self, request, *args, **kwargs):
+        item = self.get_object()
+
+        form = UpdateItemGroupForm(request.POST)
+        valid = form.is_valid()
+
+        if valid:
+
+            # Retrieve clean data from form
+            data = form.cleaned_data
+            cleaner = Cleaner()
+
+            if data.get("description"):
+                item.description = cleaner.clean_html(
+                    f"<div>{data.get('description')}</div>"
+                )
+            if data.get("features"):
+                item.features = cleaner.clean_html(f"<div>{data.get('features')}</div>")
+            if data.get("external_resources"):
+                item.external_resources = cleaner.clean_html(
+                    f"<div>{data.get('external_resources')}</div>"
+                )
+
+            item.full_clean()
+            item.save()
+        return redirect(f"{reverse('master-inventory')}?active={item.id}")
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_object()
+        context_fields = [
+            ("Description", "description", item.description),
+            ("Features", "features", item.features),
+            ("External Resources", "external_resources", item.external_resources),
+        ]
+        field = request.GET.get("field")
+        if field not in [x[1] for x in context_fields]:
+            return HttpResponseBadRequest()
+        else:
+            # Hack that filters the list using the lambda function that tests if
+            # field is in X,  which returns a list. Then pop() to get the single tuple.
+            # Theoretically, this shouldn't be an issue.
+            tuple = list(filter(lambda x: field in x, context_fields)).pop()
+
+            return render(request, self.template_name, {"object": item, "field": tuple})

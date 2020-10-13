@@ -57,11 +57,21 @@
 						{% if about_view == 'features' %}class="is-active"{% endif %}>Features</a>
 					<a 
 						href="{% url 'master-inventory' %}?active={{active.id}}&about_view=links" 
-						{% if about_view == 'links' %}class="is-active"{% endif %}>External Links</a>
+						{% if about_view == 'links' %}class="is-active"{% endif %}>Resources</a>
 				</div>
 				<div class="panel-block">
-					<div class="content">
+					<div class="content" style="width: 100%">
 						{% if active %}
+							<div class="block">
+								<a 
+									class="is-pulled-right"
+									href="{% url 'update-itemgroup' active.id %}?field=
+										{% if about_view and about_view == 'links' %}
+											external_resources
+										{% elif about_view and about_view == 'features' %}
+											features
+										{% else %}description{% endif %}">Edit</a>
+							</div>
 							<div class="block">
 								{% if about_view == 'links' %}
 									{% if active.external_resources %}

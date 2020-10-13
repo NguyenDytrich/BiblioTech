@@ -115,3 +115,27 @@ class UpdateItemGroupFlowTests(BiblioTechBaseTest):
             self.assertEqual(expected_model.features, expected)
         elif fields.get("external_resources"):
             self.assertEqual(expected_model.external_resources, expected)
+
+    def test_returns_not_found(self):
+        self.client.login(username="librarian", password="password")
+        url = reverse("update-itemgroup", args=(1000,))
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 404)
+
+    @parameterized.expand(["id", "make", "model", "evilfield"])
+    def test_returns_bad_request(self, param):
+        self.client.login(username="librarian", password="password")
+        url = reverse("update-itemgroup", args=(1,))
+
+        response = self.client.get(f"{url}?field={param}")
+        self.assertEqual(response.status_code, 400)
+
+    @parameterized.expand(["description", "features", "external_resources"])
+    def test_returns_200_and_template(self, param):
+        self.client.login(username="librarian", password="password")
+        url = reverse("update-itemgroup", args=(1,))
+
+        response = self.client.get(f"{url}?field={param}")
+        self.assertEqual(response.status_code, 200)

@@ -1,0 +1,45 @@
+{% extends "bibliotech/base.html" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.21.0/ui/trumbowyg.min.css" integrity="sha512-XjpikIIW1P7jUS8ZWIznGs9KHujZQxhbnEsqMVQ5GBTTRmmJe32+ULipOxFePB8F8j9ahKmCjyJJ22VNEX60yg==" crossorigin="anonymous" />
+{% endblock %}
+
+{% block content %}
+<form style="width: 100%" action="{% url 'update-itemgroup' object.id %}" method="POST">
+	{% csrf_token %}
+	<div class="field">
+		<label for="content" class="label">{{field.0}} for {{ object }}</label>
+		<div id="editor" class="content"></div>
+		<input id="{{field.1}}" name="{{field.1}}" type="hidden"/>
+		{% if form.model.errors %}
+			{% for e in form.model.errors %}
+				<p class="help is-danger">{{e}}</p>
+			{% endfor %}
+		{% endif %}
+	</div>
+	<div class="field is-grouped">
+		<div class="control">
+			<input class="button is-primary" type="submit" value="Save">
+		</div>
+		<div class="control">
+			<a 
+				href="{% url 'master-inventory' %}?active={{ object.id }}"
+				class="button is-danger is-outlined" >Cancel</a>
+		</div>
+	</div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.21.0/trumbowyg.min.js" integrity="sha512-l6MMck8/SpFCgbJnIEfVsWQ8MaNK/n2ppTiELW3I2BFY5pAm/WjkNHSt+2OD7+CZtygs+jr+dAgzNdjNuCU7kw==" crossorigin="anonymous"></script>
+<script>
+	$('#editor').trumbowyg();
+	$('#editor').trumbowyg('html', `{{ field.2|safe }}`);
+	$('#editor').blur(function() {
+		$('#{{field.1}}').val($('#editor').trumbowyg('html'));
+	});
+</script>
+{% endblock %}

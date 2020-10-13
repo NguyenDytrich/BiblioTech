@@ -354,7 +354,7 @@ class DeleteItemView(LibrarianViewBase, SingleObjectMixin, TemplateView):
 
 
 class UpdateItemGroupView(LibrarianViewBase, SingleObjectMixin, View):
-    template_name = "bibliotech/base.html"
+    template_name = "management/update_itemgroup.html"
     model = ItemGroup
 
     def post(self, request, *args, **kwargs):
@@ -385,4 +385,19 @@ class UpdateItemGroupView(LibrarianViewBase, SingleObjectMixin, View):
         return redirect(f"{reverse('master-inventory')}?active={item.id}")
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        item = self.get_object()
+        context_fields = [
+            ("Description", "description", item.description),
+            ("Features", "features", item.features),
+            ("External Resources", "external_resources", item.external_resources),
+        ]
+        field = request.GET.get("field")
+        if field not in [x[1] for x in context_fields]:
+            return HttpResponseBadRequest()
+        else:
+            # Hack that filters the list using the lambda function that tests if
+            # field is in X,  which returns a list. Then pop() to get the single tuple.
+            # Theoretically, this shouldn't be an issue.
+            tuple = list(filter(lambda x: field in x, context_fields)).pop()
+
+            return render(request, self.template_name, {"object": item, "field": tuple})

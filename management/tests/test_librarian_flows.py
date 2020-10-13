@@ -48,7 +48,7 @@ class LibrarianAuthTests(BiblioTechBaseTest):
         elif reverse_string in ["update-item", "delete-item"]:
             endpoint = reverse(reverse_string, args=(Item.objects.first().id,))
         elif reverse_string in ["update-itemgroup"]:
-            endpoint = reverse(reverse_string, args=(ItemGroup.objects.first().id,))
+            endpoint = reverse(reverse_string, args=(ItemGroup.objects.first().id,)) + "?field=description"
         else:
             endpoint = reverse(reverse_string)
 

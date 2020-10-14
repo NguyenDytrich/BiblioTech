@@ -28,6 +28,7 @@
 					{% if user|has_group:"librarian" %}
 						<a class="navbar-item" href="{% url 'librarian-control-panel' %}">Library Management</a>
 					{% endif %}
+					<a class="navbar-item" href="{% url 'user-profile' %}">My Profile</a>
 					<a class="navbar-item" href="{% url 'checkout-list' %}">My Checkouts</a>
 					<a class="navbar-item" href="{% url 'cart-view' %}">My Cart {% if request.session.cart_sum > 0 %}({{request.session.cart_sum}}){% endif %}</a>
 					<a class="navbar-item" >

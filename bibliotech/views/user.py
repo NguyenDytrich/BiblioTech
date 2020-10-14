@@ -23,7 +23,6 @@ class UserMember:
 class UserProfileView(LoginRequiredMixin, View):
     template_name = "bibliotech/user_profile.html"
     login_url = "/login/"
-    redirect_field_name = None
 
     def get_user_member(self, pk):
         return UserMember(pk)

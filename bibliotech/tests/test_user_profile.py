@@ -26,6 +26,9 @@ class UserProfileTests(TransactionTestCase):
         aux = User.objects.create(username="member2", email="member2@test.edu")
         aux.set_password("password")
         aux.save()
+        aux_member = Member.objects.create(user=aux, member_id="123457")
+        aux_member.save()
+
 
 
     def test_information_in_view(self):
@@ -34,41 +37,32 @@ class UserProfileTests(TransactionTestCase):
         """
         self.client.login(username="member", password="password")
 
-        # User profiles should be able to be accessed via username
-        response = self.client.get(reverse("user-profile"), args=("member",))
+        response = self.client.get(reverse("user-profile"))
 
         self.assertContains(response, self.user.get_full_name())
-        self.assertContains(response, self.user.email())
-        self.assertContains(response, self.member.member_id())
-
-    def test_profile_url(self):
-        self.client.login(username="member", password="password")
-
-        # User profiles should be able to be accessed via username
-        username = self.client.get(reverse("user-profile"), args=("member",))
-
-        # User profiles should be able to be accessed via user ID
-        user_id = self.client.get(reverse("user-profile"), args=(self.user.id,))
-
-        self.assertEqual(username.response_code, 200)
-        self.assertEqual(user_id.response_code, 200)
+        self.assertContains(response, self.user.email)
+        self.assertContains(response, self.member.member_id)
 
 
     @parameterized.expand([
-        ("owner", "member", "password", 200),
-        ("owner", "member2", "password", 403)
+        ("member", "password"),
+        ("member2", "password"),
         ])
-    def test_profile_private(self, name, username, password, status_code):
+    def test_profile_context(self, username, password):
         """
-        User profiles should be visible only to the logged-in user
+        The profile context should contain the user's information
         """
         self.client.login(username=username, password=password)
-        response = self.client.get(reverse("user-profile"), args=(username,))
-        self.assertEqual(response.status_code, status_code)
 
-    def test_profile_not_accessible_by_anon_user(self):
+        response = self.client.get(reverse("user-profile"))
+        profile = response.context.get("profile")
+        self.assertTrue(profile)
+        self.assertEqual(profile.user.username, username)
+
+
+    def test_profile_redirects_anon_user(self):
         """
         If an anon user makes a request to the user profile, should return HTTP 403
         """
-        response = self.client.get(reverse("user-profile"), args=(1,))
-        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse("user-profile"))
+        self.assertRedirects(response, reverse("login"))

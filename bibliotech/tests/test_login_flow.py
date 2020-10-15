@@ -19,3 +19,13 @@ class LoginViewTests(TransactionTestCase):
         self.client.login(username="member", password="password")
         response = self.client.get(reverse("login"), follow=True)
         self.assertRedirects(response, reverse("itemgroup-list"))
+
+    def test_returns_errors_no_user(self):
+        credentials = { "username": "doesnotexist", "password": "password" }
+        response = self.client.post(reverse("login"), credentials, follow=True)
+        self.assertContains(response, "Invalid username or password", count=1)
+
+    def test_returns_errors_wrong_password(self):
+        credentials = { "username": "member", "password": "wrong_password" }
+        response = self.client.post(reverse("login"), credentials, follow=True)
+        self.assertContains(response, "Invalid username or password", count=1)

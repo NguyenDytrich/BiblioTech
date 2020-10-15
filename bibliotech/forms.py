@@ -10,6 +10,17 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
     # TODO: implement form errors on bad password
+    def clean(self):
+        cleaned_data = super().clean()
+        user = None
+        pwd = cleaned_data.get("password")
+        try:
+            user = User.objects.get(username=cleaned_data.get("username"))
+        except User.DoesNotExist:
+            raise ValidationError(_("Invalid username or password"))
+        if user and pwd:
+            if not user.check_password(pwd):
+                raise ValidationError(_("Invalid username or password"))
 
 
 class SignupForm(forms.Form):

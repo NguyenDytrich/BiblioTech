@@ -67,7 +67,7 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
         """
         Renders the update password form
         """
-        pass
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         """

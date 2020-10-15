@@ -73,7 +73,7 @@ class UserProfileTests(TransactionTestCase):
             (
                 "Valid (Don Juan)",
                 {"email": "new@email.com", "fname": "Don", "lname": "Juan"},
-                True
+                True,
             )
         ]
     )
@@ -133,3 +133,32 @@ class UserProfileTests(TransactionTestCase):
         response = self.client.post(reverse("user-change-password"), fields)
 
         self.assertEqual(response.status_code, 403)
+
+    @parameterized.expand(
+        [
+            (
+                "current pass",
+                {
+                    "password": "wrongpass",
+                    "new_password": "newpass",
+                    "new_confirmed": "newpass",
+                },
+                "Incorrect password",
+            ),
+            (
+                "confirmed pass",
+                {
+                    "password": "password",
+                    "new_password": "newpass",
+                    "new_confirmed": "badconfirm",
+                },
+                "Passwords don&#x27;t match",
+            )
+        ]
+    )
+    def test_change_password_render_errors(self, name, fields, expected_error):
+        self.client.login(username="member", password="password")
+        fields["user_id"] = self.user.id
+
+        response = self.client.post(reverse("user-change-password"), fields)
+        self.assertContains(response, expected_error)

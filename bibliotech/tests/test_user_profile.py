@@ -62,7 +62,38 @@ class UserProfileTests(TransactionTestCase):
 
     def test_profile_redirects_anon_user(self):
         """
-        If an anon user makes a request to the user profile, should return HTTP 403
+        If an anon user makes a request to the user profile, should redirect to login
         """
         response = self.client.get(reverse("user-profile"))
-        self.assertRedirects(response, reverse("login"))
+        self.assertRedirects(response, f"{reverse('login')}?next={reverse('user-profile')}")
+
+    @parameterized.expand([
+        ("Valid (Don Juan)", {"email": "new@email.com", "fname": "Don", "lname": "Juan"}, 200)
+        ])
+    def test_update_profile(self, name, fields, expected):
+        """
+        Post request to the update-profile should update a specified field
+        """
+        self.client.login(username="member", password="password")
+
+        response = self.client.post(reverse("user-profile-update"), fields)
+
+        self.assertEqual(response.status_code, expected)
+
+        self.user.refresh_from_db()
+        if fields.get("email"):
+            self.assertEqual(user.email, fields["email"])
+        if fields.get("fname"):
+            self.assertEqual(user.first_name, fields["fname"])
+        if fields.get("lname"):
+            self.assertEQual(user.last_name, fields["lname"])
+
+    @parameterized.expand([
+            ("Valid password change", {"old_password": "password", "new_password": "password2", "new_confirmed": "password2"}, 200)
+        ])
+    def test_change_password(self, name, fields, expected_status):
+        self.client.login(username="member", password=fields["old_password"])
+        response = self.client.post(reverse("user-change-password"))
+
+        user = User.objects.get(username="member")
+        self.assertTrue(user.check_password(fields["new_password"]))

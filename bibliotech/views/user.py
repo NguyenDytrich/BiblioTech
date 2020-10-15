@@ -32,3 +32,35 @@ class UserProfileView(LoginRequiredMixin, View):
             return HttpResponseForbidden
         profile = self.get_user_member(request.user.id)
         return render(request, self.template_name, {"profile": profile})
+
+
+class UserProfileUpdateView(LoginRequiredMixin, View):
+    template_name = "bibliotech/update_profile.html"
+
+    def get(self, request, *args, **kwargs):
+        """
+        Renders the profile update form
+        """
+        pass
+
+    def post(self, request, *args, **kwargs):
+        """
+        Update the user's profile information based on the request body
+        """
+        pass
+
+
+class UserPasswordUpdateView(LoginRequiredMixin, View):
+    template_name = "bibliotech/update_password.html"
+
+    def get(self, request, *args, **kwargs):
+        """
+        Renders the update password form
+        """
+        pass
+
+    def post(self, request, *args, **kwargs):
+        """
+        Updates the user's password if all fields are valid
+        """
+        pass

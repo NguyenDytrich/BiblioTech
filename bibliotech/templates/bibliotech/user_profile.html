@@ -2,6 +2,9 @@
 
 {% block content %}
 <div class="content">
+	<div>
+		<a href="{% url 'user-change-password' %}">Change Password</a>
+	</div>
 	<h1>{{ profile.user.get_full_name }}</h1>
 	<p>{{ profile.user.email }}</p>
 	<p>{{ profile.member.member_id }}</p>

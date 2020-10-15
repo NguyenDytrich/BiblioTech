@@ -74,7 +74,7 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
         Updates the user's password if all fields are valid, and the
         user id matches the user id of the authenticated user
         """
-        user = request.user
+        user = User.objects.get(pk=request.user.id)
         form = UpdatePasswordForm(request.POST)
         valid = False
 
@@ -82,7 +82,7 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
         # if a user does not exist specified  by the user_id
         try:
             valid = form.is_valid()
-        except DoesNotExist:
+        except User.DoesNotExist:
             return HttpResponseForbidden()
 
         if form.is_valid():

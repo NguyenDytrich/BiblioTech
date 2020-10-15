@@ -4,7 +4,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 
-from bibliotech.forms import UpdatePasswordForm
+from bibliotech.forms import UpdatePasswordForm, UpdateProfileForm
 from library.models import Member
 
 
@@ -48,7 +48,16 @@ class UserProfileUpdateView(LoginRequiredMixin, View):
         """
         Update the user's profile information based on the request body
         """
-        pass
+        form = UpdateProfileForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            user.first_name = form.cleaned_data.get("fname")
+            user.last_name = form.cleaned_data.get("lname")
+            user.email = form.cleaned_data.get("email")
+            user.save()
+            return redirect("user-profile")
+        else:
+            return render(request, self.template_name, {"form": form})
 
 
 class UserPasswordUpdateView(LoginRequiredMixin, View):
@@ -67,6 +76,15 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
         """
         user = request.user
         form = UpdatePasswordForm(request.POST)
+        valid = False
+
+        # Cleaning the UpdatePasswordForm will raise DoesNotExist
+        # if a user does not exist specified  by the user_id
+        try:
+            valid = form.is_valid()
+        except DoesNotExist:
+            return HttpResponseForbidden()
+
         if form.is_valid():
             if user.id != form.cleaned_data.get("user_id"):
                 return HttpResponseForbidden()
@@ -75,4 +93,4 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
                 user.save()
                 return redirect("user-profile")
         else:
-            return render(request, template_name, {"form": form})
+            return render(request, self.template_name, {"form": form})

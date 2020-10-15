@@ -73,27 +73,27 @@ class UserProfileTests(TransactionTestCase):
             (
                 "Valid (Don Juan)",
                 {"email": "new@email.com", "fname": "Don", "lname": "Juan"},
-                200,
+                True
             )
         ]
     )
-    def test_update_profile(self, name, fields, expected):
+    def test_update_profile(self, name, fields, expect_valid):
         """
         Post request to the update-profile should update a specified field
         """
         self.client.login(username="member", password="password")
-
         response = self.client.post(reverse("user-profile-update"), fields)
 
-        self.assertEqual(response.status_code, expected)
+        if expect_valid:
+            self.assertRedirects(response, reverse("user-profile"))
 
         self.user.refresh_from_db()
         if fields.get("email"):
-            self.assertEqual(user.email, fields["email"])
+            self.assertEqual(self.user.email, fields["email"])
         if fields.get("fname"):
-            self.assertEqual(user.first_name, fields["fname"])
+            self.assertEqual(self.user.first_name, fields["fname"])
         if fields.get("lname"):
-            self.assertEQual(user.last_name, fields["lname"])
+            self.assertEqual(self.user.last_name, fields["lname"])
 
     @parameterized.expand(
         [
@@ -104,11 +104,11 @@ class UserProfileTests(TransactionTestCase):
                     "new_password": "password2",
                     "new_confirmed": "password2",
                 },
-                200,
+                True,
             )
         ]
     )
-    def test_change_password(self, name, fields, expected_status):
+    def test_change_password(self, name, fields, expect_valid):
         self.client.login(username="member", password=fields["password"])
 
         fields["user_id"] = self.user.id
@@ -124,12 +124,12 @@ class UserProfileTests(TransactionTestCase):
         self.client.login(username="member2", password="password")
 
         fields = {
-            "user_id": 1,
+            "user_id": self.user.id,
             "password": "password",
             "new_password": "password2",
             "new_confirmed": "password2",
         }
 
-        response = self.client.post(reverse("user-profile-update"), fields)
+        response = self.client.post(reverse("user-change-password"), fields)
 
         self.assertEqual(response.status_code, 403)

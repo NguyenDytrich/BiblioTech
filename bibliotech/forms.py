@@ -9,6 +9,8 @@ class LoginForm(forms.Form):
     username = forms.CharField(label="Username", max_length=20)
     password = forms.CharField(widget=forms.PasswordInput)
 
+    # TODO: implement form errors on bad password
+
 
 class SignupForm(forms.Form):
     fname = forms.CharField()
@@ -53,8 +55,10 @@ class UpdatePasswordForm(forms.Form):
         new_pwd = cleaned_data.get("new_password")
         new_conf = cleaned_data.get("new_confirmed")
         if user and current_pwd:
+            # Check if the password matches the current user's password
             if not user.check_password(current_pwd):
                 self.add_error("password", ValidationError(_("Incorrect password")))
         if new_pwd and new_conf:
+            # Check if the password confirmation matches the new password
             if new_pwd != new_conf:
                 self.add_error("new_confirmed", ValidationError(_("Passwords don't match!")))

@@ -1,3 +1,4 @@
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
@@ -91,6 +92,7 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
             else:
                 user.set_password(form.cleaned_data.get("new_password"))
                 user.save()
+                update_session_auth_hash(request, user)
                 return redirect("user-profile")
         else:
             return render(request, self.template_name, {"form": form})

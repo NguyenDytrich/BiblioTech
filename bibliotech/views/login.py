@@ -23,7 +23,6 @@ def login_view(request):
                 return redirect(request.POST.get("next", "itemgroup-list"))
         else:
             # Return to login page
-            # TODO: Display some errors
             return render(request, "bibliotech/login.html", {"form": form})
     # Redirect to home if the user is logged in already
     elif request.user.is_authenticated:

@@ -43,7 +43,7 @@ class UserProfileUpdateView(LoginRequiredMixin, View):
         """
         Renders the profile update form
         """
-        pass
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         """

@@ -11,20 +11,19 @@ from bibliotech.forms import LoginForm, SignupForm
 def login_view(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
-        form.is_valid()
 
-        username = form.cleaned_data["username"]
-        password = form.cleaned_data["password"]
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
 
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            # Nav to success page
-            return redirect(request.POST.get("next", "itemgroup-list"))
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                # Nav to success page
+                return redirect(request.POST.get("next", "itemgroup-list"))
         else:
             # Return to login page
-            # TODO: Display some errors
-            return render(request, "bibliotech/login.html")
+            return render(request, "bibliotech/login.html", {"form": form})
     # Redirect to home if the user is logged in already
     elif request.user.is_authenticated:
         return redirect("itemgroup-list")

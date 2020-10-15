@@ -1,0 +1,48 @@
+{% extends "bibliotech/base.html" %}
+
+{% block content %}
+<form class="form" action="{% url 'user-profile-update' %}" method="POST">
+	{% csrf_token %}
+
+	<div class="field is-grouped">
+		<div class="control">
+			<label for="fname">First Name</label>
+			<input class="input" type="text" name="fname" value="{{ user.first_name }}">
+			{% if form.fname.errors %}
+				{% for e in form.fname.errors %}
+				<p class="help is-danger">{{e}}</p>
+				{% endfor %}
+			{% endif %}
+		</div>
+
+		<div class="control">
+			<label for="lname">Last Name</label>
+			<input class="input" type="text" name="lname" value="{{ user.last_name }}">
+			{% if form.new_password.errors %}
+				{% for e in form.new_password.errors %}
+				<p class="help is-danger">{{e}}</p>
+				{% endfor %}
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="field">
+		<label for="email">Email</label>
+		<input class="input" type="text" name="email" value="{{ user.email }}">
+		{% if form.email.errors %}
+			{% for e in form.email.errors %}
+			<p class="help is-danger">{{e}}</p>
+			{% endfor %}
+		{% endif %}
+	</div>
+
+	<div class="field is-grouped">
+		<div class="control">
+			<input class="button is-success" type="submit" value="Save">
+		</div>
+		<div class="control">
+			<a href="{% url 'user-profile' %}" class="button is-danger is-outlined">Cancel</a>
+		</div>
+	</div>
+</form>
+{% endblock %}

@@ -100,7 +100,6 @@ class UserProfileTests(TransactionTestCase):
             (
                 "Valid password change",
                 {
-                    "user_id": 1,
                     "password": "password",
                     "new_password": "password2",
                     "new_confirmed": "password2",
@@ -110,8 +109,10 @@ class UserProfileTests(TransactionTestCase):
         ]
     )
     def test_change_password(self, name, fields, expected_status):
-        self.client.login(username="member", password=fields["old_password"])
-        response = self.client.post(reverse("user-change-password"))
+        self.client.login(username="member", password=fields["password"])
+
+        fields["user_id"] = self.user.id
+        response = self.client.post(reverse("user-change-password"), fields)
 
         user = User.objects.get(username="member")
         self.assertTrue(user.check_password(fields["new_password"]))

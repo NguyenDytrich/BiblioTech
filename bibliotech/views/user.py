@@ -1,9 +1,10 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 
+from bibliotech.forms import UpdatePasswordForm
 from library.models import Member
 
 
@@ -61,6 +62,17 @@ class UserPasswordUpdateView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         """
-        Updates the user's password if all fields are valid
+        Updates the user's password if all fields are valid, and the
+        user id matches the user id of the authenticated user
         """
-        pass
+        user = request.user
+        form = UpdatePasswordForm(request.POST)
+        if form.is_valid():
+            if user.id != form.cleaned_data.get("user_id"):
+                return HttpResponseForbidden()
+            else:
+                user.set_password(form.cleaned_data.get("new_password"))
+                user.save()
+                return redirect("user-profile")
+        else:
+            return render(request, template_name, {"form": form})

@@ -11,7 +11,7 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 
 # Roadmap to beta release
 - [x] User Sign ups
-- [ ] User profiles
+- [x] User profiles
 - [ ] User password recovery
 - [ ] Audit Logs
 - [ ] Reservations
@@ -29,4 +29,4 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 - Explore JWT for auth (but the bandwidth is not so high that scalability would be an issue at the moment)
 
 # Bugs
-Haven't gone bug hunting... yet.
+- [ ] "Member" models are not automatically created for users on signup

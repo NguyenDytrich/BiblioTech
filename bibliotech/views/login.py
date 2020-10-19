@@ -6,6 +6,7 @@ from django.views.generic.base import View
 from django.views.decorators.http import require_http_methods
 
 from bibliotech.forms import LoginForm, SignupForm
+from library.models import Member
 
 
 def login_view(request):
@@ -67,6 +68,11 @@ class SignUpView(View):
                 user.first_name = data.get("fname")
                 user.last_name = data.get("lname")
                 user.save()
+
+                # Create a member object for the user
+                member = Member.objects.create(user=user, member_id=data.get("student_id"))
+                member.save()
+
                 login(request, user)
                 return redirect(reverse("home"))
             except Exception as e:

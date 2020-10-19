@@ -4,6 +4,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from library.validators import MemberValidator
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(label="Username", max_length=20)
@@ -28,6 +30,7 @@ class SignupForm(forms.Form):
     lname = forms.CharField()
     username = forms.CharField()
     email = forms.EmailField()
+    student_id = forms.CharField(validators=[MemberValidator.member_id])
     password = forms.CharField()
     password_confirm = forms.CharField()
 

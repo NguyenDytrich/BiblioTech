@@ -54,6 +54,16 @@
 	</div>
 
 	<div class="field">
+		<label for="student_id" class="label">Student Id</label>
+		<input class="input" name="student_id" type="text">
+		{% if form.student_id.errors %}
+			{% for e in form.student_id.errors %}
+			<li>{{ e }}</li>
+			{% endfor %}
+		{% endif %}
+	</div>
+
+	<div class="field">
 		<label class="label" for="password">Password</label>
 		<p class="help">
 		minimum 8 characters

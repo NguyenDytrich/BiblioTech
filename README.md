@@ -28,5 +28,5 @@ This project is an application built on Django, and styled using Bulma CSS. It a
 - GraphQL API
 - Explore JWT for auth (but the bandwidth is not so high that scalability would be an issue at the moment)
 
-# Bugs
-- [ ] "Member" models are not automatically created for users on signup
+# Known Bugs
+(I've not gone bug hunting yet)

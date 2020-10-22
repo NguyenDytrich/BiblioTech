@@ -21,6 +21,15 @@ class Member(models.Model):
     )
 
 
+class Tag(models.Model):
+    # TODO: Hold off on subtags until a later stage in development
+    # parent_tag = models.ForeignKey('self')
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"<Tag {self.name}>"
+
+
 class ItemGroup(models.Model):
     moniker = models.CharField(max_length=100, null=True, blank=True)
     make = models.CharField(max_length=100)
@@ -29,6 +38,7 @@ class ItemGroup(models.Model):
     features = models.TextField(null=True, blank=True)
     external_resources = models.TextField(null=True, blank=True)
     default_checkout_len = models.IntegerField()
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         if self.moniker:

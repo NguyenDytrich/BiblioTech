@@ -24,7 +24,7 @@ class Member(models.Model):
 class Tag(models.Model):
     # TODO: Hold off on subtags until a later stage in development
     # parent_tag = models.ForeignKey('self')
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return f"<Tag {self.name}>"

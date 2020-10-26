@@ -66,6 +66,7 @@
 					<div class="content" style="width: 100%">
 						{% if active %}
 							<div class="block">
+								{% if about_view != 'tags' %}
 								<a 
 									class="is-pulled-right"
 									href="{% url 'update-itemgroup' active.id %}?field=
@@ -74,6 +75,7 @@
 										{% elif about_view and about_view == 'features' %}
 											features
 										{% else %}description{% endif %}">Edit</a>
+								{% endif %}
 							</div>
 							<div class="block">
 								{% if about_view == 'links' %}
@@ -91,9 +93,27 @@
 								{% elif about_view == 'tags' %}
 									{% if active.tags %}
 									<div>
-										{% for t in active.tags.all %}
-											<span class="tag is-large">{{t.display_name}}</span>
-										{% endfor %}
+										<div class="block">
+											<!-- TODO -->
+											<form>
+												<div class="field has-addons">
+													<div class="control is-expanded">
+														<input class="input" type="text" placeholder="Add tag...">
+													</div>
+													<div class="control">
+														<input class="button is-success" type="submit" value="Add">
+													</div>
+												</div>
+											</form>
+										</div>
+										<div class="block">
+											{% for t in active.tags.all %}
+											<form action="{% url 'itemgroup-tag' t.id %}" method="DELETE">
+												<input type="hidden" value="{% url 'master-inventory' %}?active={{active.id}}&about_view=tags" />
+												<span class="tag is-large">{{t.display_name}}<button type="submit" class="delete"></button></span>
+											</form>
+											{% endfor %}
+										</div>
 									</div>
 									{% else %}
 										<div>No tags yet</div>

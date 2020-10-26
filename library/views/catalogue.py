@@ -1,7 +1,8 @@
-from django.views.generic.detail import DetailView
+from django.views import View
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.list import ListView
 
-from library.models import ItemGroup
+from library.models import ItemGroup, Tag
 
 class ItemGroupListView(ListView):
 
@@ -20,3 +21,6 @@ class ItemGroupDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
+class ItemGroupTagView(SingleObjectMixin, View):
+
+    model = Tag

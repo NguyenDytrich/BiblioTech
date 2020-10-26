@@ -55,7 +55,7 @@ urlpatterns = [
         name="update-itemgroup",
     ),
     path(
-        "items/<int:pk>/tags/", ItemGroupTagListView.as_view(), name="itemgroup-taglist"
+        "items/<int:pk>/tags", ItemGroupTagListView.as_view(), name="itemgroup-taglist"
     ),
     path(
         "items/<int:itemgroup_pk>/tags/<int:tag_pk>/",

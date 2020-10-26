@@ -95,10 +95,15 @@
 									<div>
 										<div class="block">
 											<!-- TODO -->
-											<form>
+											<form action="{% url 'itemgroup-taglist' active.id %}" method="POST">
+												{% csrf_token %}
+												<input
+													type="hidden"
+													name="next"
+													value="{% url 'master-inventory' %}?active={{active.id}}&about_view=tags"/>
 												<div class="field has-addons">
 													<div class="control is-expanded">
-														<input class="input" type="text" placeholder="Add tag...">
+														<input name="tag_name" class="input" type="text" placeholder="Add tag...">
 													</div>
 													<div class="control">
 														<input class="button is-success" type="submit" value="Add">

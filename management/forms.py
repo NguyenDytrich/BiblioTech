@@ -9,7 +9,7 @@ class DenyCheckoutForm(forms.Form):
     reason = forms.CharField(label="Reason for Denial", max_length=500)
 
 class AddTagForm(forms.Form):
-    tag_name = forms.CharField(max_length=500)
+    tag_name = forms.CharField(max_length=50)
 
 
 class ReturnCheckoutForm(forms.Form):

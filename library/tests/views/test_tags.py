@@ -1,6 +1,8 @@
 from django.test import TestCase
-from library.models import ItemGroup, Tag
+from django.urls import reverse
 from parameterized import parameterized
+
+from library.models import ItemGroup, Tag
 
 
 class ItemGroupTagTests(TestCase):
@@ -17,8 +19,19 @@ class ItemGroupTagTests(TestCase):
         self.tag = Tag.objects.create(name="Test")
 
         # Add tag to itemgroup
-        self.item_group.tags.add(self.tag)
+        # self.item_group.tags.add(self.tag)
 
         # Save the models
         self.item_group.save()
         self.tag.save()
+
+    def test_add_tag(self):
+        """
+        POST requests to .../items/<pk>/tags should add a tag
+        """
+
+        self.client.post(
+            reverse("itemgroup-taglist", args=(self.item_group.id,)),
+            {"tag_name": "test"},
+        )
+        self.assertIn(self.tag, list(self.item_group.tags.all()))

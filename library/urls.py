@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from library.views.catalogue import ItemGroupListView, ItemGroupDetailView, ItemGroupTagView
+from library.views.catalogue import (
+    ItemGroupListView,
+    ItemGroupDetailView,
+)
 from library.views.cart import cart_view, add_to_cart, RemoveFromCart
 from library.views.checkout import CheckoutListView, create_checkout
 
@@ -25,7 +28,6 @@ from bibliotech.views.misc import home_view, success
 urlpatterns = [
     path("items", ItemGroupListView.as_view(), name="itemgroup-list"),
     path("items/<int:pk>/", ItemGroupDetailView.as_view(), name="itemgroup-detail"),
-    path("items/tags/<int:pk>", ItemGroupTagView.as_view(), name="itemgroup-tag"),
     path("cart/", cart_view, name="cart-view"),
     path("cart/add/<int:itemgroup_id>", add_to_cart, name="cart-add"),
     path("cart/remove", RemoveFromCart.as_view(), name="cart-remove"),

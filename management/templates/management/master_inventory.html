@@ -108,7 +108,7 @@
 										</div>
 										<div class="block">
 											{% for t in active.tags.all %}
-											<form action="{% url 'itemgroup-tag' t.id %}" method="DELETE">
+											<form action="{% url 'itemgroup-tag' active.id t.id %}" method="DELETE">
 												<input type="hidden" value="{% url 'master-inventory' %}?active={{active.id}}&about_view=tags" />
 												<span class="tag is-large">{{t.display_name}}<button type="submit" class="delete"></button></span>
 											</form>

@@ -25,9 +25,18 @@ class Tag(models.Model):
     # TODO: Hold off on subtags until a later stage in development
     # parent_tag = models.ForeignKey('self')
     name = models.CharField(max_length=50, unique=True)
+    display_name = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return f"<Tag {self.name}>"
+
+    def save(self, *args, **kwargs):
+        # Set display name as user-formatted value
+        self.display_name = self.name
+
+        # Normalize tag names to lowercase
+        self.name = self.name.lower()
+        return super(Tag, self).save(*args, **kwargs)
 
 
 class ItemGroup(models.Model):

@@ -90,11 +90,11 @@
 									{% endif %}
 								{% elif about_view == 'tags' %}
 									{% if active.tags %}
-										<ul>
+									<div>
 										{% for t in active.tags.all %}
-											<li>{{t.name}}</li>
+											<span class="tag is-large">{{t.display_name}}</span>
 										{% endfor %}
-										</ul>
+									</div>
 									{% else %}
 										<div>No tags yet</div>
 									{% endif %}

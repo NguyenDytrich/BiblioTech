@@ -67,8 +67,7 @@ class MasterInventoryViewTests(BiblioTechBaseTest):
         response = self.client.get(f"{reverse('master-inventory')}?active=1")
 
         # There is exactly 1 D7000 item entry
-        self.assertTrue(response.context.get("active_item_set"))
-        self.assertEqual(1, response.context.get("active_item_set").count())
+        self.assertEqual(1, response.context.get("active").item_set.all().count())
 
     def test_about_view_query(self):
         """

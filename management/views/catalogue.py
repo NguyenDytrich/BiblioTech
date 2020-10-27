@@ -29,6 +29,10 @@ class ItemGroupTagListView(SingleObjectMixin, View):
             item_group = self.get_object()
             tag, created = Tag.objects.get_or_create(name=data.get("tag_name").lower())
 
+            if created:
+                tag.display_name = data.get("tag_name")
+                tag.save()
+
             # If the item is already tagged with the tag, skip this
             # unless the tag has just been created, in which case there
             # is no way the item could have this tag.

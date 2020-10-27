@@ -32,7 +32,8 @@ class Tag(models.Model):
 
     def save(self, *args, **kwargs):
         # Set display name as user-formatted value
-        self.display_name = self.name
+        if not self.display_name:
+            self.display_name = self.name
 
         # Normalize tag names to lowercase
         self.name = self.name.lower()

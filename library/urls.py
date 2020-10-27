@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from library.views.catalogue import ItemGroupListView, ItemGroupDetailView
+from library.views.catalogue import (
+    ItemGroupListView,
+    ItemGroupDetailView,
+)
 from library.views.cart import cart_view, add_to_cart, RemoveFromCart
 from library.views.checkout import CheckoutListView, create_checkout
 

@@ -270,13 +270,13 @@ class AddHoldingView(LibrarianViewBase, ListView):
 
 
 class MasterInventoryView(LibrarianViewBase, ListView):
-    queryset = ItemGroup.objects.all()
+    queryset = ItemGroup.objects.prefetch_related('item_set').prefetch_related('tags').all()
     template_name = "management/master_inventory.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        about_views = ["features", "links"]
+        about_views = ["features", "links", "tags"]
 
         # The id of our selected item
         active = self.request.GET.get("active")
@@ -286,7 +286,6 @@ class MasterInventoryView(LibrarianViewBase, ListView):
         # Set the context variable if the item exists in our dataset
         if self.get_queryset().filter(pk=active).exists():
             context["active"] = self.queryset.get(pk=active)
-            context["active_item_set"] = context["active"].item_set.all()
             context["about_view"] = about_view
         return context
 

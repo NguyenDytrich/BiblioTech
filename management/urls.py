@@ -14,6 +14,8 @@ from management.views.librarian import (
     DeleteItemView,
 )
 
+from management.views.catalogue import ItemGroupTagView, ItemGroupTagListView
+
 urlpatterns = [
     path(
         "checkouts/<int:checkout_id>/deny",
@@ -51,5 +53,13 @@ urlpatterns = [
         "items/<int:pk>/update",
         UpdateItemGroupView.as_view(),
         name="update-itemgroup",
+    ),
+    path(
+        "items/<int:pk>/tags", ItemGroupTagListView.as_view(), name="itemgroup-taglist"
+    ),
+    path(
+        "items/<int:itemgroup_pk>/tags/<int:tag_pk>/",
+        ItemGroupTagView.as_view(),
+        name="itemgroup-tag",
     ),
 ]

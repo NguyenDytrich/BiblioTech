@@ -58,11 +58,15 @@
 					<a 
 						href="{% url 'master-inventory' %}?active={{active.id}}&about_view=links" 
 						{% if about_view == 'links' %}class="is-active"{% endif %}>Resources</a>
+					<a
+						href="{% url 'master-inventory' %}?active={{active.id}}&about_view=tags"
+						{% if about_view == 'tags' %}class="is-active"{% endif %}>Tags</a>
 				</div>
 				<div class="panel-block">
 					<div class="content" style="width: 100%">
 						{% if active %}
 							<div class="block">
+								{% if about_view != 'tags' %}
 								<a 
 									class="is-pulled-right"
 									href="{% url 'update-itemgroup' active.id %}?field=
@@ -71,6 +75,7 @@
 										{% elif about_view and about_view == 'features' %}
 											features
 										{% else %}description{% endif %}">Edit</a>
+								{% endif %}
 							</div>
 							<div class="block">
 								{% if about_view == 'links' %}
@@ -84,6 +89,39 @@
 										{{ active.features|safe }}
 									{% else %}
 										<div>No features yet</div>
+									{% endif %}
+								{% elif about_view == 'tags' %}
+									{% if active.tags %}
+									<div>
+										<div class="block">
+											<!-- TODO -->
+											<form action="{% url 'itemgroup-taglist' active.id %}" method="POST">
+												{% csrf_token %}
+												<input
+													type="hidden"
+													name="next"
+													value="{% url 'master-inventory' %}?active={{active.id}}&about_view=tags"/>
+												<div class="field has-addons">
+													<div class="control is-expanded">
+														<input name="tag_name" class="input" type="text" placeholder="Add tag...">
+													</div>
+													<div class="control">
+														<input class="button is-success" type="submit" value="Add">
+													</div>
+												</div>
+											</form>
+										</div>
+										<div class="block">
+											{% for t in active.tags.all %}
+											<form action="{% url 'itemgroup-tag' active.id t.id %}" method="DELETE">
+												<input type="hidden" value="{% url 'master-inventory' %}?active={{active.id}}&about_view=tags" />
+												<span class="tag is-large">{{t.display_name}}<button type="submit" class="delete"></button></span>
+											</form>
+											{% endfor %}
+										</div>
+									</div>
+									{% else %}
+										<div>No tags yet</div>
 									{% endif %}
 								{% else %}
 									{{ active.description|safe }}
@@ -111,7 +149,7 @@
 					Inventory	
 				</div>
 				<div class="panel-body">
-					{% if active_item_set and active %}
+					{% if active.item_set.all|length > 0 and active %}
 					<div class="panel-block" style="display: block">
 						<div class="level">
 							<div class="level-left">
@@ -140,7 +178,7 @@
 							<th>Actions</th>
 						</thead>
 						<tbody>
-						{% for item in active_item_set %}
+						{% for item in active.item_set.all %}
 						<tr>
 							<td>{{ item.library_id }}</td>
 							<td>{{ item.serial_num }}</td>
@@ -156,7 +194,7 @@
 						{% endfor %}
 						</tbody>
 					</table>
-					{% elif active and not active_item_set %}
+					{% elif active %}
 					<div>No Items belong to this ItemGroup yet.</div>
 					<a href="{% url 'add-holding' %}" class="button is-success">Add new</a>
 					{% else %}

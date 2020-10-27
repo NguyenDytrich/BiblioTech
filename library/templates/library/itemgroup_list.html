@@ -42,6 +42,11 @@
 						<strong>
 							<a href="{% url 'itemgroup-detail' itemgroup.id %}">{{ itemgroup }}</a>
 						</strong>
+						<div>
+							{% for tag in itemgroup.tags.all %}
+								<span class="tag">{{tag.display_name}}</span>
+							{% endfor %}
+						</div>
 						<div class="block">
 							<p>{{ itemgroup.description|safe }}</p>
 						</div>
